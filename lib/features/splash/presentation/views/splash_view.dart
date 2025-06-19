@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/features/auth/presentation/views/signup_view.dart';
-import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:shifaa/features/splash/presentation/views/widgets/splash_view_body.dart';
 
 class SplashView extends StatefulWidget {

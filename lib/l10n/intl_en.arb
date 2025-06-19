@@ -18,5 +18,7 @@
     "haveAnAccount": "Already have an account? ",
     "pleaseEnterFirstName": "Please enter your first name",
     "pleaseEnterLastName": "Please enter your last name",
-    "pleaseEnterPhone": "Please enter your phone number"
+    "pleaseEnterPhone": "Please enter your phone number",
+    "dontHaveAccount": "Don't have an account? ",
+    "singUpNow":"Sign up "
 }

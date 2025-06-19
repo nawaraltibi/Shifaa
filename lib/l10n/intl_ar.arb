@@ -18,5 +18,8 @@
     "haveAnAccount": "هل لديك حساب بالفعل؟",
     "pleaseEnterFirstName": "يرجى إدخال الاسم الأول",
     "pleaseEnterLastName": "يرجى إدخال اسم العائلة",
-    "pleaseEnterPhone": "يرجى إدخال رقم الهاتف"
+    "pleaseEnterPhone": "يرجى إدخال رقم الهاتف",
+    "dontHaveAccount": "ليس لديك حساب؟ ",
+    "singUpNow":"أنشئ حساب "
+
 }

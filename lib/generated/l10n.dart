@@ -239,6 +239,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Don't have an account? `
+  String get dontHaveAccount {
+    return Intl.message(
+      'Don\'t have an account? ',
+      name: 'dontHaveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign up `
+  String get singUpNow {
+    return Intl.message(
+      'Sign up ',
+      name: 'singUpNow',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
