@@ -1,1 +1,9 @@
-{}
+{
+    "@@locale": "en",
+    "onBoardingTitle1":"Your All-in-One Medical Center",
+    "onBoardingTitle2":"Connect With Trusted Doctors",
+    "onBoardingTitle3":"Your Health, Your Control",
+    "onBoardingSubtitle1":"Book appointments, view records, and track your health all in one app.",
+    "onBoardingSubtitle2":"Choose from multiple specialists and manage your visits with ease.",
+    "onBoardingSubtitle3":"Access your prescriptions, records, and updates securely in both Arabic and English."
+}

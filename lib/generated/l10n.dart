@@ -49,6 +49,66 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
+
+  /// `Your All-in-One Medical Center`
+  String get onBoardingTitle1 {
+    return Intl.message(
+      'Your All-in-One Medical Center',
+      name: 'onBoardingTitle1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect With Trusted Doctors`
+  String get onBoardingTitle2 {
+    return Intl.message(
+      'Connect With Trusted Doctors',
+      name: 'onBoardingTitle2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Health, Your Control`
+  String get onBoardingTitle3 {
+    return Intl.message(
+      'Your Health, Your Control',
+      name: 'onBoardingTitle3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Book appointments, view records, and track your health all in one app.`
+  String get onBoardingSubtitle1 {
+    return Intl.message(
+      'Book appointments, view records, and track your health all in one app.',
+      name: 'onBoardingSubtitle1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose from multiple specialists and manage your visits with ease.`
+  String get onBoardingSubtitle2 {
+    return Intl.message(
+      'Choose from multiple specialists and manage your visits with ease.',
+      name: 'onBoardingSubtitle2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Access your prescriptions, records, and updates securely in both Arabic and English.`
+  String get onBoardingSubtitle3 {
+    return Intl.message(
+      'Access your prescriptions, records, and updates securely in both Arabic and English.',
+      name: 'onBoardingSubtitle3',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
