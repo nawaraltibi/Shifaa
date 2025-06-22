@@ -1,53 +1,49 @@
 // ignore_for_file: prefer_single_quotes
 class Assets {
   Assets._();
+  
+  /// Assets for imagesDoctor1
+  /// assets/images/doctor1.png
+  static const String imagesDoctor1 = "assets/images/doctor1.png";
 
-  /// Assets for imagesDoctorImage1
-  /// assets/images/doctor_image1.svg
-  static const String imagesDoctorImage1 = "assets/images/doctor_image1.svg";
+  /// Assets for imagesDoctor2
+  /// assets/images/doctor2.png
+  static const String imagesDoctor2 = "assets/images/doctor2.png";
 
-  /// Assets for imagesDoctorImage2
-  /// assets/images/doctor_image2.svg
-  static const String imagesDoctorImage2 = "assets/images/doctor_image2.svg";
+  /// Assets for imagesDoctor3
+  /// assets/images/doctor3.png
+  static const String imagesDoctor3 = "assets/images/doctor3.png";
 
-  /// Assets for imagesDoctorImage3
-  /// assets/images/doctor_image3.svg
-  static const String imagesDoctorImage3 = "assets/images/doctor_image3.svg";
+  /// Assets for imagesDoctor4
+  /// assets/images/doctor4.png
+  static const String imagesDoctor4 = "assets/images/doctor4.png";
 
-  /// Assets for imagesDoctorImage4
-  /// assets/images/doctor_image4.svg
-  static const String imagesDoctorImage4 = "assets/images/doctor_image4.svg";
+  /// Assets for imagesDoctorElement
+  /// assets/images/doctor_element.png
+  static const String imagesDoctorElement = "assets/images/doctor_element.png";
 
   /// Assets for imagesLogo
-  /// assets/images/logo.svg
-  static const String imagesLogo = "assets/images/logo.svg";
+  /// assets/images/logo.png
+  static const String imagesLogo = "assets/images/logo.png";
 
-  /// Assets for imagesNoteBookImage
-  /// assets/images/note_book_image.svg
-  static const String imagesNoteBookImage = "assets/images/note_book_image.svg";
+  /// Assets for imagesNotebook
+  /// assets/images/notebook.png
+  static const String imagesNotebook = "assets/images/notebook.png";
 
-  /// Assets for imagesOnboardingImage1
-  /// assets/images/onboarding_image1.svg
-  static const String imagesOnboardingImage1 =
-      "assets/images/onboarding_image1.svg";
+  /// Assets for imagesOnboardingScreen1
+  /// assets/images/onboarding-screen-1.png
+  static const String imagesOnboardingScreen1 = "assets/images/onboarding-screen-1.png";
 
-  /// Assets for imagesOnboardingImage2
-  /// assets/images/onboarding_image2.svg
-  static const String imagesOnboardingImage2 =
-      "assets/images/onboarding_image2.svg";
+  /// Assets for imagesOnboardingScreen2
+  /// assets/images/onboarding-screen-2.png
+  static const String imagesOnboardingScreen2 = "assets/images/onboarding-screen-2.png";
 
-  /// Assets for imagesOnboardingImage3
-  /// assets/images/onboarding_image3.svg
-  static const String imagesOnboardingImage3 =
-      "assets/images/onboarding_image3.svg";
+  /// Assets for imagesOnboardingScreen3
+  /// assets/images/onboarding-screen-3.png
+  static const String imagesOnboardingScreen3 = "assets/images/onboarding-screen-3.png";
 
-  /// Assets for imagesStethoscopeImage
-  /// assets/images/stethoscope_image.svg
-  static const String imagesStethoscopeImage =
-      "assets/images/stethoscope_image.svg";
-
-  /// Assets for imagesSyrianFlagImage
-  /// assets/images/syrian_flag_image.svg
-  static const String imagesSyrianFlagImage =
-      "assets/images/syrian_flag_image.svg";
+  /// Assets for imagesSyrianFlag
+  /// assets/images/SyrianFlag.png
+  static const String imagesSyrianFlag = "assets/images/SyrianFlag.png";
 }
+

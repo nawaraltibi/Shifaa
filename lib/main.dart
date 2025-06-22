@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shifaa/core/utils/app_routes.dart';
-import 'generated/l10n.dart'; // For flutter_intl
+import 'generated/l10n.dart';
 
 void main() {
   runApp(const Shifaa());
@@ -38,6 +38,7 @@ class Shifaa extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
+          locale: const Locale('ar'),
         );
       },
     );

@@ -55,6 +55,14 @@ class AppTextStyles {
   );
 
   // Medium
+  static final TextStyle medium34 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 34.sp,
+  );
+  static final TextStyle medium24 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 24.sp,
+  );
   static final TextStyle medium16 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 16.sp,
