@@ -1,23 +1,15 @@
 class EndPoint {
-  // static String baseUrl = "https://food-api-omega.vercel.app/api/v1/";
-  // static String signIn = "user/signin";
-  // static String signUp = "user/signup";
-  // static String getUserDataEndPoint(id) {
-  //   return "user/get-user/$id";
-  // }
+  static const String baseUrl = "https://your-api-base-url.com/api/v1/";
+
+  static const String login = "auth/login";
+  static const String register = "auth/register";
+  static String getUser(String id) => "users/$id";
 }
 
 class ApiKey {
-  // static String status = "status";
-  // static String errorMessage = "ErrorMessage";
-  // static String email = "email";
-  // static String password = "password";
-  // static String token = "token";
-  // static String message = "message";
-  // static String id = "id";
-  // static String name = "name";
-  // static String phone = "phone";
-  // static String confirmPassword = "confirmPassword";
-  // static String location = "location";
-  // static String profilePic = "profilePic";
+  static const String status = "status";
+  static const String errorMessage = "errorMessage";
+  static const String message = "message";
+  static const String token = "token";
+  static const String data = "data";
 }

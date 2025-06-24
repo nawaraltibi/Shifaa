@@ -17,7 +17,7 @@ class Shifaa extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, child) {
+      builder: (context, child){
         return MaterialApp.router(
           title: 'Shifaa App',
           debugShowCheckedModeBanner: false,
@@ -38,7 +38,7 @@ class Shifaa extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
-          locale: const Locale('ar'),
+          locale: const Locale('en'),
         );
       },
     );
