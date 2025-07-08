@@ -6,6 +6,10 @@ class PasswordView extends StatelessWidget {
   static const routeName = '/password';
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: PasswordViewBody());
+    return const Scaffold(
+      resizeToAvoidBottomInset: false,
+
+      body: PasswordViewBody(),
+    );
   }
 }

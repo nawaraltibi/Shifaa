@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/widgets/custom_button.dart';
-import 'package:shifaa/features/auth/presentation/views/signup_view.dart';
 import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
-import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_title.dart';
-import 'package:shifaa/features/auth/presentation/widgets/on_tap_text.dart';
 import 'package:shifaa/features/auth/presentation/widgets/phone_number_field.dart';
 import 'package:shifaa/features/auth/presentation/widgets/text_field_title.dart';
 import 'package:shifaa/generated/l10n.dart';
+import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key});
@@ -26,7 +24,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
   @override
   Widget build(BuildContext context) {
     return AuthTemplate(
-      margin: 250,
+      containerHeight: 500.h,
       isWelcomeVisible: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,19 +66,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               }
             },
           ),
-          SizedBox(height: 20.h),
-          OnTapBlueText(text: S.of(context).forgotPassword, onTap: () {}),
-          SizedBox(height: 35.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(S.of(context).dontHaveAccount),
-              OnTapBlueText(
-                text: S.of(context).singUpNow,
-                onTap: () => context.goNamed(SignupView.routeName),
-              ),
-            ],
-          ),
+          SizedBox(height: 40.h),
         ],
       ),
     );

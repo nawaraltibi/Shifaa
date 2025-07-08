@@ -7,6 +7,10 @@ class VerifyOtpView extends StatelessWidget {
   static const routeName = '/verify-otp-view';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: VerifyOtpViewBody(phoneNumber: phoneNumber));
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+
+      body: VerifyOtpViewBody(phoneNumber: phoneNumber),
+    );
   }
 }

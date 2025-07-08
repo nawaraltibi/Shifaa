@@ -1,11 +1,13 @@
+import 'package:dartz/dartz_streaming.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/auth/presentation/views/password_view.dart';
 import 'package:shifaa/features/auth/presentation/views/profile_setup_view.dart';
-import 'package:shifaa/features/auth/presentation/views/signup_view.dart';
 import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
 import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:shifaa/features/splash/presentation/views/splash_view.dart';
+import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
@@ -16,11 +18,7 @@ abstract class AppRouter {
         name: OnBoardingView.routeName,
         builder: (context, state) => const OnBoardingView(),
       ),
-      GoRoute(
-        path: SignupView.routeName,
-        name: SignupView.routeName,
-        builder: (context, state) => const SignupView(),
-      ),
+
       GoRoute(
         path: LoginView.routeName,
         name: LoginView.routeName,

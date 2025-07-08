@@ -6,6 +6,10 @@ class ProfileSetupView extends StatelessWidget {
   static const routeName = '/profileSetup';
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: ProfileSetupViewBody());
+    return const Scaffold(
+      resizeToAvoidBottomInset: false,
+
+      body: ProfileSetupViewBody(),
+    );
   }
 }

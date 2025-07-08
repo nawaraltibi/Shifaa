@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/core/widgets/custom_button.dart';
-import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
+import 'package:shifaa/features/auth/presentation/views/password_view.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_title.dart';
 import 'package:shifaa/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:shifaa/features/auth/presentation/widgets/text_field_title.dart';
 import 'package:shifaa/generated/l10n.dart';
 import 'dart:ui' as ui;
+
+import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
 
 class ProfileSetupViewBody extends StatefulWidget {
   const ProfileSetupViewBody({super.key});
@@ -66,7 +69,7 @@ class _ProfileSetupViewBodyState extends State<ProfileSetupViewBody> {
     });
 
     if (isValid && !_showAgeError) {
-      print("Form is valid, proceed to next step.");
+      context.goNamed(PasswordView.routeName);
     }
   }
 
@@ -75,10 +78,7 @@ class _ProfileSetupViewBodyState extends State<ProfileSetupViewBody> {
     final lang = Localizations.localeOf(context).languageCode;
 
     return AuthTemplate(
-      imageTopMargin: 30.h,
-      containerTopPadding: 0,
-      containerTopMargin: 70.h,
-      margin: 150,
+      containerHeight: 650.h,
       child: Form(
         key: _formKey,
         child: Column(

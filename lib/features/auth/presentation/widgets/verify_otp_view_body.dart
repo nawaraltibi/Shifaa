@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/core/widgets/custom_button.dart';
-import 'package:shifaa/features/auth/presentation/views/signup_view.dart';
-import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
+import 'package:shifaa/features/auth/presentation/views/profile_setup_view.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_title.dart';
 import 'package:shifaa/features/auth/presentation/widgets/otp_field.dart';
 import 'package:shifaa/generated/l10n.dart';
+import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
 
 class VerifyOtpViewBody extends StatefulWidget {
   const VerifyOtpViewBody({super.key, required this.phoneNumber});
@@ -24,7 +24,7 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
   @override
   Widget build(BuildContext context) {
     return AuthTemplate(
-      margin: 205.h,
+      containerHeight: 500.h,
       child: Column(
         children: [
           AuthTitle(text: S.of(context).verifyOtp),
@@ -100,7 +100,7 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
       setState(() => _otpError = S.of(context).pleaseEnterOtp);
     } else {
       setState(() => _otpError = null);
-      context.goNamed(SignupView.routeName);
+      context.goNamed(ProfileSetupView.routeName);
     }
   }
 
