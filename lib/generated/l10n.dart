@@ -459,6 +459,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Resend OTP`
+  String get resendOtp {
+    return Intl.message(
+      'Resend OTP',
+      name: 'resendOtp',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

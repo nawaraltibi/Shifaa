@@ -5,12 +5,12 @@ import 'package:shifaa/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:shifaa/generated/l10n.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
-part 'send_otp_state.dart';
+part 'login_state.dart';
 
-class SendOtpCubit extends Cubit<SendOtpState> {
+class LoginCubit extends Cubit<LoginState> {
   final SendOtpUseCase sendOtpUseCase;
 
-  SendOtpCubit(this.sendOtpUseCase) : super(SendOtpInitial());
+  LoginCubit(this.sendOtpUseCase) : super(LoginInitial());
 
   Future<void> sendOtp(String? phoneNumber, BuildContext context) async {
     if (phoneNumber == null || phoneNumber.isEmpty) {
@@ -23,7 +23,7 @@ class SendOtpCubit extends Cubit<SendOtpState> {
       return;
     }
 
-    emit(SendOtpLoading());
+    emit(LoginLoading());
 
     final result = await sendOtpUseCase(phoneNumber);
 
@@ -53,10 +53,10 @@ class SendOtpCubit extends Cubit<SendOtpState> {
           contentType: contentType,
         );
 
-        emit(SendOtpError(message));
+        emit(LoginError(message));
       },
       (_) {
-        emit(SendOtpSuccess(phoneNumber));
+        emit(LoginSuccess(phoneNumber));
       },
     );
   }

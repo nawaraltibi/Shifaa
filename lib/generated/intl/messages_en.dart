@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter your phone number"),
         "profileSetup": MessageLookupByLibrary.simpleMessage("Profile Setup"),
         "resendCodeIn": MessageLookupByLibrary.simpleMessage("Resend code in "),
+        "resendOtp": MessageLookupByLibrary.simpleMessage("Resend OTP"),
         "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("Sign up "),
         "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),

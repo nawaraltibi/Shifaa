@@ -75,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إعداد الملف الشخصي"),
         "resendCodeIn":
             MessageLookupByLibrary.simpleMessage("إعادة إرسال الرمز خلال "),
+        "resendOtp": MessageLookupByLibrary.simpleMessage("إعادة إرسال الرمز"),
         "signup": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("أنشئ حساب "),
         "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),

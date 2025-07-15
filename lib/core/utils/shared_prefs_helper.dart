@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shifaa/core/models/user_model_local.dart';
 
 class SharedPrefsHelper {
   static const String _keyAlreadyLaunched = 'alreadyLaunched';
@@ -37,5 +38,23 @@ class SharedPrefsHelper {
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyToken);
+  }
+
+  Future<void> saveUserData(Map<String, dynamic> user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('first_name', user['first_name'] ?? '');
+    await prefs.setString('last_name', user['last_name'] ?? '');
+    await prefs.setString('gender', user['gender'] ?? '');
+    await prefs.setString('dob', user['patient']?['date_of_birth'] ?? '');
+  }
+
+  Future<UserLocalModel> getUserModel() async {
+    final prefs = await SharedPreferences.getInstance();
+    return UserLocalModel(
+      firstName: prefs.getString('first_name') ?? '',
+      lastName: prefs.getString('last_name') ?? '',
+      gender: prefs.getString('gender') ?? '',
+      dateOfBirth: prefs.getString('dob') ?? '',
+    );
   }
 }

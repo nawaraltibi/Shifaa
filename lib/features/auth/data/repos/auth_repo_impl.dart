@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shifaa/core/errors/failure.dart';
+import 'package:shifaa/features/auth/data/models/user_auth_model.dart';
 import 'package:shifaa/features/auth/domain/repos/auth_repo.dart';
 import '../datasources/auth_remote_datasource.dart';
 
@@ -22,13 +23,39 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> verifyOtp(
+  Future<Either<Failure, UserAuthModel>> verifyOtp(
     String phoneNumber,
     String otp,
   ) async {
     try {
-      final token = await remote.verifyOtp(phoneNumber, otp);
-      return Right(token);
+      final result = await remote.verifyOtp(phoneNumber, otp);
+      return Right(result);
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDiorError(e));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserAuthModel>> register({
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+    required String gender,
+    required int otp,
+    required String dateOfBirth,
+  }) async {
+    try {
+      final result = await remote.register(
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        gender: gender,
+        otp: otp,
+        dateOfBirth: dateOfBirth,
+      );
+      return Right(result);
     } on DioException catch (e) {
       return Left(ServerFailure.fromDiorError(e));
     } catch (e) {

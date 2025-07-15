@@ -25,32 +25,72 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
 
     result.fold(
       (failure) {
-        final (title, message, type) = _mapErrorToSnackbar(failure.message, context);
+        final (title, message, type) = _mapErrorToSnackbar(
+          failure.message,
+          context,
+        );
         _showAwesomeSnackbar(context, title, message, type);
         emit(VerifyOtpError(message));
       },
-      (token) async {
-        await SharedPrefsHelper.instance.saveToken(token);
-        emit(VerifyOtpSuccess());
+      (verifyResult) async {
+        if (verifyResult.token != null) {
+          await SharedPrefsHelper.instance.saveToken(verifyResult.token!);
+        }
+
+        if (verifyResult.user != null) {
+          await SharedPrefsHelper.instance.saveUserData(verifyResult.user!);
+        }
+
+        if (!verifyResult.hasAccount) {
+          emit(VerifyOtpSuccess(goToProfileSetup: true));
+        } else if (verifyResult.twoFactorEnabled) {
+          emit(VerifyOtpSuccess(goToPassword: true));
+        } else {
+          emit(VerifyOtpSuccess(goToDoctorDetails: true));
+        }
       },
     );
   }
 
-  (String, String, ContentType) _mapErrorToSnackbar(String msg, BuildContext context) {
+  (String, String, ContentType) _mapErrorToSnackbar(
+    String msg,
+    BuildContext context,
+  ) {
     if (msg.contains('expired') || msg.contains('Invalid')) {
-      return (S.of(context).warningTitle, S.of(context).invalidOtp, ContentType.warning);
+      return (
+        S.of(context).warningTitle,
+        S.of(context).invalidOtp,
+        ContentType.warning,
+      );
     } else if (msg.contains('phone_number')) {
-      return (S.of(context).warningTitle, S.of(context).invalidPhoneFormat, ContentType.warning);
+      return (
+        S.of(context).warningTitle,
+        S.of(context).invalidPhoneFormat,
+        ContentType.warning,
+      );
     } else if (msg.contains('No internet') || msg.contains('connection')) {
-      return (S.of(context).errorTitle, S.of(context).noInternet, ContentType.failure);
+      return (
+        S.of(context).errorTitle,
+        S.of(context).noInternet,
+        ContentType.failure,
+      );
     } else if (msg.contains('timeout')) {
-      return (S.of(context).errorTitle, S.of(context).timeout, ContentType.failure);
+      return (
+        S.of(context).errorTitle,
+        S.of(context).timeout,
+        ContentType.failure,
+      );
     } else {
       return (S.of(context).errorTitle, msg, ContentType.failure);
     }
   }
 
-  void _showAwesomeSnackbar(BuildContext context, String title, String msg, ContentType type) {
+  void _showAwesomeSnackbar(
+    BuildContext context,
+    String title,
+    String msg,
+    ContentType type,
+  ) {
     final snackBar = SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,

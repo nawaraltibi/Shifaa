@@ -40,6 +40,6 @@
     "timeout": "Connection timed out, please try again",
     "errorTitle": "Error",
     "warningTitle": "Warning",
-        "invalidOtp":"Invali OTP"
-
+    "invalidOtp": "Invali OTP",
+    "resendOtp": "Resend OTP"
 }

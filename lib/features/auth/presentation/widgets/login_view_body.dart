@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:shifaa/core/widgets/custom_button.dart';
-import 'package:shifaa/features/auth/presentation/cubits/send_otp_cubit/send_otp_cubit.dart';
+import 'package:shifaa/features/auth/presentation/cubits/login_cubit/login_cubit.dart';
 import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_title.dart';
 import 'package:shifaa/features/auth/presentation/widgets/phone_number_field.dart';
@@ -27,9 +27,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
   @override
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SendOtpCubit, SendOtpState>(
+    return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state is SendOtpSuccess) {
+        if (state is LoginSuccess) {
           final currentRoute = GoRouter.of(context).location;
           if (!currentRoute.contains(VerifyOtpView.routeName)) {
             context.goNamed(
@@ -37,7 +37,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               queryParams: {'phone': state.phoneNumber},
             );
           }
-        } else if (state is SendOtpError) {
+        } else if (state is LoginError) {
           // يمكنك هنا عرض Snackbar أو أي معالجة
         }
       },
@@ -93,19 +93,18 @@ class _LoginViewBodyState extends State<LoginViewBody> {
   }
 
   Widget _buildSendOtpButton() {
-    return BlocBuilder<SendOtpCubit, SendOtpState>(
+    return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        final isLoading = state is SendOtpLoading;
+        final isLoading = state is LoginLoading;
 
         return CustomButton(
           text: S.of(context).login,
           isLoading: isLoading,
           onPressed: isLoading
               ? null
-              : () => context.read<SendOtpCubit>().sendOtp(
-                  _nationalNumber,
-                  context,
-                ),
+              : () {
+                  context.read<LoginCubit>().sendOtp(_nationalNumber, context);
+                },
         );
       },
     );

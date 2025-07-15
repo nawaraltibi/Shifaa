@@ -12,7 +12,12 @@ class CustomWhiteContainer extends StatelessWidget {
   final Widget child;
   final double height;
   @override
+  @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(
+      context,
+    ).viewInsets.bottom; // ارتفاع الكيبورد لو ظاهر، 0 لو مخفي
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -22,13 +27,16 @@ class CustomWhiteContainer extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             color: Colors.white,
-
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(35.r),
               topRight: Radius.circular(35.r),
             ),
           ),
-          padding: EdgeInsets.only(left: 30.w, right: 30.w),
+          padding: EdgeInsets.only(
+            left: 30.w,
+            right: 30.w,
+            bottom: bottomInset,
+          ),
           child: Container(
             margin: EdgeInsets.only(top: 30.h),
             padding: EdgeInsets.only(top: 60.h),

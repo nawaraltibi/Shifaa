@@ -1,5 +1,6 @@
 import 'package:shifaa/core/api/api_consumer.dart';
 import 'package:shifaa/core/api/end_ponits.dart';
+import 'package:shifaa/features/auth/data/models/user_auth_model.dart';
 import 'auth_remote_datasource.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -13,15 +14,36 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<String> verifyOtp(String phoneNumber, String otp) async {
+  Future<UserAuthModel> verifyOtp(String phoneNumber, String otp) async {
     final response = await api.post(
       EndPoint.verifyOtp,
       data: {"phone_number": phoneNumber, "otp": otp},
     );
 
-    final token = response['data']['token'];
-    print('VerifyOtp response: $response');
+    return UserAuthModel.fromJson(response);
+  }
 
-    return token;
+  @override
+  Future<UserAuthModel> register({
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+    required String gender,
+    required int otp,
+    required String dateOfBirth,
+  }) async {
+    final response = await api.post(
+      EndPoint.register,
+      data: {
+        "first_name": firstName,
+        "last_name": lastName,
+        "phone_number": phoneNumber,
+        "gender": gender,
+        "otp": otp,
+        "date_of_birth": dateOfBirth,
+      },
+    );
+
+    return UserAuthModel.fromJson(response); // ✅ رجع الريسبونس
   }
 }

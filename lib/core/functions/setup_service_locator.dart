@@ -38,6 +38,6 @@ void setupServiceLocator() {
   // Use Cases
   getIt.registerLazySingleton(() => SendOtpUseCase(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => VerifyOtpUseCase(getIt<AuthRepository>()));
-  // getIt.registerLazySingleton(() => RegisterPatientUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(() => RegisterUseCase(getIt<AuthRepository>()));
   // getIt.registerLazySingleton(() => VerifyPasswordUseCase(getIt<AuthRepository>()));
 }
