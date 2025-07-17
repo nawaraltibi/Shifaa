@@ -116,6 +116,6 @@ class AppTextStyles {
 
   static final TextStyle regular10 = TextStyle(
     fontWeight: FontWeight.w400,
-    fontSize: 10.sp,
+    fontSize: 11.sp,
   );
 }

@@ -9,11 +9,13 @@ class CustomButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
+    this.borderRadius,
   });
 
   final String text;
   final void Function()? onPressed;
   final bool isLoading;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class CustomButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(borderRadius ?? 8.r),
           ),
           textStyle: AppTextStyles.semiBold18.copyWith(fontSize: 16.5.sp),
           foregroundColor: Colors.white,

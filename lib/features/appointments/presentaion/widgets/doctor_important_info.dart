@@ -18,8 +18,6 @@ class DoctorImportantInfo extends StatelessWidget {
   final String image;
   final int sessionPrice;
   @override
-/*************  ✨ Windsurf Command ⭐  *************/
-/*******  0cc0d9b2-83ba-4946-bbed-e48428e8c784  *******/
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -39,6 +37,7 @@ class DoctorImportantInfo extends StatelessWidget {
               ),
               SizedBox(height: 50.h),
               SessionPriceText(price: sessionPrice),
+              SizedBox(height: 25.h),
             ],
           ),
         ),
