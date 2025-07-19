@@ -23,7 +23,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Shifaa": MessageLookupByLibrary.simpleMessage("Shifaa!"),
+        "about_doctor": MessageLookupByLibrary.simpleMessage("About Doctor"),
         "age": MessageLookupByLibrary.simpleMessage("Age"),
+        "book": MessageLookupByLibrary.simpleMessage("Book"),
         "continueText": MessageLookupByLibrary.simpleMessage("Continue"),
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "dontHaveAccount":
@@ -31,6 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("Please enter a password"),
         "errorTitle": MessageLookupByLibrary.simpleMessage("Error"),
+        "experience": MessageLookupByLibrary.simpleMessage("Experience"),
         "female": MessageLookupByLibrary.simpleMessage("Female"),
         "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgotPassword":
@@ -42,10 +45,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidPhoneFormat":
             MessageLookupByLibrary.simpleMessage("Please enter a valid number"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
+        "loading_bio":
+            MessageLookupByLibrary.simpleMessage("Loading doctor bio..."),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "male": MessageLookupByLibrary.simpleMessage("Male"),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("No internet connection"),
+        "no_slots": MessageLookupByLibrary.simpleMessage(
+            "No available time slots for this day."),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "Book appointments, view records, and track your health all in one app."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -59,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "onBoardingTitle3":
             MessageLookupByLibrary.simpleMessage("Your Health, Your Control"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "patients": MessageLookupByLibrary.simpleMessage("Patients"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
         "pleaseEnterAge": MessageLookupByLibrary.simpleMessage(
             "Please select your date of birth"),
@@ -71,8 +79,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseEnterPhone": MessageLookupByLibrary.simpleMessage(
             "Please enter your phone number"),
         "profileSetup": MessageLookupByLibrary.simpleMessage("Profile Setup"),
+        "rating": MessageLookupByLibrary.simpleMessage("Rating"),
         "resendCodeIn": MessageLookupByLibrary.simpleMessage("Resend code in "),
         "resendOtp": MessageLookupByLibrary.simpleMessage("Resend OTP"),
+        "reviews": MessageLookupByLibrary.simpleMessage("Reviews"),
+        "select_date": MessageLookupByLibrary.simpleMessage("Select Date"),
+        "select_time": MessageLookupByLibrary.simpleMessage("Select Time"),
+        "session": MessageLookupByLibrary.simpleMessage("Session"),
         "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("Sign up "),
         "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),

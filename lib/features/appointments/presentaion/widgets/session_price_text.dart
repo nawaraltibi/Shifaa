@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
+import 'package:shifaa/generated/l10n.dart';
 
 class SessionPriceText extends StatelessWidget {
   const SessionPriceText({super.key, required this.price});
@@ -17,7 +18,7 @@ class SessionPriceText extends StatelessWidget {
           ),
           const TextSpan(text: ' '),
           TextSpan(
-            text: '/session',
+            text: '/${S.of(context).session}',
             style: AppTextStyles.regular13.copyWith(
               color: const Color(0xFF8F8F8F),
             ),

@@ -12,7 +12,7 @@ class DioConsumer extends ApiConsumer {
       ..baseUrl = EndPoint.baseUrl
       ..connectTimeout = const Duration(seconds: 5)
       ..sendTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 5);
+      ..receiveTimeout = const Duration(seconds: 8);
 
     dio.interceptors.add(ApiInterceptor());
     dio.interceptors.add(
@@ -34,11 +34,7 @@ class DioConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      final response = await dio.get(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-      );
+      final response = await dio.get(path, queryParameters: queryParameters);
       return response.data;
     } on DioException catch (e) {
       throw ServerFailure.fromDiorError(e);

@@ -37,7 +37,7 @@ class _SplashViewState extends State<SplashView> {
     final alreadyLaunched = prefs.getBool('alreadyLaunched') ?? false;
 
     if (alreadyLaunched) {
-      context.goNamed(DoctorDetailsView.routeName);
+      context.goNamed(LoginView.routeName);
     } else {
       context.goNamed(OnBoardingView.routeName);
     }

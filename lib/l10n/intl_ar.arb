@@ -40,7 +40,17 @@
     "timeout": "انتهت مهلة الاتصال، حاول مجددًا",
     "errorTitle": "خطأ",
     "warningTitle": "تحذير",
-    "invalidOtp":"رمز التحقق غير صحيح",
-            "resendOtp":"إعادة إرسال الرمز"
-
+    "invalidOtp": "رمز التحقق غير صحيح",
+    "resendOtp": "إعادة إرسال الرمز",
+    "session": "للجلسة",
+    "patients": "المرضى",
+    "experience": "الخبرة",
+    "rating": "التقييم",
+    "reviews": "المراجعات",
+    "about_doctor": "لمحة عن الطبيب",
+    "loading_bio": "يتم التحميل",
+    "select_date": "اختر يوماً",
+    "select_time": "اختر وقتاً",
+    "no_slots": "لا توجد أوقات متاحة في هذا اليوم.",
+    "book": "احجز"
 }

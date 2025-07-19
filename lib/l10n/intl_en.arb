@@ -41,5 +41,16 @@
     "errorTitle": "Error",
     "warningTitle": "Warning",
     "invalidOtp": "Invali OTP",
-    "resendOtp": "Resend OTP"
+    "resendOtp": "Resend OTP",
+    "session": "Session",
+    "patients": "Patients",
+    "experience": "Experience",
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "about_doctor": "About Doctor",
+    "loading_bio": "Loading doctor bio...",
+    "select_date": "Select Date",
+    "select_time": "Select Time",
+    "no_slots": "No available time slots for this day.",
+    "book": "Book"
 }

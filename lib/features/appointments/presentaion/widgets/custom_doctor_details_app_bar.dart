@@ -9,22 +9,25 @@ class CustomDoctorDetailsAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        CustomIconButton(
-          icon: Icon(
-            FontAwesomeIcons.arrowLeft,
-            color: Colors.black,
-            size: 18.sp,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CustomIconButton(
+            icon: Icon(
+              FontAwesomeIcons.arrowLeft,
+              color: Colors.black,
+              size: 18.sp,
+            ),
+            onTap: () => Navigator.pop(context),
           ),
-          onTap: () => Navigator.pop(context),
-        ),
-        CustomIconButton(
-          icon: Image.asset(Assets.imagesChatIcon, height: 20.h, width: 20.w),
-          onTap: () => Navigator.pop(context),
-        ),
-      ],
+          CustomIconButton(
+            icon: Image.asset(Assets.imagesChatIcon, height: 20.h, width: 20.w),
+            onTap: () => Navigator.pop(context),
+          ),
+        ],
+      ),
     );
   }
 }

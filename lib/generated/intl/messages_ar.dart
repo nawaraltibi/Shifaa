@@ -23,7 +23,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Shifaa": MessageLookupByLibrary.simpleMessage("شفاء!"),
+        "about_doctor": MessageLookupByLibrary.simpleMessage("لمحة عن الطبيب"),
         "age": MessageLookupByLibrary.simpleMessage("العمر"),
+        "book": MessageLookupByLibrary.simpleMessage("احجز"),
         "continueText": MessageLookupByLibrary.simpleMessage("استمرار"),
         "done": MessageLookupByLibrary.simpleMessage("استمرار"),
         "dontHaveAccount":
@@ -31,6 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
         "errorTitle": MessageLookupByLibrary.simpleMessage("خطأ"),
+        "experience": MessageLookupByLibrary.simpleMessage("الخبرة"),
         "female": MessageLookupByLibrary.simpleMessage("أنثى"),
         "firstName": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "forgotPassword":
@@ -43,10 +46,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidPhoneFormat":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم صحيح"),
         "lastName": MessageLookupByLibrary.simpleMessage("اسم العائلة"),
+        "loading_bio": MessageLookupByLibrary.simpleMessage("يتم التحميل"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "male": MessageLookupByLibrary.simpleMessage("ذكر"),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("لا يوجد اتصال بالإنترنت"),
+        "no_slots": MessageLookupByLibrary.simpleMessage(
+            "لا توجد أوقات متاحة في هذا اليوم."),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "احجز المواعيد، استعرض السجلات، وتابع صحتك في تطبيق واحد."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -60,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "onBoardingTitle3":
             MessageLookupByLibrary.simpleMessage("صحتك، بين يديك"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+        "patients": MessageLookupByLibrary.simpleMessage("المرضى"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
         "pleaseEnterAge":
             MessageLookupByLibrary.simpleMessage("يرجى اختيار تاريخ الميلاد"),
@@ -73,9 +80,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم الهاتف"),
         "profileSetup":
             MessageLookupByLibrary.simpleMessage("إعداد الملف الشخصي"),
+        "rating": MessageLookupByLibrary.simpleMessage("التقييم"),
         "resendCodeIn":
             MessageLookupByLibrary.simpleMessage("إعادة إرسال الرمز خلال "),
         "resendOtp": MessageLookupByLibrary.simpleMessage("إعادة إرسال الرمز"),
+        "reviews": MessageLookupByLibrary.simpleMessage("المراجعات"),
+        "select_date": MessageLookupByLibrary.simpleMessage("اختر يوماً"),
+        "select_time": MessageLookupByLibrary.simpleMessage("اختر وقتاً"),
+        "session": MessageLookupByLibrary.simpleMessage("للجلسة"),
         "signup": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("أنشئ حساب "),
         "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),

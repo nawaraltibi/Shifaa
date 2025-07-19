@@ -469,6 +469,116 @@ class S {
       args: [],
     );
   }
+
+  /// `Session`
+  String get session {
+    return Intl.message(
+      'Session',
+      name: 'session',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Patients`
+  String get patients {
+    return Intl.message(
+      'Patients',
+      name: 'patients',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Experience`
+  String get experience {
+    return Intl.message(
+      'Experience',
+      name: 'experience',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rating`
+  String get rating {
+    return Intl.message(
+      'Rating',
+      name: 'rating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reviews`
+  String get reviews {
+    return Intl.message(
+      'Reviews',
+      name: 'reviews',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About Doctor`
+  String get about_doctor {
+    return Intl.message(
+      'About Doctor',
+      name: 'about_doctor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading doctor bio...`
+  String get loading_bio {
+    return Intl.message(
+      'Loading doctor bio...',
+      name: 'loading_bio',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Date`
+  String get select_date {
+    return Intl.message(
+      'Select Date',
+      name: 'select_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Time`
+  String get select_time {
+    return Intl.message(
+      'Select Time',
+      name: 'select_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No available time slots for this day.`
+  String get no_slots {
+    return Intl.message(
+      'No available time slots for this day.',
+      name: 'no_slots',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Book`
+  String get book {
+    return Intl.message(
+      'Book',
+      name: 'book',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

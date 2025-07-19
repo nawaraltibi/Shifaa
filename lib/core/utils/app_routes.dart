@@ -84,7 +84,7 @@ abstract class AppRouter {
       GoRoute(
         path: DoctorDetailsView.routeName,
         name: DoctorDetailsView.routeName,
-        builder: (context, state) => const DoctorDetailsView(),
+        builder: (context, state) => const DoctorDetailsView(doctorId: 1),
       ),
     ],
   );

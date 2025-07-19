@@ -23,11 +23,14 @@ class TimeSlot extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.r),
         color: Colors.white,
         child: Container(
+          width: 90.w,
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(vertical: 5.h),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected ? Colors.blue : Colors.transparent,
+              color: isSelected
+                  ? AppColors.primaryAppColor
+                  : Colors.transparent,
               width: 1.5,
             ),
             borderRadius: BorderRadius.circular(30.r),
