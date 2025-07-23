@@ -9,6 +9,7 @@ import 'package:shifaa/features/auth/presentation/widgets/auth_title.dart';
 import 'package:shifaa/features/auth/presentation/widgets/custom_password_field.dart';
 import 'package:shifaa/features/auth/presentation/widgets/on_tap_text.dart';
 import 'package:shifaa/generated/l10n.dart';
+import 'package:shifaa/features/home/presentation/views/home_view.dart';
 
 class PasswordViewBody extends StatefulWidget {
   const PasswordViewBody({super.key});
@@ -55,7 +56,10 @@ class _PasswordViewBodyState extends State<PasswordViewBody> {
                 },
               ),
               SizedBox(height: 56.h),
-              OnTapBlueText(text: S.of(context).forgotPassword, onTap: () {}),
+              OnTapBlueText(
+                text: S.of(context).forgotPassword,
+                onTap: () => context.goNamed(HomeView.routeName),
+              ),
             ],
           ),
         ),

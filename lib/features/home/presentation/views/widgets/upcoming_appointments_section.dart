@@ -16,7 +16,7 @@ class UpcomingAppointmentsSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         ListView.builder(
-          itemCount: 1, // Displaying only one card as per the image
+          itemCount: 1, 
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {

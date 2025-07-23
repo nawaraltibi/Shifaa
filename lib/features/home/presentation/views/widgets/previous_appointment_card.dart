@@ -10,7 +10,7 @@ class PreviousAppointmentCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primaryAppColor, // Using same color as upcoming for consistency
+        color: AppColors.primaryAppColor, 
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
