@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shifaa/features/search/presentation/manager/search_cubit.dart';
+// import 'package:shifaa/features/search/presentation/manager/search_cubit.dart';
 
-class ToggleSearchType extends StatefulWidget {
-  const ToggleSearchType({super.key});
+class ToggleSearchType extends StatelessWidget {
+  final SearchType selectedType;
+  final ValueChanged<SearchType> onTypeChanged;
 
-  @override
-  State<ToggleSearchType> createState() => _ToggleSearchTypeState();
-}
-
-class _ToggleSearchTypeState extends State<ToggleSearchType> {
-  int _selectedIndex = 1; 
+  const ToggleSearchType({
+    super.key,
+    required this.selectedType,
+    required this.onTypeChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,23 +21,18 @@ class _ToggleSearchTypeState extends State<ToggleSearchType> {
       ),
       child: Row(
         children: [
-          _buildToggleItem(0, 'Doctors'),
-          _buildToggleItem(1, 'Specialties'),
+          _buildToggleItem(context, SearchType.doctors, 'Doctors'),
+          _buildToggleItem(context, SearchType.specialties, 'Specialties'),
         ],
       ),
     );
   }
 
-  Widget _buildToggleItem(int index, String text) {
-    final isSelected = _selectedIndex == index;
+  Widget _buildToggleItem(BuildContext context, SearchType type, String text) {
+    final bool isSelected = selectedType == type;
     return Expanded(
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedIndex = index;
-          
-          });
-        },
+        onTap: () => onTypeChanged(type),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
@@ -48,13 +45,10 @@ class _ToggleSearchTypeState extends State<ToggleSearchType> {
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
+            style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
           ),
         ),
       ),
     );
   }
 }
-
