@@ -9,7 +9,12 @@ class CustomChatAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 50.h, left: 20.w, right: 20.w),
+      padding: EdgeInsets.only(
+        top: 30.h,
+        left: 20.w,
+        right: 20.w,
+        bottom: 10.h,
+      ),
       child: Row(
         children: [
           GestureDetector(

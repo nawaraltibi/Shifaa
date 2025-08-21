@@ -1,5 +1,6 @@
 // ⭐️ لا تنسى إضافة هذا الاستيراد في الأعلى
 import 'dart:io';
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart'; // ⭐️ استيراد مهم للملفات المؤقتة
 // ⭐️ ---
@@ -8,6 +9,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shifaa/core/errors/failure.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/functions/e2ee_service.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
@@ -21,6 +23,7 @@ import 'package:shifaa/features/chat/presentation/cubits/get_messages_cubit/get_
 import 'package:shifaa/features/chat/presentation/widgets/chat_message.dart';
 import 'package:shifaa/features/chat/presentation/widgets/chat_message2.dart';
 import 'package:shifaa/features/chat/presentation/widgets/custom_chat_app_bar.dart';
+import 'package:shifaa/features/chat/presentation/widgets/message_composer.dart';
 
 // ---------------- ChatViewBody ----------------
 class ChatViewBody extends StatefulWidget {
@@ -84,11 +87,17 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   }
 
   // ✅✅✅ --- دالة الإرسال الجديدة والذكية --- ✅✅✅
+
+  // في ملف chat_view_body.dart
+
+  // ... (باقي الكود في الملف)
+
+  // ✅✅✅ --- دالة الإرسال الجديدة التي لا تعتمد على الكاش --- ✅✅✅
   void _sendMessage({String? text, File? file, Message? messageToRetry}) async {
     final messagesCubit = context.read<GetMessagesCubit>();
     final repo = context.read<ChatRepository>();
 
-    // --- الخطوة 1: إنشاء الرسالة المؤقتة ---
+    // --- الخطوة 1: إنشاء الرسالة المؤقتة (تبقى كما هي) ---
     final Message tempMessage;
     final tempId =
         messageToRetry?.id ?? DateTime.now().millisecondsSinceEpoch * -1;
@@ -97,13 +106,14 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       tempMessage = messageToRetry;
       messagesCubit.updateMessageStatus(tempId, MessageStatus.sending);
     } else {
+      // في تطبيق المريض، المرسل هو 'patient'
+      // في تطبيق الطبيب، المرسل هو 'doctor'
       final myUser = await SharedPrefsHelper.instance.getUserModel();
       tempMessage = Message(
         id: tempId,
         text: text,
-        file: file?.path,
         localFilePath: file?.path,
-        senderRole: 'patient',
+        senderRole: 'patient', // ⭐️ غيري هذه إلى 'doctor' في تطبيق الطبيب
         senderId: myUser.id,
         createdAt: DateTime.now(),
         status: MessageStatus.sending,
@@ -113,8 +123,65 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       _scrollToBottom();
     }
 
-    // --- الخطوة 2: تحضير البيانات للإرسال ---
+    // --- الخطوة 2: تحضير البيانات للتشفير والإرسال ---
     try {
+      // --- الخطوة 1 (الجديدة): جلب أحدث بيانات المحادثة من الـ API ---
+      print("🔄 Fetching latest chat details from API before sending...");
+      final latestChatResult = await repo.getChatDetails(widget.chat.id);
+
+      final Map<int, String> targets = latestChatResult.fold(
+        (failure) {
+          print(
+            "❌ Could not fetch latest chat details. Sending will likely fail.",
+          );
+          return {};
+        },
+        (latestChat) {
+          // ✅✅✅ --- هذا هو المنطق الجديد والصحيح --- ✅✅✅
+          print("✅ Building targets from live API data...");
+          final targetsMap = <int, String>{};
+
+          var doctorDevices = latestChat.doctor!.devices;
+          for (var device in doctorDevices) {
+            print(
+              '-----------------------------------------------------------------------------',
+            );
+            print(device.id);
+          }
+
+          // 1. أضف كل أجهزة الطبيب إلى القائمة
+          if (latestChat.doctor != null) {
+            for (var device in latestChat.doctor!.devices) {
+              // تجاهل أي مفاتيح عامة فارغة أو غير صالحة
+              if (device.publicKey.isNotEmpty && device.publicKey != 's') {
+                targetsMap[device.id] = device.publicKey;
+              }
+            }
+          }
+
+          // 2. أضف كل أجهزة المريض إلى القائمة
+          // (الـ Map سيمنع التكرار تلقائياً)
+          if (latestChat.patient != null) {
+            for (var device in latestChat.patient!.devices) {
+              if (device.publicKey.isNotEmpty && device.publicKey != 's') {
+                targetsMap[device.id] = device.publicKey;
+              }
+            }
+          }
+
+          print("🎯 Final targets for encryption: ${targetsMap.keys.toList()}");
+          return targetsMap;
+        },
+      );
+
+      // إذا لم يكن هناك أهداف، لا تكمل
+      if (targets.isEmpty) {
+        print("❌ No valid targets found after filtering. Aborting send.");
+        messagesCubit.updateMessageStatus(tempId, MessageStatus.failed);
+        return;
+      }
+
+      // --- الخطوة 2.3: التشفير (تبقى كما هي) ---
       final aesKey = E2EE.generateAESKey();
       String? encryptedText;
       File? encryptedFile;
@@ -122,13 +189,8 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       if (tempMessage.text != null && tempMessage.text!.isNotEmpty) {
         encryptedText = E2EE.aesGcmEncryptToBase64(aesKey, tempMessage.text!);
       } else if (tempMessage.localFilePath != null) {
-        // 1. اقرأ الملف كبايتات
         final fileBytes = await File(tempMessage.localFilePath!).readAsBytes();
-
-        // ✅✅✅ --- الإصلاح هنا: استخدام الدالة الصحيحة --- ✅✅✅
         final encryptedBytes = E2EE.aesGcmEncryptToBytes(aesKey, fileBytes);
-
-        // 3. احفظ البايتات المشفرة في ملف مؤقت لإرساله
         final tempDir = await getTemporaryDirectory();
         final fileName = tempMessage.localFilePath!.split('/').last;
         encryptedFile = await File(
@@ -136,18 +198,14 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         ).writeAsBytes(encryptedBytes);
       }
 
-      final targets = await DeviceCacheRepo.getTargetsForSending(
-        doctorUserId: widget.chat.doctor!.id,
-        myUserId: tempMessage.senderId,
-        myDeviceId: await SharedPrefsHelper.instance.getMyDeviceId(),
-      );
+      print("🎯 Final final targets for encryption: ${targets.keys.toList()}");
 
       final encryptedKeysPayload = E2EE.buildEncryptedKeysPayload(
         targets: targets,
         aesKey: aesKey,
       );
 
-      // --- الخطوة 3: إرسال الطلب ---
+      // --- الخطوة 3: إرسال الطلب (تبقى كما هي) ---
       final result = await repo.sendMessage(
         widget.chat.id,
         text: encryptedText,
@@ -155,17 +213,18 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         encryptedKeysPayload: encryptedKeysPayload,
       );
 
-      // --- الخطوة 4: معالجة النتيجة ---
+      // --- الخطوة 4: معالجة النتيجة (تبقى كما هي) ---
       result.fold(
         (failure) {
-          print("❌ Failed to send message: ${failure.message}");
+          String errorMessage = 'Unknown error';
+          errorMessage = failure.message;
+          print("❌ Failed to send message: $errorMessage");
           messagesCubit.updateMessageStatus(tempId, MessageStatus.failed);
         },
         (sentMessage) {
           print(
             "✅ Message request sent successfully. Waiting for Pusher to confirm.",
           );
-          // لا نفعل شيئاً هنا، ننتظر رسالة Pusher لتأكيد التسليم
         },
       );
     } catch (e) {
@@ -173,6 +232,8 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       messagesCubit.updateMessageStatus(tempId, MessageStatus.failed);
     }
   }
+
+  // ... (باقي الكود في الملف)
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -246,52 +307,3 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 }
 
 // هذا الوجت يبقى كما هو
-Widget buildMessageComposer({
-  required TextEditingController messageController,
-  required VoidCallback onSendPressed,
-  required VoidCallback onAttachmentPressed,
-}) {
-  // ... الكود هنا لا يتغير
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-    child: Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: messageController,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            decoration: InputDecoration(
-              hintText: 'Type a message...',
-              filled: true,
-              fillColor: const Color(0xFFF0F5F9),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.r),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20.w,
-                vertical: 10.h,
-              ),
-              suffixIcon: Padding(
-                padding: EdgeInsets.only(right: 8.w),
-                child: IconButton(
-                  icon: Icon(Icons.attachment, color: Colors.grey, size: 24.w),
-                  onPressed: onAttachmentPressed,
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: 10.w),
-        FloatingActionButton(
-          elevation: 2,
-          onPressed: onSendPressed,
-          backgroundColor: AppColors.primaryAppColor,
-          shape: const CircleBorder(),
-          child: Icon(Icons.send, color: Colors.white, size: 24.w),
-        ),
-      ],
-    ),
-  );
-}

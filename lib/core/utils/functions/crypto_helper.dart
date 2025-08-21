@@ -112,6 +112,12 @@ Future<Message> decryptForMe(MessageModel msg) async {
     // --- الخطوة 3: البحث عن المفتاح المشفر الخاص بجهازي ---
     EncryptedKeyTarget? me;
     try {
+      for (int i = 0; i < msg.encryptedKeys.length; i++) {
+        print(msg.id);
+        print(msg.encryptedKeys[i].deviceId);
+        print(msg.encryptedKeys[i].encryptedKey);
+      }
+      print(msg.encryptedKeys);
       me = msg.encryptedKeys.firstWhere(
         (keyTarget) => keyTarget.deviceId == myDeviceId,
       );

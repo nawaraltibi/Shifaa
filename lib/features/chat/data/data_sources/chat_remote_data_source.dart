@@ -47,7 +47,6 @@ class ChatRemoteDataSource {
       // ✅✅✅ --- DEBUGGING --- ✅✅✅
       // سنقوم بطباعة ال-JSON الخام الذي وصل من الخادم قبل أي محاولة تحليل
       print("🕵️‍♂️ [getChatDetails Response Body]: ${jsonEncode(res.data)}");
-
       // هذا هو السطر الذي يسبب الخطأ على الأغلب
       return ChatModel.fromJson(res.data["data"]["chat"]);
     } catch (e) {

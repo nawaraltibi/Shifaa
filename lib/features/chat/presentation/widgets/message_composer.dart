@@ -6,11 +6,11 @@ import 'package:shifaa/core/utils/app_colors.dart';
 Widget buildMessageComposer({
   required TextEditingController messageController,
   required VoidCallback onSendPressed,
-  required VoidCallback
-  onAttachmentPressed, // <-- ✅ إضافة: دالة جديدة للضغط على المرفقات
+  required VoidCallback onAttachmentPressed,
 }) {
+  // ... الكود هنا لا يتغير
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+    padding: const EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
     child: Row(
       children: [
         Expanded(
@@ -30,13 +30,11 @@ Widget buildMessageComposer({
                 horizontal: 20.w,
                 vertical: 10.h,
               ),
-              // ✅ تعديل: استخدمنا suffixIcon بدلاً من suffix لسهولة التحكم
               suffixIcon: Padding(
                 padding: EdgeInsets.only(right: 8.w),
                 child: IconButton(
-                  // <-- ✅ تحويلها إلى زر قابل للضغط
                   icon: Icon(Icons.attachment, color: Colors.grey, size: 24.w),
-                  onPressed: onAttachmentPressed, // <-- ✅ الربط بالدالة الجديدة
+                  onPressed: onAttachmentPressed,
                 ),
               ),
             ),
