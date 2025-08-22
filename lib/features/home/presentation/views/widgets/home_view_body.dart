@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/functions/generate_keys.dart';
+import 'package:shifaa/core/utils/functions/e2ee_service.dart';
 import 'package:shifaa/core/utils/functions/get_private_key.dart';
 import 'package:shifaa/core/utils/functions/privatekey_to_pem.dart';
 import 'package:shifaa/core/utils/functions/send_public_key_to_server.dart';
@@ -24,7 +25,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
   Future<void> _initializeKeysAndSendPublicKey() async {
     // توليد المفاتيح لو مش موجودة
-    await generateKeys();
+    await generateAndSaveKeys();
 
     // طباعة الـ Private Key بالكامل
     // final privateKey = await getPrivateKey();
@@ -34,7 +35,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     // }
 
     // إرسال الـ Public Key ونوع الجهاز إذا ما أرسل قبل
-    await sendPublicKeyIfNeeded();
+     await sendPublicKeyIfNeeded();
 
     // ✅ طباعة patient_id هنا
     // try {

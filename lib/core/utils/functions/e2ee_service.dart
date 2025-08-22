@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pointycastle/export.dart' as pc;
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:asn1lib/asn1lib.dart'; // تأكد من وجود هذا الاستيراد
+import 'dart:math';
 
 // ===================================================================
 // 🔑 قسم توليد وحفظ المفاتيح (النسخة النهائية والمؤكدة)
@@ -14,19 +15,16 @@ const _secureStorage = FlutterSecureStorage();
 
 /// يولد زوج مفاتيح RSA باستخدام مكتبة pointycastle.
 pc.AsymmetricKeyPair<pc.RSAPublicKey, pc.RSAPrivateKey> _generateRsaKeyPair() {
-  final secureRandom = pc.FortunaRandom()
-    ..seed(pc.KeyParameter(pc.SecureRandom('Fortuna').nextBytes(32)));
+  final secureRandom = E2EE._getSecureRandom();
+  final rsaParams = pc.RSAKeyGeneratorParameters(BigInt.parse('65537'), 2048, 64);
 
-  final keyGen = pc.RSAKeyGenerator()
-    ..init(
-      pc.ParametersWithRandom(
-        pc.RSAKeyGeneratorParameters(BigInt.parse('65537'), 2048, 64),
-        secureRandom,
-      ),
-    );
+  final params = pc.ParametersWithRandom(rsaParams, secureRandom);
+  final keyGen = pc.RSAKeyGenerator()..init(params);
 
-  return keyGen.generateKeyPair()
-      as pc.AsymmetricKeyPair<pc.RSAPublicKey, pc.RSAPrivateKey>;
+  final pair = keyGen.generateKeyPair();
+  final pub = pair.publicKey as pc.RSAPublicKey;
+  final priv = pair.privateKey as pc.RSAPrivateKey;
+  return pc.AsymmetricKeyPair<pc.RSAPublicKey, pc.RSAPrivateKey>(pub, priv);
 }
 
 /// يقوم بترميز المفتاح العام إلى صيغة PEM (PKCS#1).
@@ -76,7 +74,7 @@ Future<void> generateAndSaveKeys() async {
   final sharedPrefs = SharedPrefsHelper.instance;
 
   if (await sharedPrefs.hasKeys() &&
-      await _secureStorage.containsKey(key: 'private_key')) {
+      await _secureStorage.containsKey(key: 'privateKey')) {
     print('✅ Keys already exist. No new keys generated.');
     return;
   }
@@ -88,7 +86,7 @@ Future<void> generateAndSaveKeys() async {
   final privateKeyPem = _encodePrivateKeyToPem(keyPair.privateKey);
 
   await sharedPrefs.savePublicKey(publicKeyPem);
-  await _secureStorage.write(key: 'private_key', value: privateKeyPem);
+  await _secureStorage.write(key: 'privateKey', value: privateKeyPem);
 
   print(
     '✅✅✅ New keys generated and saved successfully using the manual (but correct) PEM encoding.',
@@ -170,100 +168,136 @@ class E2EE {
     }
   }
 
-  // في ملف e2ee_service.dart
+  static pc.RSAPrivateKey parsePrivateKeyFromPem(String pem) {
+    print (pem);
+    final cleaned = pem
+        .replaceAll(RegExp(r'-----BEGIN (?:RSA )?PRIVATE KEY-----'), '')
+        .replaceAll(RegExp(r'-----END (?:RSA )?PRIVATE KEY-----'), '')
+        .replaceAll('\r', '')
+        .replaceAll('\n', '')
+        .trim();
 
-  // ... (باقي الكلاس)
+    final bytes = base64.decode(cleaned);
+    final parser = ASN1Parser(bytes);
+    ASN1Sequence topLevel = parser.nextObject() as ASN1Sequence;
+
+    ASN1Sequence privSeq;
+
+    // Detect PKCS#8 (SubjectPrivateKeyInfo) vs PKCS#1
+    if (topLevel.elements != null &&
+        topLevel.elements!.length >= 2 &&
+        topLevel.elements![1] is ASN1OctetString) {
+      // PKCS#8: element 1 is OctetString that contains the PKCS#1 sequence
+      final octet = topLevel.elements![1] as ASN1OctetString;
+      final inner = ASN1Parser(octet.octets!);
+      privSeq = inner.nextObject() as ASN1Sequence;
+    } else {
+      // directly PKCS#1
+      privSeq = topLevel;
+    }
+
+    final elems = privSeq.elements!;
+    if (elems.length < 6) {
+      throw FormatException('Unexpected private key format (too few ASN.1 elements).');
+    }
+
+    final modulus = (elems[1] as ASN1Integer).valueAsBigInteger!;
+    final //publicExponent = (elems[2] as ASN1Integer).valueAsBigInteger!; // we don't need it
+    privateExponent = (elems[3] as ASN1Integer).valueAsBigInteger!;
+    final p = (elems[4] as ASN1Integer).valueAsBigInteger!;
+    final q = (elems[5] as ASN1Integer).valueAsBigInteger!;
+
+    // Construct without passing publicExponent to avoid the strict validation.
+    return pc.RSAPrivateKey(modulus, privateExponent, p, q);
+  }
 
   // ✅✅✅ --- هذا هو الإصلاح النهائي الذي يعالج صيغ المفاتيح المختلفة --- ✅✅✅
   static pc.RSAPublicKey parsePublicKeyFromPem(String pem) {
-    try {
-      // 1. تنظيف المفتاح وفك تشفير base64
-      final cleanBase64 = pem
-          .replaceAll('-----BEGIN PUBLIC KEY-----', '')
-          .replaceAll('-----END PUBLIC KEY-----', '')
-          .replaceAll('-----BEGIN RSA PUBLIC KEY-----', '')
-          .replaceAll('-----END RSA PUBLIC KEY-----', '')
-          .replaceAll('\n', '')
-          .replaceAll('\r', '')
-          .trim();
+    // reuse your existing parsePublicKeyFromPem implementation (the one that handles PKCS#8 & PKCS#1)
+    final cleanBase64 = pem
+        .replaceAll('-----BEGIN PUBLIC KEY-----', '')
+        .replaceAll('-----END PUBLIC KEY-----', '')
+        .replaceAll('-----BEGIN RSA PUBLIC KEY-----', '')
+        .replaceAll('-----END RSA PUBLIC KEY-----', '')
+        .replaceAll('\n', '')
+        .replaceAll('\r', '')
+        .trim();
 
-      final keyBytes = base64.decode(cleanBase64);
-      final asn1Parser = ASN1Parser(keyBytes);
+    final keyBytes = base64.decode(cleanBase64);
+    final asn1Parser = ASN1Parser(keyBytes);
+    var topLevelSeq = asn1Parser.nextObject() as ASN1Sequence;
+    ASN1Sequence publicKeySeq;
 
-      // 2. اقرأ البنية الخارجية (ASN.1 Sequence)
-      var topLevelSeq = asn1Parser.nextObject() as ASN1Sequence;
-
-      ASN1Sequence publicKeySeq;
-
-      // 3. التحقق من نوع المفتاح (PKCS#8 vs PKCS#1)
-      // إذا كان العنصر الأول هو sequence، فهذا يعني أنه PKCS#8 (يحتوي على غلاف الخوارزمية)
-      if (topLevelSeq.elements[0] is ASN1Sequence) {
-        // هذا مفتاح PKCS#8. المفتاح الفعلي موجود داخل ASN1BitString
-        final bitString = topLevelSeq.elements[1] as ASN1BitString;
-        final publicKeyParser = ASN1Parser(bitString.contentBytes());
-        publicKeySeq = publicKeyParser.nextObject() as ASN1Sequence;
-      } else {
-        // هذا مفتاح PKCS#1. البنية الخارجية هي المفتاح نفسه
-        publicKeySeq = topLevelSeq;
-      }
-
-      // 4. الآن، استخرج الـ modulus والـ exponent من البنية الصحيحة
-      final modulus =
-          (publicKeySeq.elements[0] as ASN1Integer).valueAsBigInteger;
-      final exponent =
-          (publicKeySeq.elements[1] as ASN1Integer).valueAsBigInteger;
-
-      // 5. قم ببناء كائن RSAPublicKey
-      return pc.RSAPublicKey(modulus, exponent);
-    } catch (e, stackTrace) {
-      print("🔥🔥🔥 FAILED TO PARSE PUBLIC KEY MANUALLY. Error: $e");
-      print("   --- StackTrace: ---\n$stackTrace");
-      throw Exception('Failed to parse public key.');
+    if (topLevelSeq.elements != null && topLevelSeq.elements!.isNotEmpty && topLevelSeq.elements![0] is ASN1Sequence) {
+      // PKCS#8 / SubjectPublicKeyInfo
+      final bitString = topLevelSeq.elements![1] as ASN1BitString;
+      final publicKeyParser = ASN1Parser(bitString.contentBytes()!);
+      publicKeySeq = publicKeyParser.nextObject() as ASN1Sequence;
+    } else {
+      // PKCS#1
+      publicKeySeq = topLevelSeq;
     }
+
+    final modulus = (publicKeySeq.elements![0] as ASN1Integer).valueAsBigInteger!;
+    final exponent = (publicKeySeq.elements![1] as ASN1Integer).valueAsBigInteger!;
+    return pc.RSAPublicKey(modulus, exponent);
+  }
+
+  static pc.SecureRandom _getSecureRandom() {
+    final secureRandom = pc.FortunaRandom();
+
+    // Seed with 32 secure bytes using Random.secure()
+    final seed = Uint8List.fromList(List<int>.generate(32, (_) => Random.secure().nextInt(256)));
+    secureRandom.seed(pc.KeyParameter(seed));
+
+    return secureRandom;
   }
 
   // ... (باقي الكلاس)
 
   static Future<pc.RSAPrivateKey?> loadPrivateKeyFromSecureStorage() async {
-    final pem = await _secureStorage.read(key: 'private_key');
-    if (pem == null) {
-      print("❌ Private key not found in secure storage.");
-      return null;
-    }
-    try {
-      final parser = encrypt.RSAKeyParser();
-      final privateKey = parser.parse(pem) as pc.RSAPrivateKey;
-      print("✅ Private key loaded and parsed successfully using RSAKeyParser.");
-      return privateKey;
-    } catch (e) {
-      print(
-        "❌ FAILED to parse private key from PEM using RSAKeyParser. Error: $e",
-      );
-      return null;
-    }
+      final pem = await _secureStorage.read(key: 'privateKey');
+      if (pem == null) {
+        print("❌ Private key not found in secure storage.");
+        return null;
+      }
+      try {
+        final priv = parsePrivateKeyFromPem(pem);
+        print("✅ Private key parsed successfully (manual ASN.1 parser).");
+        return priv;
+      } catch (e, st) {
+        print("❌ Failed to parse private key from PEM: $e\n$st");
+        return null;
+      }
   }
 
-  static Uint8List rsaEncryptForPublic(pc.RSAPublicKey pub, Uint8List data) {
-    final encrypter = encrypt.Encrypter(
-      encrypt.RSA(publicKey: pub, encoding: encrypt.RSAEncoding.OAEP),
-    );
-    return encrypter.encryptBytes(data).bytes;
+// ------------ RSA encrypt for public (use OAEP) ------------
+  static Uint8List rsaEncryptForPublicOAEP(pc.RSAPublicKey pub, Uint8List data) {
+    final engine = pc.OAEPEncoding(pc.RSAEngine())
+      ..init(true, pc.PublicKeyParameter<pc.RSAPublicKey>(pub));
+    return _processInBlocks(engine, data);
   }
 
-  static Uint8List rsaDecryptWithPrivate(
-    pc.RSAPrivateKey priv,
-    Uint8List cipher,
-  ) {
-    final decrypter = encrypt.Encrypter(
-      encrypt.RSA(privateKey: priv, encoding: encrypt.RSAEncoding.PKCS1),
-    );
-    try {
-      final decrypted = decrypter.decryptBytes(encrypt.Encrypted(cipher));
-      return Uint8List.fromList(decrypted);
-    } catch (e) {
-      print("❌ RSA Decryption with PKCS1 failed. Error: $e");
-      rethrow;
+// ------------ RSA decrypt with private (use OAEP) ------------
+  static Uint8List rsaDecryptWithPrivateOAEP(pc.RSAPrivateKey priv, Uint8List cipher) {
+    final engine = pc.OAEPEncoding(pc.RSAEngine())
+      ..init(false, pc.PrivateKeyParameter<pc.RSAPrivateKey>(priv));
+    return _processInBlocks(engine, cipher);
+  }
+
+  static Uint8List _processInBlocks(pc.AsymmetricBlockCipher engine, Uint8List input) {
+    final output = <int>[];
+    final inputLen = input.length;
+    final inBlock = engine.inputBlockSize;
+    var offset = 0;
+    while (offset < inputLen) {
+      final chunkEnd = (offset + inBlock < inputLen) ? offset + inBlock : inputLen;
+      final chunk = input.sublist(offset, chunkEnd);
+      final processed = engine.process(chunk);
+      output.addAll(processed);
+      offset = chunkEnd;
     }
+    return Uint8List.fromList(output);
   }
 
   static List<Map<String, String>> buildEncryptedKeysPayload({
@@ -274,7 +308,7 @@ class E2EE {
     targets.forEach((deviceId, pubPem) {
       try {
         final pub = parsePublicKeyFromPem(pubPem);
-        final enc = rsaEncryptForPublic(pub, aesKey);
+        final enc = rsaEncryptForPublicOAEP(pub, aesKey);
         list.add({
           'device_id': deviceId.toString(),
           'encrypted_key': base64.encode(enc),

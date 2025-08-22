@@ -149,7 +149,7 @@ Future<Message> decryptForMe(MessageModel msg) async {
     try {
       // ✅✅✅ --- هذا هو الإصلاح --- ✅✅✅
       // تم حذف useOaep: true لأنه لم يعد ضرورياً
-      aesKey = E2EE.rsaDecryptWithPrivate(priv, base64.decode(me.encryptedKey));
+      aesKey = E2EE.rsaDecryptWithPrivateOAEP(priv, base64.decode(me.encryptedKey));
       print("✅ STEP 5: AES key decrypted successfully using RSA.");
     } catch (e) {
       print("❌ FAILED at STEP 5: RSA decryption failed. Error: $e");

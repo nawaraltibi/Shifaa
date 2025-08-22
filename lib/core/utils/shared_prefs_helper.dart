@@ -113,8 +113,7 @@ class SharedPrefsHelper {
   // ✅ التحقق من وجود المفاتيح
   Future<bool> hasKeys() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyPublicKey) != null &&
-        prefs.getString(_keyPrivateKey) != null;
+    return prefs.getString(_keyPublicKey) != null;
   }
 
   // ✅ حفظ حالة إرسال المفتاح العام

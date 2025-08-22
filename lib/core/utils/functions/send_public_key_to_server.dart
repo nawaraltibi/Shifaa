@@ -17,23 +17,11 @@ Future<int?> sendPublicKeyIfNeeded() async {
     return existingDeviceId;
   }
 
-  // ✅ تأكّد وجود مفاتيح (ولّدي إذا ما في)
-  await generateKeys();
-  final newPublicKey = await sharedPrefs.getPublicKey();
-  if (newPublicKey == null) {
+  final PublicKey = await sharedPrefs.getPublicKey();
+  if (PublicKey == null) {
     print('⚠️ No public key found. Cannot send.');
     return null;
   }
-
-  // ✅ نظّف الـ PEM headers (نتعامل مع النوعين)
-  String cleanedPublicKey = newPublicKey
-      .replaceAll('-----BEGIN PUBLIC KEY-----', '')
-      .replaceAll('-----END PUBLIC KEY-----', '')
-      .replaceAll('-----BEGIN RSA PUBLIC KEY-----', '')
-      .replaceAll('-----END RSA PUBLIC KEY-----', '')
-      .replaceAll('\r', '')
-      .replaceAll('\n', '')
-      .trim();
 
   // ✅ اسم الجهاز
   final deviceInfo = DeviceInfoPlugin();
@@ -54,7 +42,7 @@ Future<int?> sendPublicKeyIfNeeded() async {
 
   // ✅ الإرسال
   final dioConsumer = DioConsumer(dio: Dio());
-  final body = {"public_key": cleanedPublicKey, "device_name": deviceName};
+  final body = {"public_key": PublicKey, "device_name": deviceName};
 
   try {
     print('🔹 Sending public key to: ${EndPoint.baseUrl}${EndPoint.publicKey}');
