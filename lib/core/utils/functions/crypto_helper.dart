@@ -74,7 +74,7 @@ class CryptoHelper {
 
 // في ملف crypto_helper.dart
 
-Future<Message> decryptForMe(MessageModel msg) async {
+Future<Uint8List> getAesKey(MessageModel msg) async {
   // استخدمنا print() بدلاً من logger لضمان ظهورها دائماً
   print(
     "\n🕵️‍♂️ --- DECRYPTION PROCESS STARTED for Message ID: ${msg.id} --- 🕵️‍♂️",
@@ -84,13 +84,13 @@ Future<Message> decryptForMe(MessageModel msg) async {
     // --- الخطوة 1: التحقق من الشروط الأساسية ---
     if ((msg.text ?? '').isEmpty) {
       print("➡️ SKIPPED: Message text is empty or null.");
-      return msg;
+      return Uint8List(0);
     }
     if (msg.encryptedKeys.isEmpty) {
       print(
         "➡️ SKIPPED: Message has no encrypted keys attached. (Check MessageModel.fromJson)",
       );
-      return msg;
+      return Uint8List(0);
     }
     print("✅ STEP 1: Basic conditions passed. Message has text and keys.");
 
@@ -100,7 +100,7 @@ Future<Message> decryptForMe(MessageModel msg) async {
       print(
         "❌ FAILED at STEP 2: Could not get current device ID from SharedPreferences.",
       );
-      return msg;
+      return Uint8List(0);
     }
     print(
       "✅ STEP 2: My Device ID is: $myDeviceId (Type: ${myDeviceId.runtimeType})",
@@ -128,7 +128,7 @@ Future<Message> decryptForMe(MessageModel msg) async {
       print(
         "❌ FAILED at STEP 3: No encrypted key found for my device ID ($myDeviceId). The message was not encrypted for this device.",
       );
-      return msg; // أعد الرسالة الأصلية لأنها غير موجهة لهذا الجهاز
+      return Uint8List(0); // أعد الرسالة الأصلية لأنها غير موجهة لهذا الجهاز
     }
 
     // --- الخطوة 4: تحميل المفتاح الخاص من الـ Secure Storage ---
@@ -137,7 +137,7 @@ Future<Message> decryptForMe(MessageModel msg) async {
       print(
         "❌ FAILED at STEP 4: Private key not found in secure storage. Cannot decrypt.",
       );
-      return msg;
+      return Uint8List(0);
     }
     print("✅ STEP 4: Private key loaded successfully from secure storage.");
 
@@ -153,37 +153,40 @@ Future<Message> decryptForMe(MessageModel msg) async {
       print("✅ STEP 5: AES key decrypted successfully using RSA.");
     } catch (e) {
       print("❌ FAILED at STEP 5: RSA decryption failed. Error: $e");
-      return msg;
+      return Uint8List(0);
     }
-
-    // --- الخطوة 6: فك تشفير نص الرسالة باستخدام مفتاح AES (AES-GCM) ---
-    String? plainText;
-    try {
-      plainText = E2EE.aesGcmDecryptFromBase64(aesKey, msg.text!);
-      if (plainText == null) {
-        print(
-          "❌ FAILED at STEP 6: AES-GCM decryption returned null. (The AES key might be wrong or text is corrupted).",
-        );
-        return msg;
-      }
-      print("✅ STEP 6: SUCCESS! Message decrypted!");
-      print("   ---> Decrypted Text: $plainText <---");
-    } catch (e) {
-      print(
-        "❌ FAILED at STEP 6: AES-GCM decryption threw an exception. Error: $e",
-      );
-      return msg;
-    }
-
-    // --- الخطوة 7: إعادة بناء الموديل مع النص المفكوك ---
-    // نستخدم copyWith لتحديث النص فقط
-    return msg.copyWith(text: plainText);
+    return aesKey;
   } catch (e, stackTrace) {
     print("\n🔥🔥🔥 AN UNEXPECTED ERROR OCCURRED IN DECRYPTION 🔥🔥🔥");
     print("Error for Message ID: ${msg.id}");
     print("THE ERROR: $e");
     print("STACK TRACE: $stackTrace");
     print("🔥🔥🔥 END OF ERROR 🔥🔥🔥\n");
-    return msg; // أعد الرسالة المشفرة عند حدوث خطأ فادح
+    return Uint8List(0); // أعد الرسالة المشفرة عند حدوث خطأ فادح
   }
+}
+
+Future<Message> decryptText(MessageModel msg, Uint8List aesKey) async {
+  // --- الخطوة 6: فك تشفير نص الرسالة باستخدام مفتاح AES (AES-GCM) ---
+  String? plainText;
+  try {
+    plainText = E2EE.aesGcmDecryptFromBase64(aesKey, msg.text!);
+    if (plainText == null) {
+      print(
+        "❌ FAILED at STEP 6: AES-GCM decryption returned null. (The AES key might be wrong or text is corrupted).",
+      );
+      return msg;
+    }
+    print("✅ STEP 6: SUCCESS! Message decrypted!");
+    print("   ---> Decrypted Text: $plainText <---");
+  } catch (e) {
+    print(
+      "❌ FAILED at STEP 6: AES-GCM decryption threw an exception. Error: $e",
+    );
+    return msg;
+  }
+
+  // --- الخطوة 7: إعادة بناء الموديل مع النص المفكوك ---
+  // نستخدم copyWith لتحديث النص فقط
+  return msg.copyWith(text: plainText);
 }

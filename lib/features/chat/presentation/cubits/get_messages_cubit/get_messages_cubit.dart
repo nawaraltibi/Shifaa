@@ -25,7 +25,8 @@ class GetMessagesCubit extends Cubit<GetMessagesState> {
       for (final message in chat.messages) {
         if (message is MessageModel) {
           // دائماً حاول فك التشفير. decryptForMe ستعيد الرسالة كما هي إذا فشلت.
-          final decryptedMessage = await decryptForMe(message);
+          final aesKey = await getAesKey(message);
+          final decryptedMessage = await decryptText(message, aesKey);
           processedMessages.add(decryptedMessage);
         } else {
           // هذا لن يحدث في هذه الدالة، ولكنه جيد كاحتياط
@@ -55,7 +56,8 @@ class GetMessagesCubit extends Cubit<GetMessagesState> {
     // ✅✅✅ --- الإصلاح هنا أيضاً --- ✅✅✅
     // إذا كانت الرسالة من Pusher ومن الطرف الآخر، فك تشفيرها
     if (message.senderRole != 'patient' && message is MessageModel) {
-      finalMessage = await decryptForMe(message);
+      final aesKey = await getAesKey(message);
+      finalMessage = await decryptText(message, aesKey);
     }
 
     final newMessages = [...currentMessages, finalMessage];
