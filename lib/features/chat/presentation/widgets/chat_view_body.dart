@@ -222,9 +222,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           messagesCubit.updateMessageStatus(tempId, MessageStatus.failed);
         },
         (sentMessage) {
-          print(
-            "✅ Message request sent successfully. Waiting for Pusher to confirm.",
-          );
+          print("✅ Message sent to server. Updating UI immediately.");
+          // استدعِ الدالة الجديدة لتحديث الواجهة فوراً
+          messagesCubit.replaceTempMessageWithSentMessage(tempId, sentMessage);
         },
       );
     } catch (e) {

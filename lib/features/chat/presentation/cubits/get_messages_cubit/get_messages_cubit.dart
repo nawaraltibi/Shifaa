@@ -10,6 +10,48 @@ class GetMessagesCubit extends Cubit<GetMessagesState> {
   final ChatRepository repository;
 
   GetMessagesCubit(this.repository) : super(GetMessagesInitial());
+  // في ملف: get_messages_cubit.dart
+  // داخل كلاس: GetMessagesCubit
+
+  // ✅✅✅ --- النسخة الجديدة والمحسّنة من الدالة --- ✅✅✅
+  void replaceTempMessageWithSentMessage(int tempId, Message sentMessage) {
+    if (state is! GetMessagesSuccess) return;
+
+    final currentState = state as GetMessagesSuccess;
+    final currentMessages = currentState.messages;
+
+    // 1. ابحث عن الرسالة المؤقتة
+    final messageIndex = currentMessages.indexWhere((msg) => msg.id == tempId);
+
+    // 2. إذا لم تجدها، لا تفعل شيئاً (ربما تم تحديثها بالفعل)
+    if (messageIndex == -1) {
+      print(
+        "⚠️ Temp message with id $tempId not found. Maybe already updated by Pusher.",
+      );
+      return;
+    }
+
+    // 3. أنشئ قائمة جديدة تماماً من الرسائل الحالية
+    final List<Message> newMessages = List.from(currentMessages);
+
+    // 4. استبدل الرسالة المؤقتة بالرسالة النهائية من السيرفر
+    //    مع التأكد من أن حالتها هي 'sent' وأن النص الأصلي (غير المشفر) موجود
+    newMessages[messageIndex] = sentMessage.copyWith(
+      status: MessageStatus.sent,
+      // احتفظ بالنص الأصلي والمسار المحلي من الرسالة المؤقتة
+      text: currentMessages[messageIndex].text,
+      localFilePath: currentMessages[messageIndex].localFilePath,
+      senderRole: currentMessages[messageIndex].senderRole,
+    );
+
+    print(
+      "✅ Replacing temp message $tempId with final message ${sentMessage.id}. Emitting new state.",
+    );
+
+    // 5. أصدر حالة جديدة مع القائمة الجديدة
+    //    هذا سيجبر الواجهة على إعادة البناء
+    emit(GetMessagesSuccess(newMessages));
+  }
 
   // --- دالة جلب الرسائل الأولية ---
   Future<void> fetchMessages(int chatId) async {
@@ -49,6 +91,7 @@ class GetMessagesCubit extends Cubit<GetMessagesState> {
 
     final currentMessages = (state as GetMessagesSuccess).messages;
     if (currentMessages.any((msg) => msg.id == message.id && msg.id > 0)) {
+      print("✅ Ignoring duplicate message from Pusher (ID: ${message.id})");
       return; // تجنب إضافة نفس الرسالة مرتين
     }
 
