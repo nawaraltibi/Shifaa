@@ -20,14 +20,14 @@ class DatabaseService {
     final path = join(dbPath, filePath);
     return await openDatabase(
       path,
-      version: 3, // <-- تم رفع الإصدار لتفعيل onUpgrade
+      version: 3, 
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
   }
 
   Future _createDB(Database db, int version) async {
-    // الهيكل الجديد المطابق للـ JSON
+    
     await db.execute('''
       CREATE TABLE appointments ( 
         id INTEGER NOT NULL,
@@ -47,12 +47,12 @@ class DatabaseService {
       await db.execute("ALTER TABLE appointments ADD COLUMN startTime TEXT NOT NULL DEFAULT ''");
     }
     if (oldVersion < 3) {
-      // إعادة تسمية الأعمدة لتطابق الهيكل الجديد
+      
       await db.execute("ALTER TABLE appointments RENAME COLUMN doctorName TO doctor_name");
       await db.execute("ALTER TABLE appointments RENAME COLUMN specialty TO specialty_name");
       await db.execute("ALTER TABLE appointments RENAME COLUMN imageUrl TO avatar");
       await db.execute("ALTER TABLE appointments RENAME COLUMN startTime TO start_time");
-      // حذف الأعمدة القديمة
+    
       await db.execute("ALTER TABLE appointments DROP COLUMN date");
       await db.execute("ALTER TABLE appointments DROP COLUMN time");
       print("✅ Database upgraded to version 3.");
@@ -85,7 +85,7 @@ class DatabaseService {
       'appointments',
       where: 'type = ?',
       whereArgs: [type],
-      orderBy: 'start_time ASC', // <-- التعديل هنا: من DESC إلى ASC
+      orderBy: 'start_time ASC', 
     );
 
     return maps.map((json) {

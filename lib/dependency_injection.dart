@@ -24,7 +24,7 @@ final sl = GetIt.instance;
 
 
 Future<String?> getTokenFromStorage() async {
-  return '2|NiB0JRjofbZBxQ3DIqtNjX9CQOUpqa9WYILMuIcLee2992a8';
+  return '4|A5ToOet7ApV3jigDuDHObrKAEHsHCwKIFnWNsfrq5411cc6a';
 }
 
 
@@ -57,17 +57,17 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton(() => GetUpcomingAppointmentsUseCase(sl()));
   sl.registerLazySingleton(() => GetPreviousAppointmentsUseCase(sl()));
   sl.registerLazySingleton<AppointmentRepository>(
-    // تم تحديث هذا السطر ليأخذ كل الـ Dependencies
+ 
     () => AppointmentRepositoryImpl(
       remoteDataSource: sl(),
       localDataSource: sl(),
-      networkInfo: sl(), // <-- إضافة جديدة
+      networkInfo: sl(), 
     ),
   );
   sl.registerLazySingleton<AppointmentRemoteDataSource>(
     () => AppointmentRemoteDataSourceImpl(dio: sl()),
   );
-  // تمت إضافة تسجيل المصدر المحلي
+
   sl.registerLazySingleton<AppointmentLocalDataSource>(
     () => AppointmentLocalDataSourceImpl(databaseService: sl()),
   );
@@ -75,7 +75,7 @@ Future<void> setupServiceLocator() async {
   // ================== Core / External ==================
   sl.registerLazySingleton(() => DatabaseService.instance);
   
-  // تمت إضافة تسجيل NetworkInfo
+ 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => Connectivity());
 

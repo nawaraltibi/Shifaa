@@ -48,7 +48,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       try {
         final localAppointments = await getLocal();
         if (localAppointments.isNotEmpty) return Right(localAppointments);
-      } catch (e) { /* ignore */ }
+      } catch (e) { }
     }
     if (await networkInfo.isConnected) {
       try {
@@ -62,7 +62,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       try {
         final localAppointments = await getLocal();
         if (localAppointments.isNotEmpty) return Right(localAppointments);
-      } catch (e) { /* ignore */ }
+      } catch (e) {}
       return Left(CacheFailure('No internet connection and cache is empty.'));
     }
   }

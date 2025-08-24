@@ -15,7 +15,7 @@ class GetPreviousAppointmentsUseCase implements UseCase<List<AppointmentEntity>,
   }
 }
 
-// كلاس مساعد لتمرير الباراميترات
+
 class GetAppointmentsParams extends Equatable {
   final bool forceRefresh;
   const GetAppointmentsParams({this.forceRefresh = false});
