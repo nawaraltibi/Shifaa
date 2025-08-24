@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/core/widgets/custom_button.dart';
-import 'package:shifaa/features/appointments/presentaion/views/doctor_details_view.dart';
+import 'package:shifaa/features/book_appointments/presentaion/views/doctor_details_view.dart';
 import 'package:shifaa/features/auth/presentation/cubits/login_cubit/login_cubit.dart';
 import 'package:shifaa/features/auth/presentation/cubits/verify_otp_cubit/verify_otp_cubit.dart';
 import 'package:shifaa/features/auth/presentation/views/password_view.dart';

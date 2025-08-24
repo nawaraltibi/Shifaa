@@ -4,13 +4,13 @@ import 'package:shifaa/core/api/api_interceptor.dart';
 
 import 'package:shifaa/core/api/dio_consumer.dart';
 import 'package:shifaa/core/api/end_ponits.dart';
-import 'package:shifaa/features/appointments/data/data_sources/doctor_appointment/doctor_details/doctor_appointment_remote_data_source.dart';
-import 'package:shifaa/features/appointments/data/data_sources/doctor_appointment/doctor_details/doctor_appointment_remote_data_source_impl.dart';
-import 'package:shifaa/features/appointments/domain/repos/doctor_appointment_repo/doctor_appointment_repo.dart';
-import 'package:shifaa/features/appointments/domain/repos/doctor_appointment_repo/doctor_appointment_repo_impl.dart';
-import 'package:shifaa/features/appointments/domain/repos/doctor_schedule_repo/doctor_schedule_repo.dart';
-import 'package:shifaa/features/appointments/domain/repos/doctor_schedule_repo/doctor_schedule_repo_impl.dart';
-import 'package:shifaa/features/appointments/domain/usecases/book_appointment_use_case.dart';
+import 'package:shifaa/features/book_appointments/data/data_sources/doctor_appointment/doctor_details/doctor_appointment_remote_data_source.dart';
+import 'package:shifaa/features/book_appointments/data/data_sources/doctor_appointment/doctor_details/doctor_appointment_remote_data_source_impl.dart';
+import 'package:shifaa/features/book_appointments/domain/repos/doctor_appointment_repo/doctor_appointment_repo.dart';
+import 'package:shifaa/features/book_appointments/domain/repos/doctor_appointment_repo/doctor_appointment_repo_impl.dart';
+import 'package:shifaa/features/book_appointments/domain/repos/doctor_schedule_repo/doctor_schedule_repo.dart';
+import 'package:shifaa/features/book_appointments/domain/repos/doctor_schedule_repo/doctor_schedule_repo_impl.dart';
+import 'package:shifaa/features/book_appointments/domain/usecases/book_appointment_use_case.dart';
 import 'package:shifaa/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:shifaa/features/auth/data/datasources/auth_remote_datasource_impl.dart';
 import 'package:shifaa/features/auth/data/repos/auth_repo_impl.dart';
@@ -19,16 +19,16 @@ import 'package:shifaa/features/auth/domain/usecases/register_patient_usecase.da
 import 'package:shifaa/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:shifaa/features/auth/domain/usecases/verify_otp_usecase.dart';
 
-import 'package:shifaa/features/appointments/data/data_sources/doctor_details/doctor_remote_data_soucre.dart';
-import 'package:shifaa/features/appointments/data/data_sources/doctor_details/doctor_remote_data_soucre_impl.dart';
-import 'package:shifaa/features/appointments/domain/repos/doctor_details_repo/doctor_repo.dart';
-import 'package:shifaa/features/appointments/domain/repos/doctor_details_repo/doctor_repo_impl.dart';
-import 'package:shifaa/features/appointments/domain/usecases/get_doctor_details_use_case.dart';
+import 'package:shifaa/features/book_appointments/data/data_sources/doctor_details/doctor_remote_data_soucre.dart';
+import 'package:shifaa/features/book_appointments/data/data_sources/doctor_details/doctor_remote_data_soucre_impl.dart';
+import 'package:shifaa/features/book_appointments/domain/repos/doctor_details_repo/doctor_repo.dart';
+import 'package:shifaa/features/book_appointments/domain/repos/doctor_details_repo/doctor_repo_impl.dart';
+import 'package:shifaa/features/book_appointments/domain/usecases/get_doctor_details_use_case.dart';
 
 // ✅ Doctor Schedule Imports
-import 'package:shifaa/features/appointments/data/data_sources/doctor_schedule/doctor_schedule_remote_data_source.dart';
-import 'package:shifaa/features/appointments/data/data_sources/doctor_schedule/doctor_schedule_remote_data_source_impl.dart';
-import 'package:shifaa/features/appointments/domain/usecases/get_doctor_schedule_use_case.dart';
+import 'package:shifaa/features/book_appointments/data/data_sources/doctor_schedule/doctor_schedule_remote_data_source.dart';
+import 'package:shifaa/features/book_appointments/data/data_sources/doctor_schedule/doctor_schedule_remote_data_source_impl.dart';
+import 'package:shifaa/features/book_appointments/domain/usecases/get_doctor_schedule_use_case.dart';
 import 'package:shifaa/features/auth/domain/usecases/verify_password_usecase.dart';
 
 // Chat Feature Imports

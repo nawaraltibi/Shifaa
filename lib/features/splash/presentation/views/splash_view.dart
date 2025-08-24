@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
-import 'package:shifaa/features/appointments/presentaion/views/doctor_details_view.dart';
+import 'package:shifaa/features/book_appointments/presentaion/views/doctor_details_view.dart';
 import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 import 'package:shifaa/features/home/presentation/views/home_view.dart';
