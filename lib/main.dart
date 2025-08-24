@@ -12,15 +12,14 @@ import 'package:shifaa/core/utils/app_routes.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/core/utils/simple_bloc_observer.dart';
 import 'package:shifaa/dependency_injection.dart';
+import 'package:shifaa/firebase_options.dart';
 import 'generated/l10n.dart';
 
 void main() async {
-  // تأكد من تهيئة Flutter Widgets (موجودة بالفعل)
   WidgetsFlutterBinding.ensureInitialized();
 
-  // --- الخطوة 1: قم بتهيئة Firebase هنا ---
-  // هذا السطر سيحل مشكلة "Default FirebaseApp is not initialized"
-  await Firebase.initializeApp();
+  // --- 3. قم بتهيئة Firebase باستخدام الطريقة الحديثة (ملف Options) ---
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // إعداد مراقب الـ Bloc
   Bloc.observer = SimpleBlocObserver();
@@ -38,7 +37,7 @@ void main() async {
     "1|odM4qEjV1hTTHYmfHYuvp8boG0FpnAqO9q9J8akNb14db3b0",
   );
 
-  // --- الخطوة 2: الآن يمكنك تهيئة خدمة الإشعارات بأمان ---
+  // الآن يمكنك تهيئة خدمة الإشعارات بأمان
   await NotificationService.init();
 
   // تشغيل التطبيق

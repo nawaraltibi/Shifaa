@@ -56,7 +56,9 @@ class _SplashViewState extends State<SplashView> {
   void goToLogin() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomeView()),
+      MaterialPageRoute(
+        builder: (context) => const DoctorDetailsView(doctorId: 1),
+      ),
     );
     // context.goNamed(LoginView.routeName);
   }
