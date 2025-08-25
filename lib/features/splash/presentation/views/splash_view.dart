@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shifaa/core/layout/main_layout_screen.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
-import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/book_appointments/presentaion/views/doctor_details_view.dart';
-import 'package:shifaa/features/auth/presentation/views/login_view.dart';
-import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 import 'package:shifaa/features/home/presentation/views/home_view.dart';
-import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
+import 'package:shifaa/features/search/presentation/views/search_screen.dart';
 import 'package:shifaa/features/splash/presentation/views/widgets/splash_view_body.dart';
-import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -54,12 +51,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void goToLogin() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DoctorDetailsView(doctorId: 1),
-      ),
-    );
+    context.goNamed(HomeView.routeName);
     // context.goNamed(LoginView.routeName);
   }
 }

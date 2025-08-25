@@ -25,23 +25,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     // توليد المفاتيح لو مش موجودة
     await generateAndSaveKeys();
 
-    // طباعة الـ Private Key بالكامل
-    // final privateKey = await getPrivateKey();
-    // if (privateKey != null) {
-    //   final pemString = privateKeyToPem(privateKey);
-    //   print("Private Key PEM:\n$pemString");
-    // }
-
-    // إرسال الـ Public Key ونوع الجهاز إذا ما أرسل قبل
     await sendPublicKeyIfNeeded();
-
-    // ✅ طباعة patient_id هنا
-    // try {
-    //   final userModel = await SharedPrefsHelper.instance.getUserModel();
-    //   print('Patient ID: ${userModel.patientId}');
-    // } catch (e) {
-    //   print('Error getting Patient ID: $e');
-    // }
   }
 
   @override

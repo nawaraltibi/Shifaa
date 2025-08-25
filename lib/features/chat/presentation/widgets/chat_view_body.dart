@@ -1,6 +1,5 @@
 // ⭐️ لا تنسى إضافة هذا الاستيراد في الأعلى
 import 'dart:io';
-import 'package:dartz/dartz_unsafe.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart'; // ⭐️ استيراد مهم للملفات المؤقتة
 // ⭐️ ---
@@ -9,26 +8,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shifaa/core/errors/failure.dart';
-import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/functions/e2ee_service.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
-import 'package:shifaa/features/chat/data/models/chat.dart';
 import 'package:shifaa/features/chat/data/models/message.dart';
 import 'package:shifaa/features/chat/data/models/message_status.dart'; // ⭐️ استيراد مهم للحالات
 import 'package:shifaa/features/chat/data/pusher/chat_pusher_service.dart';
-import 'package:shifaa/features/chat/data/repositories/device_cache_repo.dart';
 import 'package:shifaa/features/chat/domain/repositories/chat_repo.dart';
 import 'package:shifaa/features/chat/presentation/cubits/get_messages_cubit/get_messages_cubit.dart';
 import 'package:shifaa/features/chat/presentation/widgets/chat_message.dart';
-import 'package:shifaa/features/chat/presentation/widgets/chat_message2.dart';
 import 'package:shifaa/features/chat/presentation/widgets/custom_chat_app_bar.dart';
 import 'package:shifaa/features/chat/presentation/widgets/message_composer.dart';
 
 // ---------------- ChatViewBody ----------------
 class ChatViewBody extends StatefulWidget {
-  final Chat chat;
-  const ChatViewBody({super.key, required this.chat});
+  final int chatId;
+  const ChatViewBody({super.key, required this.chatId});
 
   @override
   State<ChatViewBody> createState() => _ChatViewBodyState();
@@ -44,7 +38,6 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     super.initState();
     _messageController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _fetchMessages();
       _scrollToBottom();
       _initPusher();
     });
@@ -57,14 +50,10 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     super.dispose();
   }
 
-  Future<void> _fetchMessages() async {
-    await context.read<GetMessagesCubit>().fetchMessages(widget.chat.id);
-  }
-
   void _initPusher() async {
     final getMessagesCubit = context.read<GetMessagesCubit>();
     await _pusherService.initPusher(
-      widget.chat.id,
+      widget.chatId,
       onMessageReceived: (event) {
         final data = jsonDecode(event.data ?? '{}');
         final msgData = data['message'] ?? {};
@@ -127,7 +116,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     try {
       // --- الخطوة 1 (الجديدة): جلب أحدث بيانات المحادثة من الـ API ---
       print("🔄 Fetching latest chat details from API before sending...");
-      final latestChatResult = await repo.getChatDetails(widget.chat.id);
+      final latestChatResult = await repo.getChatDetails(widget.chatId);
 
       final Map<int, String> targets = latestChatResult.fold(
         (failure) {
@@ -207,7 +196,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 
       // --- الخطوة 3: إرسال الطلب (تبقى كما هي) ---
       final result = await repo.sendMessage(
-        widget.chat.id,
+        widget.chatId,
         text: encryptedText,
         file: encryptedFile,
         encryptedKeysPayload: encryptedKeysPayload,

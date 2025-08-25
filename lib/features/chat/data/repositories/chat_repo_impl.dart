@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:shifaa/core/errors/failure.dart';
 import 'package:shifaa/features/chat/data/data_sources/chat_remote_data_source.dart';
 import 'package:shifaa/features/chat/data/models/chat.dart';
+import 'package:shifaa/features/chat/data/models/chat_summary.dart';
 import 'package:shifaa/features/chat/data/models/message.dart';
 import 'package:shifaa/features/chat/domain/repositories/chat_repo.dart';
 
@@ -76,6 +77,22 @@ class ChatRepositoryImpl implements ChatRepository {
     } on DioException catch (e) {
       return Left(ServerFailure.fromDiorError(e));
     } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ChatSummary>>> getChats() async {
+    try {
+      // استدعِ الدالة من الـ remote data source
+      final chats = await remote.getChats();
+      // في حالة النجاح، أرجع البيانات داخل Right
+      return Right(chats);
+    } on DioException catch (e) {
+      // في حالة حدوث خطأ من Dio، قم بتحويله إلى ServerFailure
+      return Left(ServerFailure.fromDiorError(e));
+    } catch (e) {
+      // لأي خطأ آخر، قم بإرجاعه كـ ServerFailure
       return Left(ServerFailure(e.toString()));
     }
   }

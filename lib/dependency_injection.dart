@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shifaa/core/platform/network_info.dart';
 import 'package:shifaa/core/services/database_service.dart';
+import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/appointments/data/datasources/appointment_local_data_source.dart';
 import 'package:shifaa/features/appointments/data/datasources/appointment_remote_data_source.dart';
 import 'package:shifaa/features/appointments/data/repositories/appointment_repository_impl.dart';
@@ -23,7 +24,8 @@ import 'package:shifaa/features/search/presentation/manager/search_cubit.dart';
 final sl = GetIt.instance;
 
 Future<String?> getTokenFromStorage() async {
-  return '1|odM4qEjV1hTTHYmfHYuvp8boG0FpnAqO9q9J8akNb14db3b0';
+  // 2. استخدم الكلاس الذي بنيته لجلب التوكن
+  return await SharedPrefsHelper.instance.getToken();
 }
 
 Future<void> setupServiceLocatorAshour() async {

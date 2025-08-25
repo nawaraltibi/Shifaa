@@ -5,7 +5,7 @@ import 'package:shifaa/core/utils/app_colors.dart';
 class MainLayoutScreen extends StatelessWidget {
   final Widget child;
   final int selectedIndex;
-  
+
   const MainLayoutScreen({
     super.key,
     required this.child,
@@ -16,10 +16,10 @@ class MainLayoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).location;
     // final showBottomNav = !location.contains('/notifications');
-    
+
     return Scaffold(
       body: child,
-      bottomNavigationBar:  BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
           switch (index) {
@@ -42,25 +42,15 @@ class MainLayoutScreen extends StatelessWidget {
         selectedItemColor: AppColors.primaryAppColor,
         unselectedItemColor: AppColors.secondaryTextColor,
         items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
+            icon: Icon(Icons.description),
             label: 'Appointments',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
-      ) ,
+      ),
     );
   }
 }
-

@@ -47,7 +47,7 @@ class CustomDoctorDetailsAppBar extends StatelessWidget {
               );
 
               if (state is CreateChatSuccess) {
-                context.pushNamed(ChatView.routeName, extra: state.chat);
+                context.pushNamed(ChatView.routeName, extra: state.chat.id);
               } else if (state is CreateChatFailure) {
                 if (state.error == "chat.unauthorized") {
                   ScaffoldMessenger.of(context).showSnackBar(

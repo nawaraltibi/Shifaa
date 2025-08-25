@@ -36,6 +36,7 @@ import 'package:shifaa/features/chat/data/data_sources/chat_remote_data_source.d
 import 'package:shifaa/features/chat/data/repositories/chat_repo_impl.dart';
 import 'package:shifaa/features/chat/domain/repositories/chat_repo.dart';
 import 'package:shifaa/features/chat/domain/usecases/create_chat_use_case.dart';
+import 'package:shifaa/features/chat/presentation/cubits/cubit/get_chats_cubit.dart';
 import 'package:shifaa/features/chat/presentation/cubits/get_messages_cubit/get_messages_cubit.dart';
 
 final getIt = GetIt.instance;
@@ -118,4 +119,6 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(() => CreateChat(getIt<ChatRepository>()));
 
   getIt.registerFactory(() => GetMessagesCubit(getIt<ChatRepository>()));
+
+  getIt.registerFactory(() => GetChatsCubit(getIt<ChatRepository>()));
 }

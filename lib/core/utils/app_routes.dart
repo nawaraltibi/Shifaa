@@ -10,6 +10,7 @@ import 'package:shifaa/features/auth/presentation/views/profile_setup_view.dart'
 import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
 import 'package:shifaa/features/chat/data/models/chat.dart';
 import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
+import 'package:shifaa/features/chat/presentation/views/chats_list_view.dart';
 import 'package:shifaa/features/home/presentation/views/home_view.dart';
 import 'package:shifaa/features/notifications/presentation/view/screens/notifications_screen.dart';
 import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
@@ -96,13 +97,24 @@ abstract class AppRouter {
         builder: (context, state) => const DoctorDetailsView(doctorId: 1),
       ),
       GoRoute(
+        path: ChatsListView.routeName,
+        name: ChatsListView.routeName,
+        builder: (context, state) => const ChatsListView(),
+      ),
+      // --- الكود الجديد والصحيح ---
+      GoRoute(
         path: ChatView.routeName,
         name: ChatView.routeName,
         builder: (context, state) {
-          final chat = state.extra as Chat; // اقرأ الكائن من extra
-          return ChatView(chat: chat);
+          // 1. اقرأ الـ extra وحوله إلى int
+          //    هذا الـ ID سيأتي إما من قائمة المحادثات أو بعد إنشاء محادثة جديدة
+          final chatId = state.extra as int;
+
+          // 2. مرر الـ chatId إلى الـ constructor الجديد لـ ChatView
+          return ChatView(chatId: chatId);
         },
       ),
+
       GoRoute(
         path: '/notifications',
         name: NotificationsScreen.routeName,
@@ -125,20 +137,25 @@ abstract class AppRouter {
           GoRoute(
             path: '/home',
             name: HomeView.routeName,
-            builder: (context, state) => const HomeView(),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: HomeView(), // الصفحة التي ستُعرض
+            ),
           ),
           GoRoute(
             path: '/search',
-            builder: (context, state) => const SearchScreen(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: SearchScreen()),
           ),
           GoRoute(
             path: '/appointments',
-            builder: (context, state) => const AppointmentView(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: AppointmentView()),
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) =>
-                const Scaffold(body: Center(child: Text('Profile'))),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: Scaffold(body: Center(child: Text('Profile'))),
+            ),
           ),
         ],
       ),

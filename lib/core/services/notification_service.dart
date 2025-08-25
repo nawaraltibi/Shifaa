@@ -1,4 +1,5 @@
 import 'package:pusher_beams/pusher_beams.dart';
+import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 
 class NotificationService {
   static Future<String?> _getUserId() async {
@@ -10,8 +11,9 @@ class NotificationService {
     }
   }
 
-  static String? _getAuthToken() {
-    return '1|odM4qEjV1hTTHYmfHYuvp8boG0FpnAqO9q9J8akNb14db3b0';
+  static Future<String?> _getAuthToken() async {
+    // 3. استخدم الكلاس الذي بنيته لجلب التوكن
+    return await SharedPrefsHelper.instance.getToken();
   }
 
   static const _instanceId = '779f8602-f480-4c8a-a429-29f3bd06b930';
@@ -62,12 +64,11 @@ class NotificationService {
         return;
       }
 
-      final authToken = _getAuthToken();
+      final authToken = await _getAuthToken();
       if (authToken == null || authToken.isEmpty) {
-        print('❌ Authentication failed: No auth token available');
+        print('❌ Authentication failed: Token is null or empty.');
         return;
       }
-
       final beamsAuthProvider = BeamsAuthProvider()
         ..authUrl = 'https://shifaa-backend.onrender.com/api/beams-token'
         ..headers = {

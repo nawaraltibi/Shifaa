@@ -7,7 +7,8 @@ class DoctorCard extends StatelessWidget {
   final String specialty;
   final double rating;
   final String imageUrl;
-  final VoidCallback onTap;
+  final ValueChanged<int> onTap;
+  final int doctorId;
 
   const DoctorCard({
     super.key,
@@ -16,12 +17,13 @@ class DoctorCard extends StatelessWidget {
     required this.rating,
     required this.imageUrl,
     required this.onTap,
+    required this.doctorId,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => onTap(doctorId),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24.0),
@@ -41,18 +43,22 @@ class DoctorCard extends StatelessWidget {
               Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) =>
-                    progress == null ? child : const Center(child: CircularProgressIndicator()),
-                errorBuilder: (context, error, stack) =>
-                    const Center(child: Icon(Icons.person, color: Colors.grey, size: 60)),
+                loadingBuilder: (context, child, progress) => progress == null
+                    ? child
+                    : const Center(child: CircularProgressIndicator()),
+                errorBuilder: (context, error, stack) => const Center(
+                  child: Icon(Icons.person, color: Colors.grey, size: 60),
+                ),
               ),
-          
+
               Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24.0)),
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(24.0),
+                  ),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                     child: Container(
@@ -66,22 +72,23 @@ class DoctorCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                     
                           Text(
                             name,
-                            style: const TextStyle( 
-                              color: Color(0xFF2f2f2f), 
+                            style: const TextStyle(
+                              color: Color(0xFF2f2f2f),
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
-                              shadows: [Shadow(blurRadius: 1, color: Colors.black12)],
+                              shadows: [
+                                Shadow(blurRadius: 1, color: Colors.black12),
+                              ],
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             specialty,
-                            style: const TextStyle( 
-                              color: Color(0xFF2f2f2f), 
+                            style: const TextStyle(
+                              color: Color(0xFF2f2f2f),
                               fontSize: 14,
                             ),
                             maxLines: 1,
@@ -91,12 +98,16 @@ class DoctorCard extends StatelessWidget {
 
                           Row(
                             children: [
-                              const Icon(Icons.star, color: Color(0xFFFFC107), size: 18),
+                              const Icon(
+                                Icons.star,
+                                color: Color(0xFFFFC107),
+                                size: 18,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 rating.toString(),
-                                style: const TextStyle( 
-                                  color: Color(0xFF2f2f2f), 
+                                style: const TextStyle(
+                                  color: Color(0xFF2f2f2f),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 15,
                                 ),
@@ -110,7 +121,7 @@ class DoctorCard extends StatelessWidget {
                                   shape: BoxShape.circle,
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF5c85d9).withOpacity(0.8), 
+                                      const Color(0xFF5c85d9).withOpacity(0.8),
                                       const Color(0xFF5c85d9),
                                     ],
                                     begin: Alignment.topLeft,
@@ -138,7 +149,6 @@ class DoctorCard extends StatelessWidget {
     );
   }
 }
-
 
 class SpecialtyItem extends StatelessWidget {
   final IconData icon;

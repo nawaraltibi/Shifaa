@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shifaa/core/api/end_ponits.dart';
 import 'package:shifaa/features/chat/data/models/chat.dart';
+import 'package:shifaa/features/chat/data/models/chat_summary.dart';
 import 'package:shifaa/features/chat/data/models/message.dart';
 
 class ChatAlreadyExistsException implements Exception {
@@ -109,6 +110,22 @@ class ChatRemoteDataSource {
     // 5. أرسل الطلب
     final res = await dio.post(EndPoint.sendMessage(chatId), data: formData);
     return MessageModel.fromJson(res.data["data"]);
+  }
+
+  Future<List<ChatSummary>> getChats() async {
+    try {
+      // استخدم الثابت EndPoint.chat لجلب قائمة المحادثات
+      final response = await dio.get(EndPoint.chat);
+
+      // الـ API يرجع قائمة المحادثات داخل data['chats']
+      final List<dynamic> chatListJson = response.data['data']['chats'];
+
+      // حول كل عنصر JSON في القائمة إلى موديل ChatSummary باستخدام الـ factory
+      return chatListJson.map((json) => ChatSummary.fromJson(json)).toList();
+    } catch (e) {
+      print('❌ getChats ERROR: $e');
+      rethrow; // أعد رمي الخطأ ليتم التعامل معه في الـ Repository
+    }
   }
 }
 
