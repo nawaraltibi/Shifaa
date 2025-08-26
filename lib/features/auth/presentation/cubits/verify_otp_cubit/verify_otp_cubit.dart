@@ -6,6 +6,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/auth/domain/usecases/verify_otp_usecase.dart';
 import 'package:shifaa/generated/l10n.dart';
+import 'package:shifaa/core/services/notification_service.dart';
 
 part 'verify_otp_state.dart';
 
@@ -41,6 +42,8 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
         if (verifyResult.user != null) {
           await SharedPrefsHelper.instance.saveUserData(verifyResult.user!);
         }
+
+        await NotificationService.login();
 
         if (!verifyResult.hasAccount) {
           emit(VerifyOtpSuccess(goToProfileSetup: true));

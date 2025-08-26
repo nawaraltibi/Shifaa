@@ -1,5 +1,6 @@
 // ⭐️ لا تنسى إضافة هذا الاستيراد في الأعلى
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart'; // ⭐️ استيراد مهم للملفات المؤقتة
 // ⭐️ ---
@@ -54,19 +55,121 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+    _disposePusher();
     super.dispose();
   }
 
+  void _disposePusher() {
+    // من المهم إلغاء الاشتراك في القناة أولاً
+    _pusherService.pusher.unsubscribe(
+      channelName: "presence-chat.${widget.chatId}",
+    );
+
+    // ثم قطع الاتصال بالكامل
+    _pusherService.pusher.disconnect();
+
+    print(
+      "✅ Pusher channel unsubscribed and connection disconnected successfully.",
+    );
+  }
+
   void _initPusher() async {
+    // التحقق من أن الويدجت لا يزال موجوداً في الشجرة قبل البدء
+    if (!mounted) return;
+
+    // الوصول إلى Cubit مرة واحدة في البداية
     final getMessagesCubit = context.read<GetMessagesCubit>();
+
+    // --- الخطوة 1: جلب البيانات المحلية اللازمة لمرة واحدة ---
+    final myUser = await SharedPrefsHelper.instance.getUserModel();
+    final myUserId = myUser.id;
+    final myDeviceId = await SharedPrefsHelper.instance.getMyDeviceId();
+    final privateKey = await E2EE.loadPrivateKeyFromSecureStorage();
+
+    print(
+      "Pusher Init: My User ID is '$myUserId', My Device ID is '$myDeviceId'.",
+    );
+
+    // التأكد من وجود المفتاح الخاص قبل المتابعةئ
+    if (privateKey == null) {
+      print("❌ CRITICAL: Private key not found. Cannot decrypt messages.");
+      return;
+    }
+
+    // --- الخطوة 2: تهيئة خدمة Pusher مع معالج الرسائل ---
     await _pusherService.initPusher(
       widget.chatId,
-      onMessageReceived: (event) {
+      onMessageReceived: (event) async {
+        // --- الخطوة 3: معالجة الحدث عند وصول رسالة جديدة ---
         final data = jsonDecode(event.data ?? '{}');
-        final msgData = data['message'] ?? {};
-        final msg = MessageModel.fromJson(msgData);
-        getMessagesCubit.addMessage(msg);
-        _scrollToBottom();
+        final msgData = data['message'] as Map<String, dynamic>?;
+
+        if (msgData == null) {
+          print("️️⚠️ Pusher event received with no message data.");
+          return;
+        }
+
+        // --- الخطوة 4: تجاهل رسائلك أنت لتجنب التكرار ---
+        final senderId = msgData['sender_id'];
+        if (senderId == myUserId) {
+          print("✅ Ignored own message from Pusher (Sender ID: $senderId).");
+          return;
+        }
+        print(
+          "⬇️ Received a new message from sender ID '$senderId'. Processing...",
+        );
+
+        // --- الخطوة 5: البحث عن مفتاح التشفير الخاص بجهازك ---
+        final devicesList = msgData['devices'] as List<dynamic>? ?? [];
+        final myDeviceData = devicesList.firstWhere(
+              (device) => device['id'] == myDeviceId,
+          orElse: () => null,
+        );
+
+        if (myDeviceData == null) {
+          print(
+            "❌ Decryption failed: The message was not encrypted for this device (ID: $myDeviceId).",
+          );
+          return;
+        }
+
+        // --- الخطوة 6: فك تشفير الرسالة ---
+        try {
+          // 6.1: فك تشفير مفتاح AES باستخدام مفتاحك الخاص (RSA)
+          final encryptedAesKey = myDeviceData['encrypted_key'] as String;
+          final encryptedAesKeyBytes = base64.decode(encryptedAesKey);
+          final aesKeyBytes = E2EE.rsaDecryptWithPrivateOAEP(
+            privateKey,
+            encryptedAesKeyBytes,
+          );
+          final aesKey = Uint8List.fromList(aesKeyBytes);
+
+          // 6.2: فك تشفير محتوى الرسالة باستخدام مفتاح AES
+          final decryptedMsgData = Map<String, dynamic>.from(msgData);
+          if (msgData['text'] != null) {
+            final encryptedText = msgData['text'] as String;
+            final decryptedText = E2EE.aesGcmDecryptFromBase64(
+              aesKey,
+              encryptedText,
+            );
+            decryptedMsgData['text'] = decryptedText;
+          }
+          // (يمكن إضافة منطق مماثل لفك تشفير الملفات هنا إذا لزم الأمر)
+
+          // --- الخطوة 7: إنشاء الرسالة وإضافتها للواجهة ---
+          final msg = MessageModel.fromJson(decryptedMsgData);
+
+          // التأكد مرة أخرى من أن الويدجت لا يزال موجوداً قبل تحديث الواجهة
+          if (!mounted) return;
+
+          getMessagesCubit.addMessage(msg);
+          _scrollToBottom();
+
+          print("✅ Successfully decrypted and displayed message ID ${msg.id}.");
+        } catch (e, stackTrace) {
+          print("❌ CRITICAL ERROR during message decryption: $e");
+          print("Stack Trace: $stackTrace");
+        }
       },
     );
   }

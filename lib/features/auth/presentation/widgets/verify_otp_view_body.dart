@@ -15,6 +15,7 @@ import 'package:shifaa/features/auth/presentation/views/profile_setup_view.dart'
 import 'package:shifaa/features/auth/presentation/widgets/auth_title.dart';
 import 'package:shifaa/features/auth/presentation/widgets/otp_field.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
+import 'package:shifaa/features/home/presentation/views/home_view.dart';
 import 'package:shifaa/generated/l10n.dart';
 
 class VerifyOtpViewBody extends StatefulWidget {
@@ -127,7 +128,7 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
             );
           } else if (state.goToDoctorDetails) {
             context.goNamed(
-              DoctorDetailsView.routeName,
+              HomeView.routeName,
               queryParams: {'phone': widget.phoneNumber},
             );
           } else if (state.goToPassword) {
@@ -161,7 +162,10 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
                   isLoading: isLoading,
                   onPressed: isLoading
                       ? null
-                      : () => _onContinuePressed(context),
+                      : () {
+                    _onContinuePressed(context);
+
+                  },
                 );
               },
             ),

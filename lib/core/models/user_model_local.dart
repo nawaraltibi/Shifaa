@@ -9,6 +9,7 @@ class UserLocalModel {
   final int? age;
   final double? weight;
   final double? height;
+  final String? beamsId;
 
   UserLocalModel({
     required this.id,
@@ -21,5 +22,6 @@ class UserLocalModel {
     this.age,
     this.weight,
     this.height,
+    this.beamsId
   });
 }

@@ -1,14 +1,15 @@
 import 'package:pusher_beams/pusher_beams.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 
+import '../models/user_model_local.dart';
+
 class NotificationService {
   static Future<String?> _getUserId() async {
-    try {
-      return 'patient-2';
-    } catch (e) {
-      print('❌ Error getting user ID: $e');
-      return null;
-    }
+    final sharedPref = SharedPrefsHelper.instance;
+    UserLocalModel user = await sharedPref.getUserModel();
+    final beamsId = user.beamsId;
+    print ('beamsId: ${beamsId}');
+    return beamsId;
   }
 
   static Future<String?> _getAuthToken() async {
@@ -24,14 +25,10 @@ class NotificationService {
       await PusherBeams.instance.start(_instanceId);
       print('✅ Pusher Beams instance started successfully');
       await PusherBeams.instance.addDeviceInterest('debug-hello');
+      await PusherBeams.instance.addDeviceInterest('all');
       print('✅ Subscribed to debug channel');
       _listenForNotifications();
       print('✅ Notification listeners configured');
-      final userId = await _getUserId();
-      if (userId != null && userId.isNotEmpty) {
-        print('🔄 Found existing user, attempting to authenticate...');
-        await login();
-      }
     } catch (e, stackTrace) {
       print('❌ Error initializing Pusher Beams: $e');
       print('Stack trace: $stackTrace');
@@ -84,7 +81,7 @@ class NotificationService {
         if (error != null) {
           print('❌ Failed to associate device with user: $error');
         } else {
-          print('✅ Successfully authenticated user with Pusher Beams');
+          print('✅ Successfully authenticated user with Pusher Beams, id: ${userId}');
         }
       });
     } catch (e, stackTrace) {

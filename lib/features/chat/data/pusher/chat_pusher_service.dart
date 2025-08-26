@@ -4,16 +4,17 @@ import 'dart:convert'; // Import this for jsonDecode
 
 import 'package:dio/dio.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
-import 'package:shifaa/core/api/end_ponits.dart';
-import 'package:shifaa/core/utils/shared_prefs_helper.dart';
+
+import '../../../../core/api/end_ponits.dart';
+import '../../../../core/utils/shared_prefs_helper.dart';
 
 class ChatPusherService {
   final PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
 
   Future<void> initPusher(
-    int chatId, {
-    required Function(PusherEvent event) onMessageReceived,
-  }) async {
+      int chatId, {
+        required Function(PusherEvent event) onMessageReceived,
+      }) async {
     await pusher.init(
       apiKey: "e00c03ce2ed4372ed592",
       cluster: "eu",
@@ -66,7 +67,8 @@ class ChatPusherService {
       // This is the correct place to bind to events for this channel.
       onEvent: (event) {
         // You can check the event name here
-        if (event.eventName == "App\\Events\\MessageSent") {
+        if (event.eventName == "message.sent") {
+          // <--- ✅ تم التعديل هنا
           onMessageReceived(event);
         }
         print("📡 Channel Event: ${event.eventName} | Data: ${event.data}");

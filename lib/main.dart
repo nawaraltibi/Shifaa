@@ -33,12 +33,10 @@ void main() async {
 
   // تحميل التوكن
   loadToken();
-  await SharedPrefsHelper.instance.saveToken(
-    "1|NfKEbLRXssJLsJSK3O013MatlVDccYuCR5QlOjGTb8d64845",
-  );
+  // await SharedPrefsHelper.instance.saveToken(
+  //   "1|NfKEbLRXssJLsJSK3O013MatlVDccYuCR5QlOjGTb8d64845",
+  // );
 
-  // الآن يمكنك تهيئة خدمة الإشعارات بأمان
-  await NotificationService.init();
 
   // تشغيل التطبيق
   runApp(const Shifaa());

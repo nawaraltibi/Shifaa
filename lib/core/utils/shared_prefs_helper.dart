@@ -61,6 +61,7 @@ class SharedPrefsHelper {
     await prefs.setInt('patient_id', patient['id'] ?? 0);
     await prefs.setString('date_of_birth', patient['date_of_birth'] ?? '');
     await prefs.setInt('age', patient['age'] ?? 0);
+    await prefs.setString('beamsId', patient['beamsId'] ?? '');
 
     if (patient['weight'] != null) {
       await prefs.setDouble('weight', (patient['weight'] as num).toDouble());
@@ -83,6 +84,7 @@ class SharedPrefsHelper {
       age: prefs.getInt('age'),
       weight: prefs.getDouble('weight'),
       height: prefs.getDouble('height'),
+      beamsId: prefs.getString('beamsId') ?? ''
     );
   }
 
