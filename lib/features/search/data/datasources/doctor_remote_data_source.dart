@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:shifaa/features/search/data/models/doctor_model.dart';
+import 'package:shifaa/features/search/data/models/doctor_model_ashour.dart';
 
 abstract class DoctorRemoteDataSourceAshour {
   Future<List<DoctorModelAshour>> searchForDoctors(String query);

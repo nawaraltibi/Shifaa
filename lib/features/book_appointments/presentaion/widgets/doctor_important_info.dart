@@ -31,10 +31,7 @@ class DoctorImportantInfo extends StatelessWidget {
                   color: AppColors.primaryAppColor,
                 ),
               ),
-              SizedBox(
-                width: 145.w,
-                child: Text(name, style: AppTextStyles.semiBold25),
-              ),
+
               SizedBox(height: 50.h),
               SessionPriceText(price: sessionPrice),
               SizedBox(height: 25.h),

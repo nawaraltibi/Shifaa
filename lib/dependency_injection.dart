@@ -5,7 +5,7 @@ import 'package:shifaa/core/platform/network_info.dart';
 import 'package:shifaa/core/services/database_service.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/appointments/data/datasources/appointment_local_data_source.dart';
-import 'package:shifaa/features/appointments/data/datasources/appointment_remote_data_source.dart';
+import 'package:shifaa/features/appointments/data/datasources/appointment_remote_data_source_ashour.dart';
 import 'package:shifaa/features/appointments/data/repositories/appointment_repository_impl.dart';
 import 'package:shifaa/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_previous_appointments.dart';

@@ -6,7 +6,7 @@ import 'package:shifaa/features/book_appointments/presentaion/widgets/day_contai
 class SelectDateList extends StatefulWidget {
   final List<String> availableDays;
   final DateTime selectedDate;
-  final DateTime currentMonth; // الشهر من الكيوبت
+  final DateTime currentMonth;
   final Function(DateTime date) onDateSelected;
 
   const SelectDateList({
@@ -23,7 +23,7 @@ class SelectDateList extends StatefulWidget {
 
 class _SelectDateListState extends State<SelectDateList> {
   late List<DateTime> monthDates;
-  late DateTime _localSelectedDate; // تاريخ محلي يتلون فورًا
+  late DateTime _localSelectedDate;
 
   @override
   void initState() {
@@ -35,8 +35,6 @@ class _SelectDateListState extends State<SelectDateList> {
   @override
   void didUpdateWidget(covariant SelectDateList oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    // إذا تغيّر الشهر أو التاريخ من الكيوبت → نزامن
     if (oldWidget.currentMonth != widget.currentMonth ||
         oldWidget.selectedDate != widget.selectedDate) {
       _generateMonthDates();
@@ -50,11 +48,11 @@ class _SelectDateListState extends State<SelectDateList> {
     final month = widget.currentMonth.month;
     final daysInMonth = DateTime(year, month + 1, 0).day;
 
-    monthDates = List.generate(daysInMonth, (i) {
-      return DateTime(year, month, i + 1);
-    });
+    monthDates = List.generate(
+      daysInMonth,
+      (i) => DateTime(year, month, i + 1),
+    );
 
-    // إذا الشهر الحالي فقط → نحذف الأيام الماضية
     if (year == today.year && month == today.month) {
       monthDates = monthDates.where((date) {
         return !date.isBefore(DateTime(today.year, today.month, today.day));
@@ -64,9 +62,10 @@ class _SelectDateListState extends State<SelectDateList> {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ العودة إلى Wrap لأنه الآن داخل ListView ويعمل بشكل صحيح
     return Wrap(
-      spacing: 15.w,
-      runSpacing: 10.h,
+      spacing: 15.w, // المسافة الأفقية
+      runSpacing: 10.h, // المسافة الرأسية
       children: monthDates.map((date) {
         final formattedDay = _weekdayToString(date.weekday);
         final isAvailable = widget.availableDays.contains(
@@ -78,14 +77,14 @@ class _SelectDateListState extends State<SelectDateList> {
               ? formattedDay
               : formattedDay.substring(0, 3),
           date: date.day.toString(),
-          isSelected: _isSameDay(date, _localSelectedDate), // محلي
+          isSelected: _isSameDay(date, _localSelectedDate),
           isAvailable: isAvailable,
           onTap: () {
             if (isAvailable) {
               setState(() {
-                _localSelectedDate = date; // يلون فورًا
+                _localSelectedDate = date;
               });
-              widget.onDateSelected(date); // يبعث للكيوبت
+              widget.onDateSelected(date);
             }
           },
         );

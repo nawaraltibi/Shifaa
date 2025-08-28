@@ -13,6 +13,8 @@ class EndPoint {
   static String doctorDetails(String doctorId) => "doctor/$doctorId";
   static String doctorSchedules(String doctorId) =>
       "doctor/$doctorId/schedules";
+  static String rescheduleAppointment(int appointmentId) =>
+      "appointments/$appointmentId";
 
   // 👇👇 روابط الشات
   static const String chat = "chats"; // POST لإنشاء محادثة جديدة

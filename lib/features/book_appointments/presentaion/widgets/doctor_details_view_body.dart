@@ -203,8 +203,8 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
           ),
         ),
         padding: EdgeInsets.only(
-          left: 22.w,
-          right: 22.w,
+          left: 15.w,
+          right: 15.w,
           top: 35.h,
           bottom: 54.h,
         ),
@@ -447,7 +447,6 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
         icon = Icons.warning_amber_rounded;
         break;
       case SnackBarType.info:
-      default:
         backgroundColor = Colors.blueGrey.shade700;
         icon = Icons.info_outline;
         break;
@@ -515,7 +514,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
               SelectDateList(
                 currentMonth: scheduleState.currentMonth,
                 availableDays: availableDays,
-                selectedDate: scheduleState.selectedDate,
+                selectedDate: scheduleState.selectedDate!,
                 onDateSelected: (date) {
                   setState(() {
                     _selectedDate = date;
@@ -561,7 +560,9 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
           final currentSchedule = scheduleState.schedule;
           final selectedDate = scheduleState.selectedDate;
 
-          final dayName = DateFormat('EEEE').format(selectedDate).toLowerCase();
+          final dayName = DateFormat(
+            'EEEE',
+          ).format(selectedDate!).toLowerCase();
           final slotsForSelectedDay = currentSchedule
               .where((s) => s.dayOfWeek.toLowerCase() == dayName)
               .expand((s) => s.availableSlots ?? [])

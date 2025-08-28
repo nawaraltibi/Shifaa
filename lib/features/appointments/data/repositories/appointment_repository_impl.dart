@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:shifaa/core/errors/failure.dart';
 import 'package:shifaa/core/platform/network_info.dart';
 import 'package:shifaa/features/appointments/data/datasources/appointment_local_data_source.dart';
-import 'package:shifaa/features/appointments/data/datasources/appointment_remote_data_source.dart';
+import 'package:shifaa/features/appointments/data/datasources/appointment_remote_data_source_ashour.dart';
 import 'package:shifaa/features/appointments/domain/entities/appointment_entity.dart';
 import 'package:shifaa/features/appointments/domain/repositories/appointment_repository.dart';
 
@@ -69,7 +69,9 @@ class AppointmentRepositoryImplAshour implements AppointmentRepositoryAshour {
         final localAppointments = await getLocal();
         if (localAppointments.isNotEmpty) return Right(localAppointments);
       } catch (e) {}
-      return Left(CacheFailure('No internet connection and cache is empty.'));
+      return const Left(
+        CacheFailure('No internet connection and cache is empty.'),
+      );
     }
   }
 }

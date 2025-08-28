@@ -84,6 +84,28 @@ class DioConsumer extends ApiConsumer {
     }
   }
 
+  // **** ✅ تم إضافة تنفيذ دالة put هنا ****
+  @override
+  Future put(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFromData = false,
+  }) async {
+    try {
+      final response = await dio.put(
+        path,
+        data: isFromData
+            ? FormData.fromMap(data as Map<String, dynamic>)
+            : data,
+        queryParameters: queryParameters,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw ServerFailure.fromDiorError(e);
+    }
+  }
+
   @override
   Future delete(
     String path, {

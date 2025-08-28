@@ -6,4 +6,9 @@ abstract class AppointmentRepository {
     required String startTime,
     required int doctorScheduleId,
   });
+  Future<Either<Failure, Unit>> rescheduleAppointment({
+    required int appointmentId,
+    required String startTime,
+    required int doctorScheduleId,
+  });
 }

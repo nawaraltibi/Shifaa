@@ -12,7 +12,7 @@ class DoctorScheduleLoading extends DoctorScheduleState {}
 class DoctorScheduleSuccess extends DoctorScheduleState {
   final List<DoctorScheduleModel> schedule;
   final DateTime currentMonth;
-  final DateTime selectedDate;
+  final DateTime? selectedDate;
 
   DoctorScheduleSuccess(this.schedule, this.currentMonth, this.selectedDate);
 
@@ -45,7 +45,7 @@ class DoctorScheduleMonthChanged extends DoctorScheduleState {
 }
 
 class DoctorScheduleDateLoading extends DoctorScheduleState {
-  final DateTime selectedDate;
+  final DateTime? selectedDate;
   DoctorScheduleDateLoading(this.selectedDate);
 
   @override

@@ -19,6 +19,14 @@ abstract class ApiConsumer {
     bool isFromData = false,
   });
 
+  // **** ✅ تم إضافة الدالة المطلوبة هنا ****
+  Future<dynamic> put(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFromData = false,
+  });
+
   Future<dynamic> delete(
     String path, {
     Object? data,

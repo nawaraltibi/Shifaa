@@ -37,7 +37,6 @@ void main() async {
   //   "1|NfKEbLRXssJLsJSK3O013MatlVDccYuCR5QlOjGTb8d64845",
   // );
 
-
   // تشغيل التطبيق
   runApp(const Shifaa());
 }

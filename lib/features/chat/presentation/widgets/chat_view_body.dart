@@ -122,7 +122,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         // --- الخطوة 5: البحث عن مفتاح التشفير الخاص بجهازك ---
         final devicesList = msgData['devices'] as List<dynamic>? ?? [];
         final myDeviceData = devicesList.firstWhere(
-              (device) => device['id'] == myDeviceId,
+          (device) => device['id'] == myDeviceId,
           orElse: () => null,
         );
 
@@ -163,7 +163,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           if (!mounted) return;
 
           getMessagesCubit.addMessage(msg);
-          _scrollToBottom();
+          _animateToBottom();
 
           print("✅ Successfully decrypted and displayed message ID ${msg.id}.");
         } catch (e, stackTrace) {
@@ -225,7 +225,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       );
       messagesCubit.addMessage(tempMessage);
       _messageController.clear();
-      _scrollToBottom();
+      _animateToBottom();
     }
 
     // --- الخطوة 2: تحضير البيانات للتشفير والإرسال ---
@@ -354,16 +354,24 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   // ... (باقي الكود في الملف)
 
   void _scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients &&
-          _scrollController.position.hasContentDimensions) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
+    // ⭐️ تعديل بسيط هنا: استخدم jumpTo بدلاً من animateTo للتحميل الأولي
+    // لكي لا يرى المستخدم حركة التمرير عند فتح الشاشة
+    if (_scrollController.hasClients &&
+        _scrollController.position.hasContentDimensions) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
+
+  void _animateToBottom() {
+    // دالة جديدة للتمرير مع حركة (عند إرسال/استقبال رسالة جديدة)
+    if (_scrollController.hasClients &&
+        _scrollController.position.hasContentDimensions) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override
@@ -379,39 +387,51 @@ class _ChatViewBodyState extends State<ChatViewBody> {
             doctorImage: widget.doctorImage,
           ),
           Expanded(
-            child: BlocBuilder<GetMessagesCubit, GetMessagesState>(
-              builder: (context, state) {
+            child: BlocListener<GetMessagesCubit, GetMessagesState>(
+              listener: (context, state) {
+                // 1. استمع لحالة النجاح
                 if (state is GetMessagesSuccess) {
-                  // ✅✅✅ --- تم إصلاح الخطأ هنا --- ✅✅✅
-                  final displayMessages = state.messages;
-                  if (displayMessages.isEmpty) {
-                    return const Center(
-                      child: Text("No messages yet. Start the conversation!"),
-                    );
-                  }
-                  return ListView.builder(
-                    controller: _scrollController,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 10.h,
-                    ),
-                    itemCount: displayMessages.length,
-                    itemBuilder: (context, index) {
-                      final msg = displayMessages[index];
-                      return ChatMessage(
-                        message: msg,
-                        onRetry: () {
-                          // ✅✅✅ --- تم إصلاح الخطأ هنا --- ✅✅✅
-                          _sendMessage(messageToRetry: msg);
-                        },
-                      );
-                    },
-                  );
-                } else if (state is GetMessagesFailure) {
-                  return Center(child: Text(state.error));
+                  // 2. انتظر الإطار التالي لضمان أن ListView قد تم بناؤه
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // 3. قم بالتمرير للأسفل
+                    _scrollToBottom();
+                  });
                 }
-                return const Center(child: CircularProgressIndicator());
               },
+              child: BlocBuilder<GetMessagesCubit, GetMessagesState>(
+                builder: (context, state) {
+                  if (state is GetMessagesSuccess) {
+                    // ✅✅✅ --- تم إصلاح الخطأ هنا --- ✅✅✅
+                    final displayMessages = state.messages;
+                    if (displayMessages.isEmpty) {
+                      return const Center(
+                        child: Text("No messages yet. Start the conversation!"),
+                      );
+                    }
+                    return ListView.builder(
+                      controller: _scrollController,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 10.h,
+                      ),
+                      itemCount: displayMessages.length,
+                      itemBuilder: (context, index) {
+                        final msg = displayMessages[index];
+                        return ChatMessage(
+                          message: msg,
+                          onRetry: () {
+                            // ✅✅✅ --- تم إصلاح الخطأ هنا --- ✅✅✅
+                            _sendMessage(messageToRetry: msg);
+                          },
+                        );
+                      },
+                    );
+                  } else if (state is GetMessagesFailure) {
+                    return Center(child: Text(state.error));
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
           ),
           buildMessageComposer(

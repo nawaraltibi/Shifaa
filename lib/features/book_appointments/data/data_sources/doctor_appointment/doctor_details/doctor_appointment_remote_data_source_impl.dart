@@ -6,6 +6,18 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
   final ApiConsumer apiConsumer;
 
   AppointmentRemoteDataSourceImpl(this.apiConsumer);
+  @override
+  Future<void> rescheduleAppointment({
+    required int appointmentId,
+    required String startTime,
+    required int doctorScheduleId,
+  }) async {
+    // استخدمي .put بدلاً من .post
+    await apiConsumer.put(
+      EndPoint.rescheduleAppointment(appointmentId), // الرابط الديناميكي
+      data: {"start_time": startTime, "doctor_schedule_id": doctorScheduleId},
+    );
+  }
 
   @override
   Future<void> bookAppointment({

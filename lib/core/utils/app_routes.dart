@@ -17,6 +17,7 @@ import 'package:shifaa/features/notifications/presentation/view/screens/notifica
 import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:shifaa/features/search/presentation/views/search_screen.dart';
 import 'package:shifaa/features/splash/presentation/views/splash_view.dart';
+import 'package:shifaa/features/treatmeant_plan/presentation/views/treatment_view.dart';
 
 abstract class AppRouter {
   // مفتاح Navigator رئيسي للتطبيق كله
@@ -37,6 +38,11 @@ abstract class AppRouter {
         path: OnBoardingView.routeName,
         name: OnBoardingView.routeName,
         builder: (context, state) => const OnBoardingView(),
+      ),
+      GoRoute(
+        path: TreatmentView.routeName,
+        name: TreatmentView.routeName,
+        builder: (context, state) => const TreatmentView(),
       ),
       GoRoute(
         path: LoginView.routeName,
@@ -79,14 +85,14 @@ abstract class AppRouter {
         builder: (context, state) {
           // ✅ --- التعديل هنا: استقبل الـ Map --- ✅
           // 1. تحقق من أن extra هو من نوع Map
-          final args = state.extra as Map<String, dynamic>?;
+          final args = state.extra as Map<String, dynamic>;
 
           // 2. استخرج البيانات مع قيم افتراضية آمنة
-          final chatId = args?['chatId'] as int? ?? 0;
-          final doctorName = args?['doctorName'] as String? ?? 'Doctor';
+          final chatId = args['chatId'] as int? ?? 0;
+          final doctorName = args['doctorName'] as String? ?? 'Doctor';
           final doctorImage =
-              args?['doctorImage'] as String?; // يمكن أن يكون null
-          final isMuted = args?['isMuted'] as bool? ?? false;
+              args['doctorImage'] as String?; // يمكن أن يكون null
+          final isMuted = args['isMuted'] as bool? ?? false;
 
           // 3. مرر البيانات إلى ChatView
           return ChatView(

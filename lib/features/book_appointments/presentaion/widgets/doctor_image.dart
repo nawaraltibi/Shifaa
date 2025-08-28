@@ -52,7 +52,7 @@ class DoctorImage extends StatelessWidget {
             // إذا فشل التحميل، اعرض الصورة الافتراضية
             return Image.asset(
               AppImages.imagesDoctor1,
-              height: 210.h,
+              height: 200.h,
               fit: BoxFit.contain,
             );
           },
