@@ -8,4 +8,6 @@ abstract class AppointmentRemoteDataSource {
     required String startTime,
     required int doctorScheduleId,
   });
+
+  Future<void> cancelAppointment({required int appointmentId});
 }

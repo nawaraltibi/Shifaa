@@ -15,7 +15,7 @@ class EndPoint {
       "doctor/$doctorId/schedules";
   static String rescheduleAppointment(int appointmentId) =>
       "appointments/$appointmentId";
-
+  static String cancelAppointment(int appointmentId) => "$appointmentId/cancel";
   // 👇👇 روابط الشات
   static const String chat = "chats"; // POST لإنشاء محادثة جديدة
   // GET للحصول على تفاصيل المحادثة (بما في ذلك الرسائل)

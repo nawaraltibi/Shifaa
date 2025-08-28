@@ -30,4 +30,12 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
     );
     // ما عم نرجع شي من الـ response
   }
+
+  @override
+  Future<void> cancelAppointment({required int appointmentId}) async {
+    // استخدمي .delete
+    await apiConsumer.post(
+      EndPoint.cancelAppointment(appointmentId), // الرابط الديناميكي
+    );
+  }
 }

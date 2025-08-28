@@ -46,4 +46,18 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       return Left(ServerFailure('حدث خطأ غير متوقع: $e'));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> cancelAppointment({
+    required int appointmentId,
+  }) async {
+    try {
+      await remoteDataSource.cancelAppointment(appointmentId: appointmentId);
+      return const Right(unit); // نجح الحذف
+    } on DioException catch (dioError) {
+      return Left(ServerFailure.fromDiorError(dioError));
+    } catch (e) {
+      return Left(ServerFailure('حدث خطأ غير متوقع: $e'));
+    }
+  }
 }

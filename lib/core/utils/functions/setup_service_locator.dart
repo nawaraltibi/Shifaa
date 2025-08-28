@@ -23,6 +23,7 @@ import 'package:shifaa/features/book_appointments/data/data_sources/doctor_detai
 import 'package:shifaa/features/book_appointments/data/data_sources/doctor_details/doctor_remote_data_soucre_impl.dart';
 import 'package:shifaa/features/book_appointments/domain/repos/doctor_details_repo/doctor_repo.dart';
 import 'package:shifaa/features/book_appointments/domain/repos/doctor_details_repo/doctor_repo_impl.dart';
+import 'package:shifaa/features/book_appointments/domain/usecases/cancel_appointment_use_case.dart';
 import 'package:shifaa/features/book_appointments/domain/usecases/get_doctor_details_use_case.dart';
 
 // ✅ Doctor Schedule Imports
@@ -126,5 +127,8 @@ void setupServiceLocator() {
   getIt.registerFactory(() => ChatMuteCubit(getIt<ChatRepository>()));
   getIt.registerLazySingleton(
     () => RescheduleAppointmentUseCase(getIt<AppointmentRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => CancelAppointmentUseCase(getIt<AppointmentRepository>()),
   );
 }
