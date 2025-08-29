@@ -39,6 +39,17 @@ abstract class AppRouter {
         builder: (context, state) => const OnBoardingView(),
       ),
       GoRoute(
+        path: PasswordView.routeName,
+        name: PasswordView.routeName,
+        
+        builder: (context, state) {
+                    final phone = state.queryParams['phone'] ?? '';
+                    final otp = state.queryParams['otp'] ?? '';
+                    return PasswordView(phoneNumber: phone, otp: otp);
+
+        },
+      ),
+      GoRoute(
         path: LoginView.routeName,
         name: LoginView.routeName,
         builder: (context, state) => const LoginView(),

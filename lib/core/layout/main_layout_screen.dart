@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
+import 'package:shifaa/features/appointments/presentation/views/appointment_view.dart';
 import 'package:shifaa/features/chat/presentation/views/chats_list_view.dart';
 
 class MainLayoutScreen extends StatelessWidget {
@@ -33,8 +34,8 @@ class MainLayoutScreen extends StatelessWidget {
               context.go('/search');
               break;
             case 2:
-              // ⭐️ عند الضغط على التبويب الثالث، انتقل إلى قائمة المحادثات
-              context.go(ChatsListView.routeName);
+            
+              context.go('/appointments');
               break;
             case 3:
               context.go('/profile');

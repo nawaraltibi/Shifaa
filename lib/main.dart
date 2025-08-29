@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// --- استيراد مكتبة Firebase Core ---
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shifaa/constants.dart';
 import 'package:shifaa/core/services/notification_service.dart';
@@ -33,9 +32,9 @@ void main() async {
 
   // تحميل التوكن
   loadToken();
-  // await SharedPrefsHelper.instance.saveToken(
-  //   "1|NfKEbLRXssJLsJSK3O013MatlVDccYuCR5QlOjGTb8d64845",
-  // );
+  await SharedPrefsHelper.instance.saveToken(
+    "1|9Htc3iVMweaYkmKU14iHA3eN6GnV6exYCkpi5ylQ4aa63715",
+  );
 
 
   // تشغيل التطبيق

@@ -11,6 +11,12 @@ import 'package:shifaa/features/appointments/domain/repositories/appointment_rep
 import 'package:shifaa/features/appointments/domain/usecases/get_previous_appointments.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_upcoming_appointments.dart';
 import 'package:shifaa/features/appointments/presentation/manager/appointments_cubit.dart';
+import 'package:shifaa/features/home/data/datasources/home_remote_data_source.dart';
+import 'package:shifaa/features/home/data/repositories/home_repository_impl.dart';
+import 'package:shifaa/features/home/domain/repositories/home_repository.dart';
+import 'package:shifaa/features/home/domain/usecases/get_home_previous_appointment_usecase.dart';
+import 'package:shifaa/features/home/domain/usecases/get_home_upcoming_appointment_usecase.dart';
+import 'package:shifaa/features/home/presentation/manager/home_cubit.dart';
 import 'package:shifaa/features/search/data/datasources/doctor_remote_data_source.dart';
 import 'package:shifaa/features/search/data/datasources/specialty_remote_data_source.dart';
 import 'package:shifaa/features/search/data/repositories/doctor_repository_impl.dart';
@@ -50,6 +56,26 @@ Future<void> setupServiceLocatorAshour() async {
   sl.registerLazySingleton<DoctorRemoteDataSourceAshour>(
     () => DoctorRemoteDataSourceImplAshour(dio: sl()),
   );
+
+  // ================== Features - Home ==================
+sl.registerFactory(() => HomeCubit(
+  getUpcomingAppointmentUsecase: sl(),
+  getPreviousAppointmentUsecase: sl(),
+));
+
+sl.registerLazySingleton(() => GetHomeUpcomingAppointmentUsecase(sl()));
+sl.registerLazySingleton(() => GetHomePreviousAppointmentUsecase(sl()));
+
+sl.registerLazySingleton<HomeRepository>(
+  () => HomeRepositoryImpl(remoteDataSource: sl()),
+);
+
+sl.registerLazySingleton<HomeRemoteDataSource>(
+  () => HomeRemoteDataSourceImpl(dio: sl()),
+);
+
+
+
 
   // ================== Features - Appointments ==================
   sl.registerFactory(

@@ -41,22 +41,22 @@ class _SplashViewState extends State<SplashView> {
     final alreadyLaunched = prefs.getBool('alreadyLaunched') ?? false;
     final token = prefs.getString('token');
 
-    if (!alreadyLaunched) {
-      // أول مرة → OnBoarding
-      context.goNamed(OnBoardingView.routeName);
-      await NotificationService.init();
-    } else if (alreadyLaunched && (token == null || token.isEmpty)) {
-      // عمل OnBoarding بس ما عندو token → Login
-      context.goNamed(LoginView.routeName);
-    } else {
-      // عندو token → DoctorDetails
-      context.goNamed(HomeView.routeName);
-    }
-    //goToLogin();
+    // if (!alreadyLaunched) {
+    //   // أول مرة → OnBoarding
+    //   context.goNamed(OnBoardingView.routeName);
+    //   await NotificationService.init();
+    // } else if (alreadyLaunched && (token == null || token.isEmpty)) {
+    //   // عمل OnBoarding بس ما عندو token → Login
+    //   context.goNamed(LoginView.routeName);
+    // } else {
+    //   // عندو token → DoctorDetails
+    //   context.goNamed(HomeView.routeName);
+    // }
+    goToLogin();
   }
 
   void goToLogin() {
-    //context.goNamed(HomeView.routeName);
-     context.goNamed(LoginView.routeName);
+    context.goNamed(HomeView.routeName);
+    //  context.goNamed(LoginView.routeName);
   }
 }
