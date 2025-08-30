@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shifaa/core/utils/functions/e2ee_service.dart';
 import 'package:shifaa/core/utils/functions/send_public_key_to_server.dart';
+import 'package:shifaa/features/home/presentation/manager/home_cubit.dart';
 import 'package:shifaa/features/home/presentation/views/widgets/home_app_bar.dart';
 import 'package:shifaa/features/home/presentation/views/widgets/previous_appointments_section.dart';
 import 'package:shifaa/features/home/presentation/views/widgets/random_tips_section.dart';
@@ -30,30 +32,37 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              children: [
-                SizedBox(height: 16),
-                HomeAppBar(),
-                SizedBox(height: 24),
-                RandomTipsSection(),
-                SizedBox(height: 24),
-                UpcomingAppointmentsSection(),
-                SizedBox(height: 16),
-                PreviousAppointmentsSection(),
-                SizedBox(height: 24),
-                SpecialtiesSection(),
-                SizedBox(height: 24),
-              ],
+    return   Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              context.read<HomeCubit>().fetchAppointments(forceRefresh: true);
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+            children:  [
+              SizedBox(height: 16),
+              HomeAppBar(),
+              SizedBox(height: 24),
+              RandomTipsSection(),
+              SizedBox(height: 24),
+              UpcomingAppointmentsSection(),
+              SizedBox(height: 16),
+              PreviousAppointmentsSection(),
+              SizedBox(height: 24),
+              SpecialtiesSection(),
+              SizedBox(height: 24),
+            ],
+          ),
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+   
   }
 }

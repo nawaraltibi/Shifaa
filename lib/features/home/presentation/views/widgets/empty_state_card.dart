@@ -8,7 +8,7 @@ class EmptyStateCard extends StatelessWidget {
   const EmptyStateCard({
     super.key,
     required this.message,
-    this.height = 230, // ارتفاع تقديري ليطابق كارد المواعيد الحقيقي
+    this.height = 230, 
   });
 
   @override

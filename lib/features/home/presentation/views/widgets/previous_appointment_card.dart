@@ -2,14 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
-import 'package:shifaa/features/home/domain/entities/home_appointment_entity.dart';
+import 'package:shifaa/features/appointments/domain/entities/appointment_entity.dart';
 
 class PreviousAppointmentCard extends StatelessWidget {
-  final HomeAppointmentEntity appointment;
+  // The widget now accepts a list of AppointmentEntity as requested.
+  final List<AppointmentEntity> appointment;
   const PreviousAppointmentCard({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
+    // If the list is empty, we display an empty container to avoid errors.
+    if (appointment.isEmpty) {
+      return const SizedBox.shrink(); // This will display nothing.
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -23,10 +29,11 @@ class PreviousAppointmentCard extends StatelessWidget {
               CircleAvatar(
                 radius: 25,
                 backgroundColor: Colors.white,
-                backgroundImage: appointment.imageUrl != null
-                    ? CachedNetworkImageProvider(appointment.imageUrl!)
+                // We access properties from the first element of the list.
+                backgroundImage: appointment.first.imageUrl != null
+                    ? CachedNetworkImageProvider(appointment.first.imageUrl!)
                     : null,
-                child: appointment.imageUrl == null
+                child: appointment.first.imageUrl == null
                     ? const Icon(Icons.person, size: 40, color: AppColors.primaryAppColor)
                     : null,
               ),
@@ -35,11 +42,11 @@ class PreviousAppointmentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    appointment.doctorName,
+                    appointment.first.doctorName, // Corrected: Using .first
                     style: AppTextStyles.semiBold16.copyWith(color: Colors.white),
                   ),
                   Text(
-                    appointment.specialty,
+                    appointment.first.specialty, // Corrected: Using .first
                     style: AppTextStyles.regular12.copyWith(color: Colors.white.withOpacity(0.8)),
                   ),
                 ],
@@ -52,8 +59,8 @@ class PreviousAppointmentCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildInfoColumn(Icons.calendar_today_outlined, 'Date', appointment.date),
-              _buildInfoColumn(Icons.access_time_outlined, 'Time', appointment.time),
+              _buildInfoColumn(Icons.calendar_today_outlined, 'Date', appointment.first.date), // Corrected
+              _buildInfoColumn(Icons.access_time_outlined, 'Time', appointment.first.time), // Corrected
             ],
           ),
           const SizedBox(height: 20),
@@ -123,3 +130,4 @@ class PreviousAppointmentCard extends StatelessWidget {
     );
   }
 }
+

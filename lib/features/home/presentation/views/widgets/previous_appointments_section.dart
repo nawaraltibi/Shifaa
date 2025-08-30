@@ -10,7 +10,6 @@ class PreviousAppointmentsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // القسم الآن يعرض دائماً العنوان
     return Column(
       children: [
         SectionHeader(
@@ -22,16 +21,18 @@ class PreviousAppointmentsSection extends StatelessWidget {
         const SizedBox(height: 16),
         BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
-            // إذا كانت البيانات قيد التحميل، نعرض كارد رمادي بنفس الحجم
+            // الحالة الأولى: جاري التحميل
             if (state.status == HomeStatus.loading) {
               return const EmptyStateCard(message: 'Loading...');
             }
-            // إذا كان هناك موعد، نعرضه
-            if (state.previousAppointment != null) {
+
+            // الحالة الثانية: يوجد موعد سابق (القائمة ليست فارغة)
+            if (state.previousAppointment != null && state.previousAppointment!.isNotEmpty) {
               return PreviousAppointmentCard(appointment: state.previousAppointment!);
-            } else {
-              // إذا لم يكن هناك موعد، نعرض رسالة مناسبة في كارد بنفس الحجم
-              return const EmptyStateCard(message: 'لا يوجد مواعيد سابقة حالياً');
+            } 
+            // الحالة الثالثة: لا يوجد أي مواعيد سابقة
+            else {
+              return const EmptyStateCard(message: 'You have no previous appointments.');
             }
           },
         ),

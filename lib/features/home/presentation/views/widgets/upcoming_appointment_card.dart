@@ -2,14 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
-import 'package:shifaa/features/home/domain/entities/home_appointment_entity.dart';
+import 'package:shifaa/features/appointments/domain/entities/appointment_entity.dart';
 
 class UpcomingAppointmentCard extends StatelessWidget {
-  final HomeAppointmentEntity appointment;
+  // Reverted: The widget now accepts a list of AppointmentEntity as requested.
+  final List<AppointmentEntity> appointment;
   const UpcomingAppointmentCard({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
+    // A check to prevent crashes if an empty list is accidentally passed.
+    if (appointment.isEmpty) {
+      return const SizedBox.shrink(); // Or a placeholder widget
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -23,10 +29,11 @@ class UpcomingAppointmentCard extends StatelessWidget {
               CircleAvatar(
                 radius: 25,
                 backgroundColor: Colors.white,
-                backgroundImage: appointment.imageUrl != null
-                    ? CachedNetworkImageProvider(appointment.imageUrl!)
+                // Accessing the first element of the list.
+                backgroundImage: appointment.first.imageUrl != null
+                    ? CachedNetworkImageProvider(appointment.first.imageUrl!)
                     : null,
-                child: appointment.imageUrl == null
+                child: appointment.first.imageUrl == null
                     ? const Icon(Icons.person, size: 40, color: AppColors.primaryAppColor)
                     : null,
               ),
@@ -35,18 +42,19 @@ class UpcomingAppointmentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    appointment.doctorName,
+                    appointment.first.doctorName, // Reverted: Using .first
                     style: AppTextStyles.semiBold16.copyWith(color: Colors.white),
                   ),
                   Text(
-                    appointment.specialty,
+                    appointment.first.specialty, // Reverted: Using .first
                     style: AppTextStyles.regular12.copyWith(color: Colors.white.withOpacity(0.8)),
                   ),
                 ],
               ),
               const Spacer(),
               Container(
-                width: 40, height: 40,
+                width: 40,
+                height: 40,
                 decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 child: IconButton(
                   onPressed: () {},
@@ -61,8 +69,8 @@ class UpcomingAppointmentCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildInfoColumn(Icons.calendar_today_outlined, 'Date', appointment.date),
-              _buildInfoColumn(Icons.access_time_outlined, 'Time', appointment.time),
+              _buildInfoColumn(Icons.calendar_today_outlined, 'Date', appointment.first.date), // Reverted
+              _buildInfoColumn(Icons.access_time_outlined, 'Time', appointment.first.time), // Reverted
             ],
           ),
           const SizedBox(height: 20),

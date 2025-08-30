@@ -11,6 +11,7 @@ import 'package:shifaa/features/appointments/domain/repositories/appointment_rep
 import 'package:shifaa/features/appointments/domain/usecases/get_previous_appointments.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_upcoming_appointments.dart';
 import 'package:shifaa/features/appointments/presentation/manager/appointments_cubit.dart';
+import 'package:shifaa/features/home/data/datasources/home_local_data_source.dart';
 import 'package:shifaa/features/home/data/datasources/home_remote_data_source.dart';
 import 'package:shifaa/features/home/data/repositories/home_repository_impl.dart';
 import 'package:shifaa/features/home/domain/repositories/home_repository.dart';
@@ -67,14 +68,16 @@ sl.registerLazySingleton(() => GetHomeUpcomingAppointmentUsecase(sl()));
 sl.registerLazySingleton(() => GetHomePreviousAppointmentUsecase(sl()));
 
 sl.registerLazySingleton<HomeRepository>(
-  () => HomeRepositoryImpl(remoteDataSource: sl()),
+  () => HomeRepositoryImpl(remoteDataSource: sl(), localDataSource: sl(), networkInfo:  sl()),
 );
 
 sl.registerLazySingleton<HomeRemoteDataSource>(
   () => HomeRemoteDataSourceImpl(dio: sl()),
 );
 
-
+sl.registerLazySingleton<HomeLocalDataSource>(
+  () => HomeLocalDataSourceImpl(databaseService: sl()),
+);
 
 
   // ================== Features - Appointments ==================

@@ -1,11 +1,11 @@
 part of 'home_cubit.dart';
 
-enum HomeStatus { initial, loading, success, failure }
+enum HomeStatus { initial, loading, success, error }
 
 class HomeState extends Equatable {
   final HomeStatus status;
-  final HomeAppointmentEntity? upcomingAppointment;
-  final HomeAppointmentEntity? previousAppointment;
+  final List<AppointmentEntity>? upcomingAppointment;
+  final List<AppointmentEntity>? previousAppointment;
   final String? errorMessage;
 
   const HomeState({
@@ -17,8 +17,8 @@ class HomeState extends Equatable {
 
   HomeState copyWith({
     HomeStatus? status,
-    HomeAppointmentEntity? upcomingAppointment,
-    HomeAppointmentEntity? previousAppointment,
+    List <AppointmentEntity>? upcomingAppointment,
+    List <AppointmentEntity>? previousAppointment,
     String? errorMessage,
     bool clearUpcoming = false,
     bool clearPrevious = false,
@@ -27,7 +27,7 @@ class HomeState extends Equatable {
       status: status ?? this.status,
       upcomingAppointment: clearUpcoming ? null : upcomingAppointment ?? this.upcomingAppointment,
       previousAppointment: clearPrevious ? null : previousAppointment ?? this.previousAppointment,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: errorMessage,
     );
   }
 
