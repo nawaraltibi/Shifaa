@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shifaa/features/book_appointments/presentaion/views/doctor_details_view.dart';
 import 'package:shifaa/features/search/domain/entities/dtoctor_entity.dart';
+import 'package:shifaa/features/specialty_details/presentation/views/specialty_details_screen.dart'; 
 import 'package:shifaa/features/search/domain/entities/specialty_entity.dart';
 import 'package:shifaa/features/search/presentation/manager/search_cubit.dart';
-import 'package:shifaa/features/home/presentation/views/widgets/specialty_item.dart';
 import 'package:shifaa/features/search/presentation/views/widgets/doctor_card.dart'
     hide SpecialtyItem;
-import 'package:shifaa/features/book_appointments/presentaion/views/doctor_details_view.dart';
+import 'package:shifaa/features/search/presentation/views/widgets/specialty_item.dart';
 
 class SearchResultsSection extends StatelessWidget {
   const SearchResultsSection({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchCubit, SearchLoadSuccess>(
+    return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
-        if (state.isLoading)
+        if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());
-        if (state.errorMessage != null && state.results.isEmpty)
+        }
+        if (state.errorMessage != null && state.results.isEmpty) {
           return Center(child: Text(state.errorMessage!));
-        if (state.results.isEmpty) {
+        }
+        if (state.results.isEmpty && state.query.isNotEmpty) {
           return Center(
             child: Text(
-              state.query.isEmpty
-                  ? 'Start by typing in the search bar above.'
-                  : 'No results found for "${state.query}".',
+              'No results found for "${state.query}".',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.grey),
             ),
           );
         }
+
         if (state.searchType == SearchType.doctors) {
           return GridView.builder(
             itemCount: state.results.length,
@@ -44,8 +46,7 @@ class SearchResultsSection extends StatelessWidget {
                 name: doctor.fullName,
                 specialty: doctor.specialtyName,
                 rating: doctor.rating,
-                imageUrl:
-                    doctor.imageUrl ??
+                imageUrl: doctor.imageUrl ??
                     'https://placehold.co/400x600/cccccc/ffffff?text=No+Image',
                 doctorId: doctor.id,
                 onTap: (id) {
@@ -71,17 +72,24 @@ class SearchResultsSection extends StatelessWidget {
             itemBuilder: (context, index) {
               final specialty = state.results[index] as SpecialtyEntity;
               return SpecialtyItem(
-                icon: _mapSpecialtyNameToIcon(specialty.name),
+                imageUrl: specialty.icon,
                 name: specialty.name,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SpecialtyDetailsScreen(
+                        specialtyId: specialty.id,
+                        specialtyName: specialty.name,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
         }
       },
     );
-  }
-
-  IconData _mapSpecialtyNameToIcon(String specialtyName) {
-    return Icons.medical_services;
   }
 }

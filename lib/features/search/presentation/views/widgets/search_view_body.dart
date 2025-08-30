@@ -6,21 +6,18 @@ import 'package:shifaa/features/search/presentation/views/widgets/search_field_w
 import 'package:shifaa/features/search/presentation/views/widgets/search_results_section.dart';
 import 'package:shifaa/features/search/presentation/views/widgets/toggle_search_type.dart';
 
-
 class SearchViewBody extends StatelessWidget {
   const SearchViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchCubit, SearchLoadSuccess>(
+    return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title:  Center(
-              child: Text(
-                'Search',
-                style: AppTextStyles.semiBold22
-              ),
+            title: Center(
+              child:
+                  Text('Search', style: AppTextStyles.semiBold22),
             ),
             backgroundColor: Colors.white,
             scrolledUnderElevation: 0,
@@ -31,30 +28,30 @@ class SearchViewBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              ToggleSearchType(
-                selectedType: state.searchType,
-                onTypeChanged: (type) {
-                  context.read<SearchCubit>().changeSearchType(type);
-                },
-              ),
-              const SizedBox(height: 20),
-              SearchFieldWidget(
-      
-                hintText: state.searchType == SearchType.doctors
-                    ? 'Search for a doctor'
-                    : 'Search for a specialty',
-                onSubmitted: (query) {
-                  context.read<SearchCubit>().performSearch(query);
-                },
-              ),
-              const SizedBox(height: 20),
-              const Expanded(
-                child: SearchResultsSection(),
-              ),
-            ],
+                ToggleSearchType(
+                  selectedType: state.searchType,
+                  onTypeChanged: (type) {
+                    context.read<SearchCubit>().changeSearchType(type);
+                  },
+                ),
+                const SizedBox(height: 20),
+                SearchFieldWidget(
+                  hintText: state.searchType == SearchType.doctors
+                      ? 'Search for a doctor'
+                      : 'Search for a specialty',
+                  onSubmitted: (query) {
+                    context.read<SearchCubit>().performSearch(query);
+                  },
+                ),
+                const SizedBox(height: 20),
+                const Expanded(
+                  child: SearchResultsSection(),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-  }}
+        );
+      },
+    );
+  }
+}

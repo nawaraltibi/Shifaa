@@ -1,24 +1,15 @@
 part of 'search_cubit.dart';
 
-
 enum SearchType { doctors, specialties }
 
-abstract class SearchState extends Equatable {
-  const SearchState();
-
-  @override
-  List<Object> get props => [];
-}
-
-
-class SearchLoadSuccess extends SearchState {
+class SearchState extends Equatable {
   final SearchType searchType;
-  final List<dynamic> results; 
+  final List<dynamic> results;
   final bool isLoading;
   final String? errorMessage;
   final String query;
 
-  const SearchLoadSuccess({
+  const SearchState({
     this.searchType = SearchType.specialties,
     this.results = const [],
     this.isLoading = false,
@@ -26,8 +17,7 @@ class SearchLoadSuccess extends SearchState {
     this.query = '',
   });
 
- 
-  SearchLoadSuccess copyWith({
+  SearchState copyWith({
     SearchType? searchType,
     List<dynamic>? results,
     bool? isLoading,
@@ -35,7 +25,7 @@ class SearchLoadSuccess extends SearchState {
     bool clearError = false,
     String? query,
   }) {
-    return SearchLoadSuccess(
+    return SearchState(
       searchType: searchType ?? this.searchType,
       results: results ?? this.results,
       isLoading: isLoading ?? this.isLoading,
@@ -45,5 +35,6 @@ class SearchLoadSuccess extends SearchState {
   }
 
   @override
-  List<Object> get props => [searchType, results, isLoading, query, errorMessage ?? ''];
+  List<Object?> get props =>
+      [searchType, results, isLoading, query, errorMessage];
 }

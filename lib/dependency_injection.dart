@@ -27,6 +27,11 @@ import 'package:shifaa/features/search/domain/repositories/specialty_repository.
 import 'package:shifaa/features/search/domain/usecases/search_for_doctors_usecase.dart';
 import 'package:shifaa/features/search/domain/usecases/search_for_specialties_usecase.dart';
 import 'package:shifaa/features/search/presentation/manager/search_cubit.dart';
+import 'package:shifaa/features/specialty_details/data/datasources/specialty_details_remote_data_source.dart';
+import 'package:shifaa/features/specialty_details/data/repositories/specialty_details_repository_impl.dart';
+import 'package:shifaa/features/specialty_details/domain/repositories/specialty_details_repository.dart';
+import 'package:shifaa/features/specialty_details/domain/usecases/get_specialty_doctors_usecase.dart';
+import 'package:shifaa/features/specialty_details/presentation/manager/specialty_details_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -78,6 +83,26 @@ sl.registerLazySingleton<HomeRemoteDataSource>(
 sl.registerLazySingleton<HomeLocalDataSource>(
   () => HomeLocalDataSourceImpl(databaseService: sl()),
 );
+
+
+//region SpecialtyDetails Feature Dependencies
+
+// Cubit
+sl.registerFactory(() => SpecialtyDetailsCubit(sl()));
+
+// Usecase
+sl.registerLazySingleton(() => GetSpecialtyDoctorsUsecase(sl()));
+
+// Repository
+sl.registerLazySingleton<SpecialtyDetailsRepository>(
+    () => SpecialtyDetailsRepositoryImpl(remoteDataSource: sl()));
+
+// DataSource
+sl.registerLazySingleton<SpecialtyDetailsRemoteDataSource>(
+    () => SpecialtyDetailsRemoteDataSourceImpl(dio: sl()));
+
+//endregion
+
 
 
   // ================== Features - Appointments ==================
