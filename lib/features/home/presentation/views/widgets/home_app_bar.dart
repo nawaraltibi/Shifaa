@@ -33,10 +33,10 @@ class HomeAppBar extends StatelessWidget {
         ),
         Row(
           children: [
-            IconButton(
-              onPressed: () => context.goNamed('/notifications'),
-              icon: const Icon(Icons.notifications_none_outlined, size: 28),
-            ),
+            // IconButton(
+            //   onPressed: () => context.goNamed('/notifications'),
+            //   icon: const Icon(Icons.notifications_none_outlined, size: 28),
+            // ),
             IconButton(
               onPressed: () {
                 context.pushNamed(ChatsListView.routeName);

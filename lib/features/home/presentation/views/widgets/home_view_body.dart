@@ -54,8 +54,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               SizedBox(height: 16),
               PreviousAppointmentsSection(),
               SizedBox(height: 24),
-              SpecialtiesSection(),
-              SizedBox(height: 24),
             ],
           ),
               ),

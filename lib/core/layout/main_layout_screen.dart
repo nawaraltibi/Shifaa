@@ -51,8 +51,8 @@ class MainLayoutScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           // ⭐️ قمت بتغيير الأيقونة والاسم ليعكس المحادثات
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
-            label: 'Chats',
+            icon: Icon(Icons.description),
+            label: 'Appointment',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
