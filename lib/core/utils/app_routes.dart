@@ -17,6 +17,7 @@ import 'package:shifaa/features/notifications/presentation/view/screens/notifica
 import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:shifaa/features/search/presentation/views/search_screen.dart';
 import 'package:shifaa/features/splash/presentation/views/splash_view.dart';
+import 'package:shifaa/features/user_info/presentation/views/user_info_screen.dart';
 
 abstract class AppRouter {
   // مفتاح Navigator رئيسي للتطبيق كله
@@ -129,6 +130,7 @@ abstract class AppRouter {
             // ⭐️ دمجنا شرط قائمة المحادثات مع المواعيد
             selectedIndex = 2;
           } else if (location.startsWith('/profile')) {
+            
             selectedIndex = 3;
           }
 
@@ -165,7 +167,7 @@ abstract class AppRouter {
             name: 'profile', // أعطِ اسماً للمسار
             pageBuilder: (context, state) => const NoTransitionPage(
               child: Scaffold(
-                body: Center(child: Text('Profile')),
+                body: UserInfoScreen(),
               ), // استبدلها بشاشة البروفايل
             ),
           ),

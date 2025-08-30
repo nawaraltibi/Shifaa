@@ -32,6 +32,11 @@ import 'package:shifaa/features/specialty_details/data/repositories/specialty_de
 import 'package:shifaa/features/specialty_details/domain/repositories/specialty_details_repository.dart';
 import 'package:shifaa/features/specialty_details/domain/usecases/get_specialty_doctors_usecase.dart';
 import 'package:shifaa/features/specialty_details/presentation/manager/specialty_details_cubit.dart';
+import 'package:shifaa/features/user_info/data/datasources/user_info_remote_data_source.dart';
+import 'package:shifaa/features/user_info/data/repositories/user_info_repository_impl.dart';
+import 'package:shifaa/features/user_info/domain/repositories/user_info_repository.dart';
+import 'package:shifaa/features/user_info/domain/usecases/get_user_info_usecase.dart';
+import 'package:shifaa/features/user_info/presentation/manager/user_info_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -83,6 +88,30 @@ sl.registerLazySingleton<HomeRemoteDataSource>(
 sl.registerLazySingleton<HomeLocalDataSource>(
   () => HomeLocalDataSourceImpl(databaseService: sl()),
 );
+
+//region UserInfo Feature Dependencies
+
+// Cubit
+sl.registerFactory(() => UserInfoCubit(sl()));
+
+// Usecase
+sl.registerLazySingleton(() => GetUserInfoUsecase(sl()));
+
+// Repository
+sl.registerLazySingleton<UserInfoRepository>(
+    () => UserInfoRepositoryImpl(remoteDataSource: sl()));
+
+// DataSource
+sl.registerLazySingleton<UserInfoRemoteDataSource>(
+    () => UserInfoRemoteDataSourceImpl(dio: sl()));
+
+// Helper
+// قم بتسجيل الـ SharedPreferencesHelper إذا لم تكن قد فعلت ذلك بالفعل
+// sl.registerLazySingleton(() => SharedPreferencesHelper());
+
+//endregion
+
+
 
 
 //region SpecialtyDetails Feature Dependencies
