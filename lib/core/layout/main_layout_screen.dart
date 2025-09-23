@@ -1,14 +1,11 @@
-// في ملف: lib/core/layout/main_layout_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
-import 'package:shifaa/features/chat/presentation/views/chats_list_view.dart';
 
 class MainLayoutScreen extends StatelessWidget {
   final Widget child;
   final int selectedIndex;
-
+  
   const MainLayoutScreen({
     super.key,
     required this.child,
@@ -17,12 +14,12 @@ class MainLayoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ❌ تم حذف المنطق اليدوي لإخفاء وإظهار الـ BottomNav
-
+    final location = GoRouterState.of(context).location;
+    // final showBottomNav = !location.contains('/notifications');
+    
     return Scaffold(
       body: child,
-      // ⭐️ أصبح الـ BottomNavigationBar يُعرض دائماً بدون شروط
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar:  BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
           switch (index) {
@@ -33,8 +30,7 @@ class MainLayoutScreen extends StatelessWidget {
               context.go('/search');
               break;
             case 2:
-              // ⭐️ عند الضغط على التبويب الثالث، انتقل إلى قائمة المحادثات
-              context.go(ChatsListView.routeName);
+              context.go('/appointments');
               break;
             case 3:
               context.go('/profile');
@@ -46,16 +42,25 @@ class MainLayoutScreen extends StatelessWidget {
         selectedItemColor: AppColors.primaryAppColor,
         unselectedItemColor: AppColors.secondaryTextColor,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          // ⭐️ قمت بتغيير الأيقونة والاسم ليعكس المحادثات
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
-            label: 'Chats',
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt),
+            label: 'Appointments',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
-      ),
+      ) ,
     );
   }
 }
+
