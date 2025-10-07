@@ -7,6 +7,7 @@ import 'package:shifaa/features/appointments/domain/entities/appointment_entity.
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._init();
   static Database? _database;
+
   DatabaseService._init();
 
   Future<Database> get database async {
@@ -20,14 +21,13 @@ class DatabaseService {
     final path = join(dbPath, filePath);
     return await openDatabase(
       path,
-      version: 3, 
+      version: 3,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
   }
 
   Future _createDB(Database db, int version) async {
-    
     await db.execute('''
       CREATE TABLE appointments ( 
         id INTEGER NOT NULL,
@@ -43,28 +43,42 @@ class DatabaseService {
 
   Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await db.execute("ALTER TABLE appointments ADD COLUMN type TEXT NOT NULL DEFAULT 'unknown'");
-      await db.execute("ALTER TABLE appointments ADD COLUMN startTime TEXT NOT NULL DEFAULT ''");
+      await db.execute(
+        "ALTER TABLE appointments ADD COLUMN type TEXT NOT NULL DEFAULT 'unknown'",
+      );
+      await db.execute(
+        "ALTER TABLE appointments ADD COLUMN startTime TEXT NOT NULL DEFAULT ''",
+      );
     }
     if (oldVersion < 3) {
-      
-      await db.execute("ALTER TABLE appointments RENAME COLUMN doctorName TO doctor_name");
-      await db.execute("ALTER TABLE appointments RENAME COLUMN specialty TO specialty_name");
-      await db.execute("ALTER TABLE appointments RENAME COLUMN imageUrl TO avatar");
-      await db.execute("ALTER TABLE appointments RENAME COLUMN startTime TO start_time");
-    
+      await db.execute(
+        "ALTER TABLE appointments RENAME COLUMN doctorName TO doctor_name",
+      );
+      await db.execute(
+        "ALTER TABLE appointments RENAME COLUMN specialty TO specialty_name",
+      );
+      await db.execute(
+        "ALTER TABLE appointments RENAME COLUMN imageUrl TO avatar",
+      );
+      await db.execute(
+        "ALTER TABLE appointments RENAME COLUMN startTime TO start_time",
+      );
+
       await db.execute("ALTER TABLE appointments DROP COLUMN date");
       await db.execute("ALTER TABLE appointments DROP COLUMN time");
       print("✅ Database upgraded to version 3.");
     }
   }
 
-  Future<void> cacheAppointments(List<AppointmentEntity> appointments, String type) async {
+  Future<void> cacheAppointments(
+    List<AppointmentEntity> appointments,
+    String type,
+  ) async {
     final db = await instance.database;
     final batch = db.batch();
-    
+
     batch.delete('appointments', where: 'type = ?', whereArgs: [type]);
-    
+
     for (final appointment in appointments) {
       batch.insert('appointments', {
         'id': appointment.id,
@@ -80,26 +94,26 @@ class DatabaseService {
 
   Future<List<AppointmentEntity>> getCachedAppointments(String type) async {
     final db = await instance.database;
-    
+
     final maps = await db.query(
       'appointments',
       where: 'type = ?',
       whereArgs: [type],
-      orderBy: 'start_time ASC', 
+      orderBy: 'start_time ASC',
     );
 
     return maps.map((json) {
-        final startTimeString = json['start_time'] as String;
-        final startTime = DateTime.parse(startTimeString);
-        return AppointmentEntity(
-            id: json['id'] as int,
-            doctorName: json['doctor_name'] as String,
-            specialty: json['specialty_name'] as String,
-            imageUrl: json['avatar'] as String?,
-            date: DateFormat('d MMMM, EEEE').format(startTime),
-            time: DateFormat('h:mm a').format(startTime),
-            startTime: startTimeString,
-        );
+      final startTimeString = json['start_time'] as String;
+      final startTime = DateTime.parse(startTimeString);
+      return AppointmentEntity(
+        id: json['id'] as int,
+        doctorName: json['doctor_name'] as String,
+        specialty: json['specialty_name'] as String,
+        imageUrl: json['avatar'] as String?,
+        date: DateFormat('d MMMM, EEEE').format(startTime),
+        time: DateFormat('h:mm a').format(startTime),
+        startTime: startTimeString,
+      );
     }).toList();
   }
 }

@@ -15,8 +15,7 @@ class MainLayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).location;
-    // final showBottomNav = !location.contains('/notifications');
-    
+
     return Scaffold(
       body: child,
       bottomNavigationBar:  BottomNavigationBar(

@@ -26,7 +26,6 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
 
     result.fold(
       (failure) {
-        // ❌ أي خطأ → يطلع Snackbar مباشر
         final (title, message, type) = _mapErrorToSnackbar(
           failure.message,
           context,

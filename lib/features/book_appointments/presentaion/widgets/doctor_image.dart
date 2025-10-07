@@ -10,7 +10,6 @@ class DoctorImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // إذا كانت الصورة فارغة أو null، اعرض الصورة الافتراضية مباشرة
     if (image == null || image!.isEmpty) {
       return Transform.flip(
         flipX: true,
@@ -21,7 +20,6 @@ class DoctorImage extends StatelessWidget {
         ),
       );
     } else {
-      // إذا كانت هناك صورة، استخدم Image.network مع builder
       return Transform.flip(
         flipX: true,
         child: Image.network(
@@ -30,10 +28,8 @@ class DoctorImage extends StatelessWidget {
           fit: BoxFit.contain,
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) {
-              // إذا انتهى التحميل، اعرض الصورة
               return child;
             } else {
-              // أثناء التحميل، اعرض مؤشر تحميل دائري
               return SizedBox(
                 height: 200.h,
                 child: Center(
@@ -49,7 +45,6 @@ class DoctorImage extends StatelessWidget {
             }
           },
           errorBuilder: (context, error, stackTrace) {
-            // إذا فشل التحميل، اعرض الصورة الافتراضية
             return Image.asset(
               AppImages.imagesDoctor1,
               height: 200.h,

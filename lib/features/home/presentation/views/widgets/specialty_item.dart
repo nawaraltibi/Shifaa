@@ -10,9 +10,8 @@ class SpecialtyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // تم حذف SingleChildScrollView لأنه غير ضروري هنا ويسبب المشكلة
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center, // <-- إضافة لتحسين التوسيط
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           width: 60,
@@ -24,7 +23,6 @@ class SpecialtyItem extends StatelessWidget {
           child: Icon(icon, color: AppColors.primaryAppColor, size: 32),
         ),
         const SizedBox(height: 8),
-        // لف النص بـ Flexible يجعله يتكيف مع المساحة المتبقية
         Flexible(
           child: Text(
             name,

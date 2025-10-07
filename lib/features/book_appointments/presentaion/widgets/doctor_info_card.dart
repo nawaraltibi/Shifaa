@@ -18,30 +18,27 @@ class DoctorInfoCard extends StatelessWidget {
       children: [
         Row(
           children: [
-            // صورة الطبيب
             CircleAvatar(
               radius: 32.r,
               backgroundColor: AppColors.primaryAppColor,
               child: ClipOval(child: Image.asset(AppImages.imagesDoctor1)),
             ),
             SizedBox(width: 16.w),
-            // الاسم والتخصص
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Dr. George Doe', // بيانات وهمية
+                  'Dr. George Doe',
                   style: AppTextStyles.semiBold16,
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'Neurologist', // بيانات وهمية
+                  'Neurologist',
                   style: AppTextStyles.regular13.copyWith(color: Colors.grey),
                 ),
               ],
             ),
-            const Spacer(), // يأخذ كل المساحة المتبقية
-            // أيقونة الشات
+            const Spacer(),
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(

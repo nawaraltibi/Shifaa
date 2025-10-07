@@ -1,4 +1,3 @@
-// repository impl
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -27,51 +26,31 @@ class ChatRepositoryImpl implements ChatRepository {
     }
   }
 
-  // في ملف ChatRepositoryImpl.dart
-
-  // ✅✅✅ --- تم تعديل هذه الدالة بالكامل --- ✅✅✅
   @override
-  // في ملف ChatRepositoryImpl.dart
   Future<Either<Failure, ChatModel>> getChatDetails(int chatId) async {
     try {
       final chat = await remote.getChatDetails(chatId);
       return Right(chat);
     } on DioException catch (e) {
-      // ملاحظة: تأكد من أن اسم الدالة هو fromDioError وليس fromDiorError
       return Left(ServerFailure.fromDiorError(e));
     } catch (e) {
-      // ✅✅✅ --- هذا هو الإصلاح --- ✅✅✅
-      // نقوم بإنشاء كائن جديد من ServerFailure ونمرر له رسالة الخطأ
       return Left(ServerFailure(e.toString()));
     }
   }
 
-  // في ملف ChatRepositoryImpl.dart، داخل دالة sendMessage
-
-  // في ملف ChatRepositoryImpl.dart
-
   @override
   Future<Either<Failure, Message>> sendMessage(
-    int chatId, {
-    String? text,
-    File? file,
-    String? originalFileName, // <--- أضف هذا السطر
-    List<Map<String, String>> encryptedKeysPayload = const [],
-  }) async {
+      int chatId, {
+        String? text,
+        File? file,
+        String? originalFileName,
+        List<Map<String, String>> encryptedKeysPayload = const [],
+      }) async {
     try {
-      // 🕵️‍♂️ نقطة تفتيش 5: هل وصلت البيانات إلى الـ Repository؟
-      print(
-        "🕵️‍♂️ [5. REPO IMPL] Received data in repository implementation:",
-      );
-      print("   - Text: ${text != null ? 'Present' : 'null'}");
-      print("   - File: ${file?.path ?? 'null'}");
-      print("   - Original Name: ${originalFileName ?? 'null'}");
-
       final msg = await remote.sendMessage(
         chatId,
         text: text,
         file: file,
-        // ✅ مرر الاسم الذي استقبلته مباشرة إلى remote data source
         originalFileName: originalFileName,
         encryptedKeysPayload: encryptedKeysPayload,
       );
@@ -86,15 +65,11 @@ class ChatRepositoryImpl implements ChatRepository {
   @override
   Future<Either<Failure, List<ChatSummary>>> getChats() async {
     try {
-      // استدعِ الدالة من الـ remote data source
       final chats = await remote.getChats();
-      // في حالة النجاح، أرجع البيانات داخل Right
       return Right(chats);
     } on DioException catch (e) {
-      // في حالة حدوث خطأ من Dio، قم بتحويله إلى ServerFailure
       return Left(ServerFailure.fromDiorError(e));
     } catch (e) {
-      // لأي خطأ آخر، قم بإرجاعه كـ ServerFailure
       return Left(ServerFailure(e.toString()));
     }
   }

@@ -1,44 +1,48 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// --- استيراد مكتبة Firebase Core ---
-import 'package:firebase_core/firebase_core.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:shifaa/constants.dart';
-import 'package:shifaa/core/services/notification_service.dart';
-import 'package:shifaa/core/utils/functions/setup_service_locator.dart';
 import 'package:shifaa/core/utils/app_routes.dart';
-import 'package:shifaa/core/utils/shared_prefs_helper.dart';
+import 'package:shifaa/core/utils/functions/setup_service_locator.dart';
 import 'package:shifaa/core/utils/simple_bloc_observer.dart';
 import 'package:shifaa/dependency_injection.dart';
+import 'package:shifaa/features/book_appointments/domain/usecases/cancel_appointment_use_case.dart';
+import 'package:shifaa/features/book_appointments/presentaion/cubits/cancel_appointment/cancel_appointment_cubit.dart';
+import 'package:shifaa/features/home/domain/repositories/home_repository.dart';
 import 'package:shifaa/firebase_options.dart';
+
+import 'features/home/presentation/providers/home_provider .dart';
 import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // --- 3. قم بتهيئة Firebase باستخدام الطريقة الحديثة (ملف Options) ---
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // إعداد مراقب الـ Bloc
   Bloc.observer = SimpleBlocObserver();
-
-  // إخفاء الـ System UI
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
-  // إعداد الـ Service Locator
   setupServiceLocator();
   await setupServiceLocatorAshour();
-
-  // تحميل التوكن
   loadToken();
-  // await SharedPrefsHelper.instance.saveToken(
-  //   "1|NfKEbLRXssJLsJSK3O013MatlVDccYuCR5QlOjGTb8d64845",
-  // );
 
-  // تشغيل التطبيق
-  runApp(const Shifaa());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) =>
+          HomeProvider(homeRepository: GetIt.instance<HomeRepository>())
+            ..fetchAllData(),
+        ),
+        BlocProvider(
+          create: (context) => CancelCubit(getIt<CancelAppointmentUseCase>()),
+        ),
+      ],
+      child: const Shifaa(),
+    ),
+  );
 }
 
 class Shifaa extends StatelessWidget {
@@ -55,7 +59,6 @@ class Shifaa extends StatelessWidget {
           title: 'Shifaa App',
           debugShowCheckedModeBanner: false,
           routerConfig: AppRouter.router,
-
           theme: ThemeData(
             fontFamily: 'Inter',
             scaffoldBackgroundColor: Colors.white,

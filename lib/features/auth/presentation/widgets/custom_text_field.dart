@@ -33,7 +33,6 @@ class CustomTextField extends StatelessWidget {
     this.errorText,
   }) : super(key: key);
 
-  // ✅ Reusable border builder method
   OutlineInputBorder _buildOutlineInputBorder(Color color, [double width = 2]) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),

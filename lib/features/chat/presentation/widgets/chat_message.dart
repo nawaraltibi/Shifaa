@@ -21,7 +21,6 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ تم التعديل: نعتمد على senderRole لتحديد ملكية الرسالة
     final bool isMine = message.senderRole == 'patient';
 
     return Align(
@@ -59,7 +58,6 @@ class ChatMessage extends StatelessWidget {
   Widget _buildMessageContent(BuildContext context, bool isMine) {
     final textColor = isMine ? Colors.white : Colors.black87;
 
-    // تحديد نوع الملف
     final isImage =
         message.file?.toLowerCase().endsWith('.jpg') == true ||
         message.file?.toLowerCase().endsWith('.jpeg') == true ||
@@ -110,7 +108,6 @@ class ChatMessage extends StatelessWidget {
         message.file!,
         fit: BoxFit.cover,
         width: 200.w,
-        // ✅ تم الإصلاح: استخدام frameBuilder, loadingBuilder, و errorBuilder
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           if (wasSynchronouslyLoaded) return child;
           return AnimatedOpacity(

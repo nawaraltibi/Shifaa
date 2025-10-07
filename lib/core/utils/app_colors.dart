@@ -5,7 +5,6 @@ abstract class AppColors {
   static const Color secondaryAppColor = Color(0xFF77A1F8);
   static const Color primaryTextColor = Color(0xFF2f2f2f);
   static const Color secondaryTextColor = Color(0xFF575757);
-  static const Color secondaryAppColor = Color(0xFF77A1F8);
   static const Color blue = Color(0xFF5C85D9);
   static const Color purple = Color(0xFF645CD9);
   static const Color red = Color(0xFFD95C5C);

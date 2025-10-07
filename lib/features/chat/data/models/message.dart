@@ -1,7 +1,5 @@
 import 'package:shifaa/features/chat/data/models/message_status.dart';
 
-// ----------------- الكلاس المساعد -----------------
-// يمثل كل جهاز مستهدف مع مفتاحه المشفر
 class EncryptedKeyTarget {
   final int deviceId;
   final String encryptedKey;
@@ -9,18 +7,14 @@ class EncryptedKeyTarget {
   EncryptedKeyTarget({required this.deviceId, required this.encryptedKey});
 
   factory EncryptedKeyTarget.fromJson(Map<String, dynamic> json) {
-    // هذا الكود مرن ويتعامل مع id أو device_id
     final idValue = json['device_id'] ?? json['id'];
     return EncryptedKeyTarget(
-      deviceId: idValue is int
-          ? idValue
-          : int.tryParse(idValue.toString()) ?? 0,
+      deviceId: idValue is int ? idValue : int.tryParse(idValue.toString()) ?? 0,
       encryptedKey: json['encrypted_key'] ?? '',
     );
   }
 }
 
-// ----------------- الكلاس الأب -----------------
 class Message {
   final int id;
   final String? text;
@@ -30,7 +24,7 @@ class Message {
   final DateTime createdAt;
   final MessageStatus status;
   final String? localFilePath;
-  final List<EncryptedKeyTarget> encryptedKeys; // ✅ تم إضافته هنا
+  final List<EncryptedKeyTarget> encryptedKeys;
 
   Message({
     required this.id,
@@ -41,11 +35,9 @@ class Message {
     required this.createdAt,
     this.status = MessageStatus.sent,
     this.localFilePath,
-    this.encryptedKeys = const [], // ✅
+    this.encryptedKeys = const [],
   });
 
-  // ✅✅✅ --- دالة مساعدة مهمة جداً --- ✅✅✅
-  // تسمح لنا بنسخ كائن الرسالة مع تغيير بعض خصائصه بسهولة
   Message copyWith({
     int? id,
     String? text,
@@ -71,7 +63,6 @@ class Message {
   }
 }
 
-// ----------------- الموديل الابن -----------------
 class MessageModel extends Message {
   MessageModel({
     required int id,
@@ -82,32 +73,26 @@ class MessageModel extends Message {
     required DateTime createdAt,
     MessageStatus status = MessageStatus.sent,
     String? localFilePath,
-    List<EncryptedKeyTarget> encryptedKeys = const [], // ✅
+    List<EncryptedKeyTarget> encryptedKeys = const [],
   }) : super(
-         id: id,
-         text: text,
-         file: file,
-         senderRole: senderRole,
-         senderId: senderId,
-         createdAt: createdAt,
-         status: status,
-         localFilePath: localFilePath,
-         encryptedKeys: encryptedKeys, // ✅ تمرير المفاتيح للـ super
-       );
-
-  // في ملف message.dart، داخل كلاس MessageModel
+    id: id,
+    text: text,
+    file: file,
+    senderRole: senderRole,
+    senderId: senderId,
+    createdAt: createdAt,
+    status: status,
+    localFilePath: localFilePath,
+    encryptedKeys: encryptedKeys,
+  );
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
-    // ✅✅✅ --- هذا هو الإصلاح --- ✅✅✅
-    // 1. تحقق أولاً إذا كان المفتاح "devices" موجوداً ونوعه قائمة
     final List<EncryptedKeyTarget> keys;
     if (json['devices'] != null && json['devices'] is List) {
-      // 2. إذا كان موجوداً، قم بتحليله
       keys = (json['devices'] as List)
           .map((e) => EncryptedKeyTarget.fromJson(e))
           .toList();
     } else {
-      // 3. إذا لم يكن موجوداً (أو ليس قائمة)، استخدم قائمة فارغة
       keys = [];
     }
 
@@ -120,11 +105,10 @@ class MessageModel extends Message {
       createdAt: json["created_at"] != null
           ? DateTime.parse(json["created_at"])
           : DateTime.now(),
-      encryptedKeys: keys, // <-- 4. استخدم القائمة الآمنة التي أنشأناها
+      encryptedKeys: keys,
     );
   }
 
-  // هذه الدالة مفيدة إذا احتجت تحويل الموديل إلى JSON لإرساله لمكان ما
   Map<String, dynamic> toJson() {
     return {
       "id": id,

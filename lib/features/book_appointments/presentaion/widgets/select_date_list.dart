@@ -62,10 +62,9 @@ class _SelectDateListState extends State<SelectDateList> {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ العودة إلى Wrap لأنه الآن داخل ListView ويعمل بشكل صحيح
     return Wrap(
-      spacing: 15.w, // المسافة الأفقية
-      runSpacing: 10.h, // المسافة الرأسية
+      spacing: 15.w,
+      runSpacing: 10.h,
       children: monthDates.map((date) {
         final formattedDay = _weekdayToString(date.weekday);
         final isAvailable = widget.availableDays.contains(

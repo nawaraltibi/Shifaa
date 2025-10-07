@@ -9,7 +9,7 @@ class AppointmentsSection extends StatelessWidget {
   final List<AppointmentInfo> appointments;
 
   const AppointmentsSection({Key? key, required this.appointments})
-    : super(key: key);
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,55 +19,45 @@ class AppointmentsSection extends StatelessWidget {
           _buildAppointmentItem(
             context,
             appointments[i],
-            i == appointments.length - 1, // التحقق إذا كان العنصر الأخير
+            i == appointments.length - 1,
           ),
       ],
     );
   }
 
   Widget _buildAppointmentItem(
-    BuildContext context,
-    AppointmentInfo appointment,
-    bool isLast,
-  ) {
-    // الهامش السفلي الذي يسبب المشكلة
+      BuildContext context,
+      AppointmentInfo appointment,
+      bool isLast,
+      ) {
     final double bottomMargin = !isLast ? 40.h : 0;
 
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // --- عمود الخط الزمني ---
           SizedBox(
             width: 50.w,
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
-                // الخط العمودي
-                // **** التعديل النهائي هنا ****
-                // استبدلنا Positioned.fill بـ Positioned عادي
-                // وحددنا نقطة النهاية (bottom) لتكون بقيمة الهامش
                 Positioned(
-                  top: 50.h, // نقطة البداية (تحت التاريخ)
-                  bottom: bottomMargin, // نقطة النهاية (قبل الهامش السفلي)
+                  top: 50.h,
+                  bottom: bottomMargin,
                   left: 0,
                   right: 0,
                   child: Align(
-                    alignment: Alignment.center, // محاذاة في المنتصف
+                    alignment: Alignment.center,
                     child: Container(width: 2.w, color: AppColors.purple),
                   ),
                 ),
-                // مربع التاريخ
                 _buildTimelineDot(context, appointment.date),
               ],
             ),
           ),
           SizedBox(width: 12.w),
-
-          // --- عمود المحتوى ---
           Expanded(
             child: Container(
-              // نستخدم نفس قيمة الهامش هنا
               margin: EdgeInsets.only(bottom: isLast ? 0 : bottomMargin),
               padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(

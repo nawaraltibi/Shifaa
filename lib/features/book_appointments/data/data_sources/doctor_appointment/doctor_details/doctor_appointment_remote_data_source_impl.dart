@@ -6,15 +6,15 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
   final ApiConsumer apiConsumer;
 
   AppointmentRemoteDataSourceImpl(this.apiConsumer);
+
   @override
   Future<void> rescheduleAppointment({
     required int appointmentId,
     required String startTime,
     required int doctorScheduleId,
   }) async {
-    // استخدمي .put بدلاً من .post
     await apiConsumer.put(
-      EndPoint.rescheduleAppointment(appointmentId), // الرابط الديناميكي
+      EndPoint.rescheduleAppointment(appointmentId),
       data: {"start_time": startTime, "doctor_schedule_id": doctorScheduleId},
     );
   }
@@ -28,14 +28,12 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
       EndPoint.appointment,
       data: {"start_time": startTime, "doctor_schedule_id": doctorScheduleId},
     );
-    // ما عم نرجع شي من الـ response
   }
 
   @override
   Future<void> cancelAppointment({required int appointmentId}) async {
-    // استخدمي .delete
     await apiConsumer.post(
-      EndPoint.cancelAppointment(appointmentId), // الرابط الديناميكي
+      EndPoint.cancelAppointment(appointmentId),
     );
   }
 }

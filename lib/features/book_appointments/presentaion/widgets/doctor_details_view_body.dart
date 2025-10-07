@@ -76,13 +76,11 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
               }
 
               if (state is AppointmentSuccess) {
-                // ✅ تم ترجمة النص هنا
                 _showSnackBar(
                   context,
-                  // "تم الحجز بنجاح "
                   S
                       .of(context)
-                      .bookSuccess, // يجب أن يكون هذا المفتاح موجودًا في ملف الترجمة
+                      .bookSuccess,
                   type: SnackBarType.success,
                 );
 
@@ -233,7 +231,6 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
               text: S.of(context).book,
               onPressed: () {
                 if (_selectedDate == null) {
-                  // ✅ تم ترجمة هذا النص
                   _showSnackBar(
                     context,
                     S.of(context).select_date,
@@ -243,7 +240,6 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                 }
 
                 if (_selectedTimeSlot == null) {
-                  // ✅ تم ترجمة هذا النص
                   _showSnackBar(
                     context,
                     S.of(context).select_time,
@@ -292,9 +288,8 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                 color: AppColors.primaryAppColor,
               ),
               const SizedBox(width: 8),
-              // ✅ تم ترجمة هذا النص
               Text(
-                S.of(context).confirmBooking, // مفتاح جديد
+                S.of(context).confirmBooking,
                 style: AppTextStyles.semiBold18.copyWith(fontSize: 20.sp),
               ),
             ],
@@ -302,9 +297,8 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ✅ تم ترجمة هذا النص
               Text(
-                S.of(context).confirmBookingMessage, // مفتاح جديد
+                S.of(context).confirmBookingMessage,
                 style: AppTextStyles.regular15,
                 textAlign: TextAlign.center,
               ),
@@ -319,9 +313,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
               ),
               SizedBox(height: 20.h),
 
-              // الكود الصحيح للـ Row widget
               Row(
-                // ✅ تم تصحيح الخطأ الإملائي هنا
                 textDirection: ui.TextDirection.ltr,
                 children: [
                   SizedBox(
@@ -344,7 +336,6 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                         if (_selectedDate == null || _selectedTimeSlot == null)
                           return;
 
-                        // ✅ استخدم en_US دائماً عند تجهيز البيانات للإرسال
                         final datePart = DateFormat(
                           'yyyy-MM-dd',
                           'en_US',
@@ -381,7 +372,6 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                           }
                         }
 
-                        // ✅ طباعة بشكل مفهوم للمستخدم حسب اللغة الحالية
                         final displayDate = DateFormat(
                           'EEEE, dd/MM/yyyy',
                           Intl.getCurrentLocale(),
@@ -456,7 +446,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
       SnackBar(
         behavior: SnackBarBehavior.floating,
         backgroundColor:
-            Colors.transparent, // خلفية شفافة عشان نقدر نرسم الكارد
+            Colors.transparent,
         elevation: 0,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         content: Container(

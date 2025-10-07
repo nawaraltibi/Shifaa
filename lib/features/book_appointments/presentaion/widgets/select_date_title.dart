@@ -24,13 +24,11 @@ class SelectDateTitle extends StatelessWidget {
         DoctorDetailsTitle(text: S.of(context).select_date),
         const Spacer(),
 
-        // زر يسار
         IconButton(
           icon: Icon(Icons.arrow_left, color: Colors.black54, size: 28.sp),
           onPressed: onPrevious,
         ),
 
-        // اسم الشهر والسنة
         Text(
           DateFormat('MMMM yyyy').format(currentMonth),
           style: AppTextStyles.regular14.copyWith(
@@ -39,7 +37,6 @@ class SelectDateTitle extends StatelessWidget {
           ),
         ),
 
-        // زر يمين
         IconButton(
           icon: Icon(Icons.arrow_right, color: Colors.black54, size: 28.sp),
           onPressed: onNext,

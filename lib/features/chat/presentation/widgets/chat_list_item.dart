@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-// ✅ 1. استيراد المكتبة الجديدة
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/core/utils/app_images.dart';
 
 class ChatListItem extends StatelessWidget {
-  // ... (الخصائص تبقى كما هي)
   final String imageUrl;
   final String name;
   final String lastMessage;
@@ -29,26 +27,22 @@ class ChatListItem extends StatelessWidget {
         imageUrl.isNotEmpty && imageUrl.startsWith('http');
 
     if (isNetworkImage) {
-      // --- ✅ 2. هنا تم التعديل لاستخدام CachedNetworkImage ---
       return CachedNetworkImage(
         imageUrl: imageUrl,
         fit: BoxFit.cover,
         height: 56,
         width: 56,
-        // هذا يظهر أثناء تحميل الصورة من الشبكة لأول مرة
         placeholder: (context, url) => const Center(
           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
         ),
-        // هذا يظهر في حالة فشل تحميل الصورة
         errorWidget: (context, url, error) => Image.asset(
-          AppImages.imagesDoctor1, // الصورة الافتراضية
+          AppImages.imagesDoctor1,
           fit: BoxFit.cover,
           height: 56,
           width: 56,
         ),
       );
     } else {
-      // --- في حالة عدم وجود رابط، الكود يبقى كما هو ---
       return Image.asset(
         AppImages.imagesDoctor1,
         fit: BoxFit.cover,
@@ -65,10 +59,7 @@ class ChatListItem extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 12.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             child: Row(
               children: [
                 CircleAvatar(
@@ -76,7 +67,6 @@ class ChatListItem extends StatelessWidget {
                   backgroundColor: Colors.grey[200],
                   child: ClipOval(child: _buildProfileImage()),
                 ),
-                // ... (بقية الكود يبقى كما هو تماماً)
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(

@@ -9,7 +9,6 @@ import 'generate_keys.dart';
 Future<int?> sendPublicKeyIfNeeded() async {
   final sharedPrefs = SharedPrefsHelper.instance;
 
-  // ✅ إذا سبق وانبعت وتخزّن deviceId، خلّص ارجع
   final isPublicKeySent = await sharedPrefs.getPublicKeySentToServer();
   final existingDeviceId = await sharedPrefs.getMyDeviceId();
   if (isPublicKeySent && existingDeviceId != null) {
@@ -23,7 +22,6 @@ Future<int?> sendPublicKeyIfNeeded() async {
     return null;
   }
 
-  // ✅ اسم الجهاز
   final deviceInfo = DeviceInfoPlugin();
   String deviceName = 'Unknown';
   try {
@@ -40,7 +38,6 @@ Future<int?> sendPublicKeyIfNeeded() async {
     print('Error getting device info: $e');
   }
 
-  // ✅ الإرسال
   final dioConsumer = DioConsumer(dio: Dio());
   final body = {"public_key": PublicKey, "device_name": deviceName};
 
@@ -50,8 +47,6 @@ Future<int?> sendPublicKeyIfNeeded() async {
 
     print('✅ Response from server: $response');
 
-    // شكل الريسبونس حسب ما بعتي:
-    // { success, message, data: { device: { id, public_key, fingerprint, device_name } } }
     final data = (response is Map<String, dynamic>) ? response['data'] : null;
     final device = (data is Map<String, dynamic>) ? data['device'] : null;
 
@@ -75,7 +70,6 @@ Future<int?> sendPublicKeyIfNeeded() async {
       }
     }
 
-    // لو وصلنا لهون، معناها ما قدرنا نقرأ الـ device من الريسبونس
     print('⚠️ Could not parse device info from response.');
     return null;
   } on DioException catch (e) {

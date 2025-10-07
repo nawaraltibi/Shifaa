@@ -12,9 +12,7 @@ class ChatsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ 2. قم بلف الـ Scaffold بـ BlocProvider
     return BlocProvider(
-      // 3. استخدم getIt لإنشاء نسخة جديدة من GetChatsCubit
       create: (context) => getIt<GetChatsCubit>(),
       child: const Scaffold(body: ChatsListViewBody()),
     );

@@ -42,21 +42,23 @@ import 'package:shifaa/features/chat/presentation/cubits/get_chats_cubit/get_cha
 import 'package:shifaa/features/chat/presentation/cubits/get_messages_cubit/get_messages_cubit.dart';
 import 'package:shifaa/features/chat/presentation/cubits/mute_chat_cubit/chat_mute_cubit.dart';
 
+import '../../../features/home/data/datasources/home_remote_data_source.dart';
+import '../../../features/home/data/datasources/home_remote_data_source_impl.dart';
+import '../../../features/home/data/repositories/home_repository_impl.dart';
+import '../../../features/home/domain/repositories/home_repository.dart';
+
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
-  // Dio setup
   getIt.registerLazySingleton<Dio>(() {
     final dio = Dio();
     dio.options.baseUrl = EndPoint.baseUrl;
-    dio.interceptors.add(ApiInterceptor()); // ✅ أضف هذه السطر
+    dio.interceptors.add(ApiInterceptor());
     return dio;
   });
 
-  // DioConsumer
   getIt.registerLazySingleton(() => DioConsumer(dio: getIt<Dio>()));
 
-  // Auth Feature
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(getIt<DioConsumer>()),
   );
@@ -130,5 +132,15 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton(
     () => CancelAppointmentUseCase(getIt<AppointmentRepository>()),
+  );
+
+  // 1. تسجيل الـ Remote Data Source
+  getIt.registerLazySingleton<HomeRemoteDataSource>(
+    () => HomeRemoteDataSourceImpl(apiConsumer: getIt<DioConsumer>()),
+  );
+
+  // 2. تسجيل الـ Repository
+  getIt.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(remoteDataSource: getIt<HomeRemoteDataSource>()),
   );
 }

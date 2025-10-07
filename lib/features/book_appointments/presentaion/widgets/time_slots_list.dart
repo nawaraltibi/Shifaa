@@ -65,13 +65,12 @@ class _TimeSlotsListState extends State<TimeSlotsList> {
           try {
             final parsedTime = DateFormat("HH:mm", 'en_US').parse(slot);
 
-            // ✅ صيغة الوقت للـ API وللعرض (بالأرقام الإنجليزية فقط)
             final displayTime = DateFormat.jm('en_US').format(parsedTime);
 
             final fullDateTimeForApi = "$formattedDateForApi - $displayTime";
 
             return TimeSlot(
-              time: displayTime, // ✅ تم تغيير هذا السطر
+              time: displayTime,
               isSelected: selectedSlot == slot,
               onTap: () {
                 setState(() => selectedSlot = slot);

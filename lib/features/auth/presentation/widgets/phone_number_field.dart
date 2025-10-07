@@ -8,7 +8,7 @@ import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 
 class PhoneNumberField extends StatelessWidget {
-  final void Function(String)? onChanged; // هذا الآن الرقم الكامل
+  final void Function(String)? onChanged;
   final TextEditingController? controller;
   final Color borderColor;
 
@@ -72,7 +72,6 @@ class PhoneNumberField extends StatelessWidget {
       ),
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
 
-      // هنا التعديل: ترسل الرقم الكامل مع رمز الدولة
       onChanged: (phone) => onChanged?.call(phone.completeNumber),
     );
   }

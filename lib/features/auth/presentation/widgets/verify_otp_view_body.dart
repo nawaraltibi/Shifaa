@@ -46,7 +46,7 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
   }
 
   void _startCountdown() {
-    _timer?.cancel(); // ألغِ أي مؤقت سابق قبل البدء
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_secondsRemaining == 0) {
         timer.cancel();
@@ -96,7 +96,6 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
     });
     _startCountdown();
 
-    // استدعاء دالة إعادة إرسال OTP من SendOtpCubit
     context.read<LoginCubit>().sendOtp(widget.phoneNumber, context);
   }
 
@@ -171,7 +170,6 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
             ),
             SizedBox(height: 20.h),
 
-            // هنا إظهار المؤقت أو زر إعادة الإرسال
             _secondsRemaining > 0
                 ? _buildCountdownTimer()
                 : TextButton(

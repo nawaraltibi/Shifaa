@@ -24,7 +24,6 @@ class DoctorModel {
   });
 
   factory DoctorModel.fromJson(Map<String, dynamic> doctor) {
-    // 1. استخدام المعامل ?? {} للتعامل مع null أو الأنواع غير الصحيحة بأمان.
     final specialty = doctor['specialty'] is Map<String, dynamic>
         ? doctor['specialty']
         : {};

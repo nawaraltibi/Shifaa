@@ -1,5 +1,3 @@
-// lib/features/treatmeant_plan/presentation/views/treatment_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +16,6 @@ class TreatmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Sample data updated with dates
     final appointmentDetails = AppointmentDetails(
       diagnosis: DiagnosisInfo(
         status: 'Completed',
@@ -28,18 +25,18 @@ class TreatmentView extends StatelessWidget {
       ),
       appointments: [
         AppointmentInfo(
-          date: DateTime(2024, 4, 19), // <-- تم إضافة التاريخ هنا
+          date: DateTime(2024, 4, 19),
           time: '08:00 - 08:30',
           type: 'Follow Up',
           doctorNotes:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur.',
         ),
         AppointmentInfo(
-          date: DateTime(2024, 4, 12), // <-- تم إضافة التاريخ هنا
+          date: DateTime(2024, 4, 12),
           time: '08:00 - 08:30',
           type: 'Normal',
           doctorNotes:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         ),
       ],
       medications: [
@@ -48,14 +45,14 @@ class TreatmentView extends StatelessWidget {
           dosage: '500 mg',
           frequency: 'Twice Daily',
           doctorNotes:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         ),
         MedicationInfo(
           name: 'Panadol Extra',
           dosage: '500 mg',
           frequency: 'Twice Daily',
           doctorNotes:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         ),
       ],
     );

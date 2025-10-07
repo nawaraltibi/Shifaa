@@ -37,10 +37,8 @@ class CustomDoctorDetailsAppBar extends StatelessWidget {
             onTap: () async {
               final cubit = context.read<CreateChatCubit>();
 
-              // استدعاء بدء المحادثة
               cubit.startChat(doctorId);
 
-              // انتظار حتى تصبح الحالة CreateChatSuccess أو CreateChatFailure
               final state = await cubit.stream.firstWhere(
                 (state) =>
                     state is CreateChatSuccess || state is CreateChatFailure,
@@ -51,7 +49,6 @@ class CustomDoctorDetailsAppBar extends StatelessWidget {
                   ChatView.routeName,
                   extra: {
                     'chatId': doctorId,
-                    // أضف أي بيانات أخرى تحتاجها من الموديل
                   },
                 );
               } else if (state is CreateChatFailure) {

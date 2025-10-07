@@ -19,7 +19,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
         startTime: startTime,
         doctorScheduleId: doctorScheduleId,
       );
-      return const Right(unit); // نجح الحجز
+      return const Right(unit);
     } on DioException catch (dioError) {
       return Left(ServerFailure.fromDiorError(dioError));
     } catch (e) {
@@ -39,7 +39,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
         startTime: startTime,
         doctorScheduleId: doctorScheduleId,
       );
-      return const Right(unit); // نجحت إعادة الجدولة
+      return const Right(unit);
     } on DioException catch (dioError) {
       return Left(ServerFailure.fromDiorError(dioError));
     } catch (e) {
@@ -53,7 +53,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
   }) async {
     try {
       await remoteDataSource.cancelAppointment(appointmentId: appointmentId);
-      return const Right(unit); // نجح الحذف
+      return const Right(unit);
     } on DioException catch (dioError) {
       return Left(ServerFailure.fromDiorError(dioError));
     } catch (e) {

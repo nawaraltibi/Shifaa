@@ -3,10 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shifaa/dependency_injection.dart';
 import 'package:shifaa/features/appointments/presentation/manager/appointments_cubit.dart';
 import 'package:shifaa/features/appointments/presentation/widgets/appointment_view_body.dart';
-// import 'package:shifaa/core/utils/app_text_styles.dart';
-// import 'package:shifaa/dependency_injection.dart';
-// import 'package:shifaa/features/appointments/presentation/manager/appointments_cubit.dart';
-// import 'package:shifaa/features/appointments/presentation/widgets/appointment_view_body.dart';
 
 class AppointmentView extends StatelessWidget {
   const AppointmentView({super.key});

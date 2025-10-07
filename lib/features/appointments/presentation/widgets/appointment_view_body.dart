@@ -23,13 +23,12 @@ class AppointmentViewBody extends StatelessWidget {
             const SizedBox(height: 20),
             Expanded(
               child: RefreshIndicator(
-                // دالة يتم استدعاؤها عند سحب الشاشة للأسفل
                 onRefresh: () async {
                   context.read<AppointmentsCubit>().fetchAppointments(forceRefresh: true);
                 },
-                child: _buildContent(state), // بناء المحتوى بناءً على الحالة
+                child: _buildContent(state),
               ),
-            ),
+            ) ,
           ],
         );
       },

@@ -16,7 +16,7 @@ class CustomWhiteContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(
       context,
-    ).viewInsets.bottom; // ارتفاع الكيبورد لو ظاهر، 0 لو مخفي
+    ).viewInsets.bottom;
 
     return Stack(
       clipBehavior: Clip.none,

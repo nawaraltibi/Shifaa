@@ -46,7 +46,6 @@ class ChatPusherService {
           };
         }
       },
-      // You can handle global events here, or leave it blank
       onEvent: (event) {
         print("📡 Global Event: ${event.eventName} | Data: ${event.data}");
       },
@@ -54,8 +53,6 @@ class ChatPusherService {
 
     await pusher.connect();
 
-    // Now, subscribe to the channel and provide a specific onEvent callback
-    // for this channel.
     await pusher.subscribe(
       channelName: "presence-chat.$chatId",
       onSubscriptionSucceeded: (data) {
@@ -64,11 +61,8 @@ class ChatPusherService {
       onSubscriptionError: (message, e) {
         print("❌ Subscription to chat.$chatId failed: $message, error: $e");
       },
-      // This is the correct place to bind to events for this channel.
       onEvent: (event) {
-        // You can check the event name here
         if (event.eventName == "message.sent") {
-          // <--- ✅ تم التعديل هنا
           onMessageReceived(event);
         }
         print("📡 Channel Event: ${event.eventName} | Data: ${event.data}");

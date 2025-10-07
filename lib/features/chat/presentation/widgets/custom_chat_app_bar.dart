@@ -1,5 +1,3 @@
-// lib/features/chat/presentation/widgets/custom_chat_app_bar.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,12 +43,10 @@ class CustomChatAppBar extends StatelessWidget {
             ),
           ),
           BlocConsumer<ChatMuteCubit, ChatMuteState>(
-            // ✅ الشرط الذكي: شغّل الـ listener فقط عند الانتقال من التحميل للنجاح
             listenWhen: (previous, current) {
               return previous is ChatMuteLoading && current is ChatMuteSuccess;
             },
             listener: (context, state) {
-              // هذا الكود الآن آمن ولن يعمل إلا بعد ضغط المستخدم
               if (state is ChatMuteSuccess) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 final snackBar = SnackBar(
@@ -70,12 +66,10 @@ class CustomChatAppBar extends StatelessWidget {
               bool isLoading = state is ChatMuteLoading;
               bool isMuted = false;
 
-              // استخرج الحالة الحالية للكتم لعرض الأيقونة الصحيحة دائماً
               if (state is ChatMuteSuccess) {
                 isMuted = state.isMuted;
               } else if (context.read<ChatMuteCubit>().state
-                  is ChatMuteSuccess) {
-                // في حالة التحميل، اعرض الحالة التي كانت قبل الضغط
+              is ChatMuteSuccess) {
                 isMuted =
                     (context.read<ChatMuteCubit>().state as ChatMuteSuccess)
                         .isMuted;
@@ -91,7 +85,6 @@ class CustomChatAppBar extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  // لا تسمح بالضغط المتكرر أثناء التحميل
                   if (!isLoading) {
                     context.read<ChatMuteCubit>().toggleMute(chatId);
                   }

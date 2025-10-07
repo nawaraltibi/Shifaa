@@ -35,7 +35,6 @@ Future<void> generateKeys() async {
   final pc.RSAPublicKey publicKey = keyPair.publicKey as pc.RSAPublicKey;
   final pc.RSAPrivateKey privateKey = keyPair.privateKey as pc.RSAPrivateKey;
 
-  // ✅ المفتاح العام أصبح SPKI لتوافق الـ parser
   final String publicKeyPem = encodePublicKeyToPemSpki(publicKey);
   final String privateKeyPem = encodePrivateKeyToPemPKCS1(privateKey);
 

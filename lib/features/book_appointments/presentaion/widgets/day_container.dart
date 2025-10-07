@@ -19,12 +19,10 @@ class DayContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ الخطوة 1: حساب العرض الديناميكي الصحيح
-    // عرض الشاشة الكلي - (padding الـ sheet * 2) - (مجموع المسافات بين العناصر) / عدد العناصر
     final screenWidth = MediaQuery.of(context).size.width;
     const horizontalPadding =
-        30 * 2; // Padding الأفقي للـ BottomSheet (24 من كل جهة)
-    const totalSpacing = 15 * 4; // 4 مسافات بين 5 عناصر (كل مسافة 15)
+        30 * 2;
+    const totalSpacing = 15 * 4;
     final availableWidth = screenWidth - horizontalPadding - totalSpacing;
     final itemWidth = availableWidth / 5;
 
@@ -43,11 +41,10 @@ class DayContainer extends StatelessWidget {
     return GestureDetector(
       onTap: isAvailable ? onTap : null,
       child: Container(
-        // ✅ الخطوة 2: تطبيق العرض الديناميكي المحسوب بدلاً من العرض الثابت
         width: itemWidth,
         padding: EdgeInsets.symmetric(vertical: 12.h),
         decoration: BoxDecoration(
-          color: containerColor, // لون الخلفية عند الاختيار
+          color: containerColor,
           borderRadius: BorderRadius.circular(30.r),
           border: Border.all(color: borderColor, width: 1.4),
         ),

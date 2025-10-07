@@ -9,7 +9,6 @@ class ApiInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // --- لا تغيير هنا ---
     final token = await SharedPrefsHelper.instance.getToken();
     final locale = Intl.getCurrentLocale();
 
@@ -23,31 +22,22 @@ class ApiInterceptor extends Interceptor {
     final isUnauthenticated = unauthenticatedEndpoints.any(
       (unauth) => options.path.contains(unauth),
     );
-    // --------------------
 
-    // --- هنا التعديل ---
-    // 1. أضف الهيدرز الأساسية
     options.headers['Accept'] = 'application/json';
     options.headers['Accept-Language'] = locale == 'ar' ? 'ar' : 'en';
     if (!isUnauthenticated && token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
 
-    // 2. (التغيير الحاسم) لا تقم بتعيين Content-Type يدوياً إذا كان الطلب من نوع FormData.
-    //    مكتبة Dio ستقوم بتعيينه إلى 'multipart/form-data' تلقائياً وهو المطلوب.
     if (options.data is! FormData) {
       options.headers['Content-Type'] = 'application/json';
     }
-    // --------------------
-
-    // --- لا تغيير هنا ---
 
     print("➡️➡️➡️ --- Request --- ⬅️⬅️⬅️");
     print("URI: ${options.uri}");
     print("METHOD: ${options.method}");
     print("HEADERS: ${options.headers}");
 
-    // إذا كانت البيانات FormData، اطبع الحقول والملفات بشكل منفصل
     if (options.data is FormData) {
       final formData = options.data as FormData;
       print("BODY (FormData Fields): ${formData.fields}");
@@ -55,7 +45,6 @@ class ApiInterceptor extends Interceptor {
         "BODY (FormData Files): ${formData.files.map((f) => f.value.filename)}",
       );
     } else {
-      // إذا كانت البيانات JSON عادية
       print("BODY: ${options.data}");
     }
     print("➡️➡️➡️ --- End Request --- ⬅️⬅️⬅️");

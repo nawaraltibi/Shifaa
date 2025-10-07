@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:asn1lib/asn1lib.dart';
 import 'package:pointycastle/export.dart' as pointycastle;
 
-// تحويل RSAPrivateKey إلى PEM
 String privateKeyToPem(pointycastle.RSAPrivateKey privateKey) {
   final topLevel = ASN1Sequence();
 
@@ -17,7 +16,6 @@ String privateKeyToPem(pointycastle.RSAPrivateKey privateKey) {
 
   final base64Str = base64.encode(topLevel.encodedBytes);
 
-  // chunk كل 64 حرف
   final chunks = RegExp(
     '.{1,64}',
   ).allMatches(base64Str).map((m) => m.group(0)).join('\n');

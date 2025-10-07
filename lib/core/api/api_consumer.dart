@@ -19,7 +19,6 @@ abstract class ApiConsumer {
     bool isFromData = false,
   });
 
-  // **** ✅ تم إضافة الدالة المطلوبة هنا ****
   Future<dynamic> put(
     String path, {
     Object? data,

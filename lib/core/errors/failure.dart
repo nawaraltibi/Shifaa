@@ -104,7 +104,7 @@ class ServerFailure extends Failure {
       case 500:
         final msg = (data is Map && data['message'] is String)
             ? data['message']
-            : data.toString(); // fallback to raw body if structure unknown
+            : data.toString();
         return ServerFailure(
           msg ?? 'Server error. Try again later.',
           statusCode: 500,

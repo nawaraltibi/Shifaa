@@ -8,7 +8,7 @@ class OtpFieldItem extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final FocusNode? nextFocusNode;
-  final FocusNode? previousFocusNode; // 👈 جديد
+  final FocusNode? previousFocusNode;
 
   const OtpFieldItem({
     super.key,

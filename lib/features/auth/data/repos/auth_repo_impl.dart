@@ -13,7 +13,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> sendOtp(String phoneNumber) async {
     try {
-      await remote.sendOtp(phoneNumber); // استعمل remote مباشرة هنا
+      await remote.sendOtp(phoneNumber);
       return const Right(null);
     } on DioException catch (e) {
       return Left(ServerFailure.fromDiorError(e));

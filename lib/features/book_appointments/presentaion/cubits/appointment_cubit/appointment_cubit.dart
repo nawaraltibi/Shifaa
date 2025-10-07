@@ -16,18 +16,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       startTime: startTime,
       doctorScheduleId: doctorScheduleId,
     );
-
-    // -->> أضف هذا الشرط للحماية <<--
     if (isClosed) return;
-
     result.fold(
-      (failure) => emit(AppointmentError(failure.message)),
-      (_) => emit(AppointmentSuccess()),
+          (failure) => emit(AppointmentError(failure.message)),
+          (_) => emit(AppointmentSuccess()),
     );
   }
 
   void reset() {
-    // يفضل أيضاً إضافة الحماية هنا، على الرغم من أن احتمالية حدوثها أقل
     if (isClosed) return;
     emit(AppointmentInitial());
   }

@@ -12,6 +12,6 @@ class DoctorRemoteDataSourceImpl implements DoctorRemoteDataSource {
   Future<DoctorModel> getDoctorDetails(String doctorId) async {
     final response = await api.get(EndPoint.doctorDetails(doctorId));
     final doctorData = response['data']['doctor'];
-    return DoctorModel.fromJson(doctorData); // نمرر مباشرة بيانات الدكتور
+    return DoctorModel.fromJson(doctorData);
   }
 }

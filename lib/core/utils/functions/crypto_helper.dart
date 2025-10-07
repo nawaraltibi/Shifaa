@@ -11,7 +11,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart'; // for compute
+import 'package:flutter/foundation.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -19,21 +19,18 @@ import 'package:path_provider/path_provider.dart';
 class CryptoHelper {
   static final _random = Random.secure();
 
-  /// توليد مفتاح AES (256bit)
   static Uint8List generateAESKey([int length = 32]) {
     return Uint8List.fromList(
       List<int>.generate(length, (_) => _random.nextInt(256)),
     );
   }
 
-  /// توليد IV عشوائي (12 bytes للـ GCM)
   static Uint8List generateIV([int length = 12]) {
     return Uint8List.fromList(
       List<int>.generate(length, (_) => _random.nextInt(256)),
     );
   }
 
-  /// AES-GCM Encrypt: بيرجع base64(iv + cipher + tag)
   static String aesGcmEncryptToBase64(Uint8List key, String plainText) {
     final iv = generateIV(12);
     final cipher = pc.GCMBlockCipher(pc.AESEngine());
@@ -46,7 +43,7 @@ class CryptoHelper {
     cipher.init(true, aeadParams);
 
     final input = Uint8List.fromList(utf8.encode(plainText));
-    final output = cipher.process(input); // cipher + tag
+    final output = cipher.process(input);
 
     final combined = Uint8List(iv.length + output.length)
       ..setAll(0, iv)
@@ -55,7 +52,6 @@ class CryptoHelper {
     return base64.encode(combined);
   }
 
-  /// AES-GCM Decrypt: بياخد base64(iv + cipher + tag)
   static String? aesGcmDecryptFromBase64(Uint8List key, String base64Combined) {
     try {
       final bytes = base64.decode(base64Combined);
@@ -82,16 +78,12 @@ class CryptoHelper {
   }
 }
 
-// في ملف crypto_helper.dart
-
 Future<Uint8List> getAesKey(MessageModel msg) async {
-  // استخدمنا print() بدلاً من logger لضمان ظهورها دائماً
   print(
     "\n🕵️‍♂️ --- DECRYPTION PROCESS STARTED for Message ID: ${msg.id} --- 🕵️‍♂️",
   );
 
   try {
-    // --- الخطوة 1: التحقق من الشروط الأساسية ---
     if ((msg.text ?? '').isEmpty) {
       print("➡️ SKIPPED: Message text is empty or null.");
       return Uint8List(0);
@@ -104,7 +96,6 @@ Future<Uint8List> getAesKey(MessageModel msg) async {
     }
     print("✅ STEP 1: Basic conditions passed. Message has text and keys.");
 
-    // --- الخطوة 2: جلب ID الجهاز الحالي ---
     final myDeviceId = await SharedPrefsHelper.instance.getMyDeviceId();
     if (myDeviceId == null) {
       print(
@@ -119,7 +110,6 @@ Future<Uint8List> getAesKey(MessageModel msg) async {
       "   - Available Keys for Devices: ${msg.encryptedKeys.map((k) => 'ID: ${k.deviceId} (Type: ${k.deviceId.runtimeType})').toList()}",
     );
 
-    // --- الخطوة 3: البحث عن المفتاح المشفر الخاص بجهازي ---
     EncryptedKeyTarget? me;
     try {
       for (int i = 0; i < msg.encryptedKeys.length; i++) {
@@ -138,10 +128,9 @@ Future<Uint8List> getAesKey(MessageModel msg) async {
       print(
         "❌ FAILED at STEP 3: No encrypted key found for my device ID ($myDeviceId). The message was not encrypted for this device.",
       );
-      return Uint8List(0); // أعد الرسالة الأصلية لأنها غير موجهة لهذا الجهاز
+      return Uint8List(0);
     }
 
-    // --- الخطوة 4: تحميل المفتاح الخاص من الـ Secure Storage ---
     final priv = await E2EE.loadPrivateKeyFromSecureStorage();
     if (priv == null) {
       print(
@@ -151,15 +140,12 @@ Future<Uint8List> getAesKey(MessageModel msg) async {
     }
     print("✅ STEP 4: Private key loaded successfully from secure storage.");
 
-    // --- الخطوة 5: فك تشفير مفتاح AES باستخدام المفتاح الخاص (RSA) ---
-    // في ملف crypto_helper.dart، داخل دالة decryptForMe
-
-    // --- الخطوة 5: فك تشفير مفتاح AES باستخدام المفتاح الخاص (RSA) ---
     Uint8List? aesKey;
     try {
-      // ✅✅✅ --- هذا هو الإصلاح --- ✅✅✅
-      // تم حذف useOaep: true لأنه لم يعد ضرورياً
-      aesKey = E2EE.rsaDecryptWithPrivateOAEP(priv, base64.decode(me.encryptedKey));
+      aesKey = E2EE.rsaDecryptWithPrivateOAEP(
+        priv,
+        base64.decode(me.encryptedKey),
+      );
       print("✅ STEP 5: AES key decrypted successfully using RSA.");
     } catch (e) {
       print("❌ FAILED at STEP 5: RSA decryption failed. Error: $e");
@@ -172,12 +158,11 @@ Future<Uint8List> getAesKey(MessageModel msg) async {
     print("THE ERROR: $e");
     print("STACK TRACE: $stackTrace");
     print("🔥🔥🔥 END OF ERROR 🔥🔥🔥\n");
-    return Uint8List(0); // أعد الرسالة المشفرة عند حدوث خطأ فادح
+    return Uint8List(0);
   }
 }
 
 Future<Message> decryptText(MessageModel msg, Uint8List aesKey) async {
-  // --- الخطوة 6: فك تشفير نص الرسالة باستخدام مفتاح AES (AES-GCM) ---
   String? plainText;
   try {
     plainText = E2EE.aesGcmDecryptFromBase64(aesKey, msg.text!);
@@ -196,18 +181,19 @@ Future<Message> decryptText(MessageModel msg, Uint8List aesKey) async {
     return msg;
   }
 
-  // --- الخطوة 7: إعادة بناء الموديل مع النص المفكوك ---
-  // نستخدم copyWith لتحديث النص فقط
   return msg.copyWith(text: plainText);
 }
 
-
-Future<File?> downloadDecryptAndOpenExternal(String url, Uint8List aesKey, void Function(int received, int? total)? onProgress,) async {
+Future<File?> downloadDecryptAndOpenExternal(
+  String url,
+  Uint8List aesKey,
+  void Function(int received, int? total)? onProgress,
+) async {
   print("[file] start downloadDecryptAndOpenExternal for file=${url}");
 
   final cacheDir = await getTemporaryDirectory();
   final basename = p.basename(Uri.tryParse(url)?.path ?? 'file');
-  final hashed = url.hashCode; // could also use md5 for stronger uniqueness
+  final hashed = url.hashCode;
   final outName = 'decrypted_${hashed}_$basename';
   final outFile = File(p.join(cacheDir.path, outName));
 
@@ -223,7 +209,7 @@ Future<File?> downloadDecryptAndOpenExternal(String url, Uint8List aesKey, void 
   }
 
   print("[file] encrypted file not in cache -> downloading: $url");
-  final token = await SharedPrefsHelper.instance.getToken(); // replace with your token getter
+  final token = await SharedPrefsHelper.instance.getToken();
   print("[file] auth token is: ${token}");
   final headers = {
     'Authorization': 'Bearer $token',
@@ -233,14 +219,11 @@ Future<File?> downloadDecryptAndOpenExternal(String url, Uint8List aesKey, void 
   final dio = new Dio();
   final resp = await dio.get(
     url,
-    options: Options(
-        responseType: ResponseType.bytes,
-        headers: headers,
-    ),
+    options: Options(responseType: ResponseType.bytes, headers: headers),
     onReceiveProgress: (received, total) {
-      // call the callback if provided
       try {
-        if (onProgress != null) onProgress(received, total == -1 ? null : total);
+        if (onProgress != null)
+          onProgress(received, total == -1 ? null : total);
       } catch (_) {}
     },
   );
@@ -251,14 +234,15 @@ Future<File?> downloadDecryptAndOpenExternal(String url, Uint8List aesKey, void 
 
   print('[file] downloaded encrypted bytes len=${encryptedBytes.length}');
 
-  // validate AES key
   if (!(aesKey.length == 16 || aesKey.length == 24 || aesKey.length == 32)) {
     print('[file] invalid AES key length=${aesKey.length}');
     return null;
   }
 
-  // Decrypt in isolate to avoid UI jank
-  final decrypted = await compute< List<dynamic>, Uint8List? >(_decryptBytesIsolate, [encryptedBytes, aesKey]);
+  final decrypted = await compute<List<dynamic>, Uint8List?>(
+    _decryptBytesIsolate,
+    [encryptedBytes, aesKey],
+  );
 
   if (decrypted == null) {
     print('[file] decryption failed (null)');
@@ -267,9 +251,10 @@ Future<File?> downloadDecryptAndOpenExternal(String url, Uint8List aesKey, void 
   print('[file] decryption succeeded, bytes=${decrypted.length}');
 
   await outFile.writeAsBytes(decrypted, flush: true);
-  print('[file] decrypted file written: ${outFile.path} (${await outFile.length()})');
+  print(
+    '[file] decrypted file written: ${outFile.path} (${await outFile.length()})',
+  );
 
-  // open externally
   try {
     final openResult = await OpenFile.open(outFile.path);
     print('[file] OpenFile result: ${openResult.type} ${openResult.message}');
@@ -278,9 +263,7 @@ Future<File?> downloadDecryptAndOpenExternal(String url, Uint8List aesKey, void 
   }
 
   return outFile;
-
 }
-
 
 Future<Uint8List?> _decryptBytesIsolate(List<dynamic> args) async {
   final Uint8List encrypted = args[0] as Uint8List;
@@ -291,21 +274,24 @@ Future<Uint8List?> _decryptBytesIsolate(List<dynamic> args) async {
       print('[isolate] encrypted payload too short: ${encrypted.length}');
       return null;
     }
-    // Extract IV and ciphertext+tag
     final iv = encrypted.sublist(0, 12);
     final cipherAndTag = encrypted.sublist(12);
 
-    // Key length must be 16/24/32
     if (!(key.length == 16 || key.length == 24 || key.length == 32)) {
       print('[isolate] invalid AES key length: ${key.length}');
       return null;
     }
 
     final pc.GCMBlockCipher cipher = pc.GCMBlockCipher(pc.AESEngine());
-    final params = pc.AEADParameters(pc.KeyParameter(key), 128, iv, Uint8List(0));
-    cipher.init(false, params); // false = decrypt
+    final params = pc.AEADParameters(
+      pc.KeyParameter(key),
+      128,
+      iv,
+      Uint8List(0),
+    );
+    cipher.init(false, params);
 
-    final out = cipher.process(cipherAndTag); // may throw InvalidCipherTextException
+    final out = cipher.process(cipherAndTag);
     return Uint8List.fromList(out);
   } catch (e, st) {
     print('[isolate] decrypt error: $e\n$st');
@@ -314,9 +300,9 @@ Future<Uint8List?> _decryptBytesIsolate(List<dynamic> args) async {
 }
 
 Future<T?> showProgressDialog<T>(
-    BuildContext context,
-    ValueNotifier<int> progress,
-    ) {
+  BuildContext context,
+  ValueNotifier<int> progress,
+) {
   return showDialog<T>(
     context: context,
     barrierDismissible: false,
@@ -325,7 +311,9 @@ Future<T?> showProgressDialog<T>(
         valueListenable: progress,
         builder: (_, value, __) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

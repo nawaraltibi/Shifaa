@@ -19,7 +19,7 @@ class DoctorNotes extends StatelessWidget {
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
           style: AppTextStyles.regular12.copyWith(
             color: const Color(0xFF8D8D8D),
-            height: 1.4, // لزيادة المسافة بين السطور
+            height: 1.4,
           ),
         ),
       ],

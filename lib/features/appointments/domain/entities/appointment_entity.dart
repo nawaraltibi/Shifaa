@@ -5,9 +5,9 @@ class AppointmentEntity extends Equatable {
   final String doctorName;
   final String specialty;
   final String? imageUrl;
-  final String date;  // للعرض
-  final String time;  // للعرض
-  final String startTime; // للترتيب والمنطق
+  final String date;
+  final String time;
+  final String startTime;
 
   const AppointmentEntity({
     required this.id,

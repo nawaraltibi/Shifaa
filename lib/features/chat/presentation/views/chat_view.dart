@@ -15,7 +15,6 @@ class ChatView extends StatelessWidget {
   final String doctorName;
   final String? doctorImage;
 
-  // ✅ --- لم نعد بحاجة لـ isMuted هنا --- ✅
   const ChatView({
     super.key,
     required this.chatId,
@@ -36,10 +35,9 @@ class ChatView extends StatelessWidget {
                 getIt<GetMessagesCubit>()..fetchMessages(chatId),
           ),
           BlocProvider(
-            // ✅ --- استدعاء الدالة الجديدة هنا --- ✅
             create: (context) =>
                 ChatMuteCubit(context.read<ChatRepository>())
-                  ..loadInitialMuteStatus(chatId), // <-- التعديل هنا
+                  ..loadInitialMuteStatus(chatId),
           ),
         ],
         child: Scaffold(

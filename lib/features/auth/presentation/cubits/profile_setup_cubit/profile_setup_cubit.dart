@@ -65,12 +65,10 @@ class ProfileSetupCubit extends Cubit<ProfileSetupState> {
         emit(ProfileSetupFailure(message));
       },
       (authData) async {
-        // ✅ حفظ التوكين
         if (authData.token != null) {
           await SharedPrefsHelper.instance.saveToken(authData.token!);
         }
 
-        // ✅ حفظ معلومات المستخدم
         if (authData.user != null) {
           await SharedPrefsHelper.instance.saveUserData(authData.user!);
         }

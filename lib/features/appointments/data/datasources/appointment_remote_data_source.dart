@@ -16,7 +16,7 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
       'appointments',
       queryParameters: {'time': timeType,
                          'per_page': 100
-                        }, // 'upcoming' or 'past'
+                        },
     );
 
     if (response.statusCode == 200 && response.data['success'] == true) {

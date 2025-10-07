@@ -13,14 +13,12 @@ class DiagnosisInfo {
 }
 
 class AppointmentInfo {
-  // **** الخطوة 1: إضافة الحقل هنا ****
   final DateTime date;
   final String time;
   final String type;
   final String doctorNotes;
 
   AppointmentInfo({
-    // **** الخطوة 2: إضافته إلى الـ constructor ****
     required this.date,
     required this.time,
     required this.type,

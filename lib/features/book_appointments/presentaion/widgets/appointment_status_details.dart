@@ -19,7 +19,6 @@ class AppointmentStatusDetails extends StatelessWidget {
     );
   }
 
-  // ويدجت مساعد لتجنب تكرار الكود
   Widget _buildDetailRow(String title, String value, {Color? valueColor}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

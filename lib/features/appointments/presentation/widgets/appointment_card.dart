@@ -27,7 +27,6 @@ class AppointmentCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // الجزء العلوي: معلومات الطبيب
           Row(
             children: [
               CircleAvatar(
@@ -44,7 +43,6 @@ class AppointmentCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              // زر الشات يظهر فقط في المواعيد القادمة
               if (type == AppointmentType.upcoming)
                 Container(
                   width: 40, height: 40,
@@ -56,7 +54,6 @@ class AppointmentCard extends StatelessWidget {
           const SizedBox(height: 16),
           const Divider(color: Colors.white, thickness: 0.5),
           const SizedBox(height: 16),
-          // الجزء الأوسط: التاريخ والوقت
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -65,7 +62,6 @@ class AppointmentCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          // الجزء السفلي: الأزرار تتغير حسب نوع الموعد
           _buildActionButtons(),
         ],
       ),

@@ -38,7 +38,6 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             );
           }
         } else if (state is LoginError) {
-          // يمكنك هنا عرض Snackbar أو أي معالجة
         }
       },
       child: AuthTemplate(
